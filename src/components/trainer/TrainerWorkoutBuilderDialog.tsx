@@ -600,7 +600,7 @@ export function TrainerWorkoutBuilderDialog({
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Ex.: Upper — empurrar"
-                  className="h-11 rounded-xl border-white/[0.08] bg-white/[0.04] text-sm text-white placeholder:text-white/25 focus-visible:border-primary focus-visible:ring-primary/30"
+                  className="h-12 rounded-2xl border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
                 />
               </div>
 
@@ -613,24 +613,24 @@ export function TrainerWorkoutBuilderDialog({
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="h-11 rounded-xl border-white/[0.08] bg-white/[0.04] text-sm text-white focus-visible:border-primary focus-visible:ring-primary/30"
+                  className="h-12 rounded-2xl border-border bg-background text-sm text-foreground focus-visible:border-primary focus-visible:ring-primary/20"
                 />
               </div>
             </div>
 
             {showAudienceToggle ? (
-              <div className="space-y-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 md:p-6">
+              <div className="space-y-5 rounded-[24px] border border-border bg-card p-5 md:p-6">
                 <div className="space-y-3">
                   <Label className="font-body text-xs font-medium text-muted-foreground">Destino</Label>
-                  <div className="flex gap-3">
+                  <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setIsGroup(false)}
                       className={cn(
-                        "h-11 flex-1 rounded-xl border font-mono text-[10px] font-bold uppercase tracking-[0.16em] transition-colors",
+                        "h-11 rounded-full border px-4 text-sm font-medium transition-colors",
                         !isGroup
-                          ? "border-white/20 bg-white/10 text-white"
-                          : "border-white/[0.08] bg-transparent text-white/35 hover:border-white/15 hover:text-white/70",
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary",
                       )}
                     >
                       Atleta
@@ -639,10 +639,10 @@ export function TrainerWorkoutBuilderDialog({
                       type="button"
                       onClick={() => setIsGroup(true)}
                       className={cn(
-                        "h-11 flex-1 rounded-xl border font-mono text-[10px] font-bold uppercase tracking-[0.16em] transition-colors",
+                        "h-11 rounded-full border px-4 text-sm font-medium transition-colors",
                         isGroup
-                          ? "border-white/20 bg-white/10 text-white"
-                          : "border-white/[0.08] bg-transparent text-white/35 hover:border-white/15 hover:text-white/70",
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary",
                       )}
                     >
                       Grupo
@@ -656,13 +656,13 @@ export function TrainerWorkoutBuilderDialog({
                     <select
                       value={selectedGroupId}
                       onChange={(e) => setSelectedGroupId(e.target.value)}
-                      className="h-11 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 text-sm text-white focus:border-primary focus:outline-none"
+                      className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:border-primary focus:outline-none"
                     >
-                      <option value="" className="bg-[#121212]">
+                      <option value="">
                         Selecionar grupo…
                       </option>
                       {groups.map((g) => (
-                        <option key={g.id} value={g.id} className="bg-[#121212]">
+                        <option key={g.id} value={g.id}>
                           {g.name}
                         </option>
                       ))}
@@ -681,13 +681,13 @@ export function TrainerWorkoutBuilderDialog({
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 md:p-5">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-[#121212] text-primary">
+              <div className="flex items-center gap-4 rounded-[24px] border border-border bg-card p-4 md:p-5">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-border bg-background text-primary">
                   {fixedScope?.kind === "student" ? <Users className="h-5 w-5" /> : <Layers className="h-5 w-5" />}
                 </div>
                 <div className="min-w-0">
-                  <p className="font-mono text-[9px] font-bold uppercase tracking-[0.24em] text-primary">Para</p>
-                  <p className="truncate font-display text-lg font-bold uppercase tracking-tight text-white md:text-xl">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">Destino fixo</p>
+                  <p className="truncate text-xl font-medium tracking-[-0.02em] text-foreground md:text-2xl">
                     {fixedScope?.kind === "student"
                       ? students.find((s) => s.id === fixedScope.studentId)?.name || "Atleta"
                       : groups.find((g) => g.id === fixedScope?.groupId)?.name || "Grupo"}
@@ -696,40 +696,38 @@ export function TrainerWorkoutBuilderDialog({
               </div>
             )}
 
-            <div className="space-y-6 border-t border-white/[0.06] pt-8">
+            <div className="space-y-6 border-t border-border pt-8">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="space-y-1">
-                  <h4 className="font-display text-xl font-bold uppercase tracking-tight text-white md:text-2xl">Exercícios e blocos</h4>
+                  <h4 className="text-2xl font-medium tracking-[-0.03em] text-foreground md:text-[2rem]">Exercícios e blocos</h4>
                   <p className="font-body text-sm text-muted-foreground">Monte a sessão na ordem em que o atleta deve executar.</p>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                   <button
                     type="button"
                     onClick={addExercise}
-                    className="flex h-10 items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-white/80 transition-colors hover:border-white/15 hover:bg-white/[0.08] hover:text-white"
+                    className="flex h-11 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium text-foreground transition-colors hover:border-primary/30 hover:text-primary"
                   >
                     <Plus className="h-3.5 w-3.5" /> Exercício
                   </button>
                   <button
                     type="button"
                     onClick={addBiSet}
-                    className="flex h-10 items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-white/80 transition-colors hover:border-white/15 hover:bg-white/[0.08] hover:text-white"
+                    className="flex h-11 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium text-foreground transition-colors hover:border-primary/30 hover:text-primary"
                   >
                     <Link2 className="h-3.5 w-3.5" /> Bi-set
                   </button>
                   <button
                     type="button"
                     onClick={addMetcon}
-                    className="flex h-10 items-center gap-2 rounded-xl border border-primary/30 bg-primary/15 px-4 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary hover:text-white"
+                    className="flex h-11 items-center justify-center gap-2 rounded-full border border-primary bg-primary px-4 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
                   >
                     <Layers className="h-3.5 w-3.5" /> Bloco livre
                   </button>
                 </div>
               </div>
 
-              <div
-                className={cn("space-y-6 relative", isPage && "pl-2 sm:pl-0")}
-              >
+              <div className={cn("relative space-y-6", isPage && "pl-2 sm:pl-0")}>
                 {builderMode === "smart" ? (
                   <div className="space-y-4">
                     <div className="flex justify-end">
@@ -737,7 +735,7 @@ export function TrainerWorkoutBuilderDialog({
                         type="button"
                         onClick={() => void convertSmartToForm()}
                         disabled={!smartText.trim() || isConverting}
-                        className="flex h-10 items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-5 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-white/70 transition-colors hover:border-primary/40 hover:text-primary disabled:opacity-30"
+                        className="flex h-11 items-center gap-2 rounded-full border border-border bg-background px-5 text-sm font-medium text-foreground transition-colors hover:border-primary/35 hover:text-primary disabled:opacity-30"
                       >
                         {isConverting ? (
                           <>
@@ -771,10 +769,10 @@ export function TrainerWorkoutBuilderDialog({
                             isPage ? "left-0 sm:-left-12" : "-left-12",
                           )}
                         >
-                          <button type="button" onClick={() => moveItem(idx, "up")} disabled={idx === 0} className="text-white hover:text-primary disabled:hidden">
+                          <button type="button" onClick={() => moveItem(idx, "up")} disabled={idx === 0} className="text-muted-foreground hover:text-primary disabled:hidden">
                             <ArrowUp className="w-4 h-4" />
                           </button>
-                          <button type="button" onClick={() => moveItem(idx, "down")} disabled={idx === workoutItems.length - 1} className="text-white hover:text-primary disabled:hidden">
+                          <button type="button" onClick={() => moveItem(idx, "down")} disabled={idx === workoutItems.length - 1} className="text-muted-foreground hover:text-primary disabled:hidden">
                             <ArrowDown className="w-4 h-4" />
                           </button>
                         </div>
@@ -806,17 +804,15 @@ export function TrainerWorkoutBuilderDialog({
                             autoFocus={focusNewItemIdx === idx}
                           />
                         ) : (
-                          <div className="group/block relative space-y-6 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 md:p-6">
-                            <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-primary/10 blur-3xl" />
-
-                            <div className="flex items-center justify-between gap-4 border-b border-white/[0.06] pb-4">
+                          <div className="group/block relative space-y-6 overflow-hidden rounded-[24px] border border-border bg-card p-5 md:p-6">
+                            <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
                               <div className="flex min-w-0 items-center gap-3">
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
                                   <Layers className="h-5 w-5" />
                                 </div>
                                 <div className="min-w-0">
-                                  <p className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-primary">Bloco livre</p>
-                                  <p className="truncate font-display text-lg font-bold uppercase tracking-tight text-white">
+                                  <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">Bloco livre</p>
+                                  <p className="truncate text-lg font-medium tracking-[-0.02em] text-foreground">
                                     {item.block_category || "Escolha o tipo"}
                                   </p>
                                 </div>
@@ -824,7 +820,7 @@ export function TrainerWorkoutBuilderDialog({
                               <button
                                 type="button"
                                 onClick={() => removeItem(idx)}
-                                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white/35 transition-colors hover:bg-destructive/15 hover:text-destructive"
+                                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:border-destructive/35 hover:text-destructive"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </button>
@@ -844,10 +840,10 @@ export function TrainerWorkoutBuilderDialog({
                                         setFocusNewItemIdx(null);
                                       }}
                                       className={cn(
-                                        "px-3 py-2 font-mono text-[9px] uppercase tracking-widest transition-all border clip-cut-corner-xs",
+                                        "rounded-full border px-3 py-2 text-sm font-medium transition-colors",
                                         item.block_category === t
-                                          ? "bg-primary border-primary text-white font-bold"
-                                          : "bg-white/5 border-white/5 text-white/30 hover:border-white/20 hover:text-white"
+                                          ? "border-primary bg-primary text-primary-foreground"
+                                          : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary",
                                       )}
                                     >
                                       {t}
@@ -857,20 +853,20 @@ export function TrainerWorkoutBuilderDialog({
                               </div>
 
                               {item.block_category && (
-                                <div className="space-y-6 border-t border-white/[0.06] pt-4">
+                                <div className="space-y-6 border-t border-border pt-4">
                                   <div className="space-y-2">
                                     <Label className="font-body text-xs font-medium text-muted-foreground">Título (opcional)</Label>
                                     <Input
                                       value={item.metcon_title || ""}
                                       onChange={(e) => updateItemField(idx, "metcon_title", e.target.value)}
                                       placeholder="Nome curto do bloco"
-                                      className="h-10 rounded-xl border-white/[0.08] bg-white/[0.04] text-sm text-white placeholder:text-white/25 focus-visible:border-primary"
+                                      className="h-11 rounded-2xl border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-primary"
                                     />
                                   </div>
 
                                   {item.block_category === "LPO" ? (
                                     <div className="space-y-4">
-                                      <div className="flex items-center gap-2 rounded-xl border border-primary/25 bg-primary/10 px-3 py-2.5">
+                                      <div className="flex items-center gap-2 rounded-2xl border border-primary/20 bg-primary/10 px-3 py-2.5">
                                         <span className="font-body text-xs font-medium text-primary">Bloco de cargas (LPO)</span>
                                       </div>
                                       <LpoBlockForm
@@ -893,8 +889,10 @@ export function TrainerWorkoutBuilderDialog({
                                               type="button"
                                               onClick={() => updateItemField(idx, "metcon_type", t)}
                                               className={cn(
-                                                "px-3 py-1.5 font-mono text-[8px] uppercase tracking-widest transition-all border clip-cut-corner-xs",
-                                                item.metcon_type === t ? "bg-primary border-primary text-white font-bold" : "bg-white/5 border-white/5 text-white/30 hover:text-white"
+                                                "rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
+                                                item.metcon_type === t
+                                                  ? "border-primary bg-primary text-primary-foreground"
+                                                  : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary",
                                               )}
                                             >
                                               {t}
@@ -909,7 +907,7 @@ export function TrainerWorkoutBuilderDialog({
                                           value={item.metcon_description || ""}
                                           onChange={(e) => updateItemField(idx, "metcon_description", e.target.value)}
                                           placeholder="Descreva rounds, tempos, repetições…"
-                                          className="min-h-[100px] rounded-xl border-white/[0.08] bg-white/[0.04] text-sm text-white/90 placeholder:text-white/20 focus-visible:border-primary"
+                                          className="min-h-[100px] rounded-[20px] border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-primary"
                                         />
                                       </div>
                                     </div>
@@ -926,13 +924,13 @@ export function TrainerWorkoutBuilderDialog({
             </div>
           </div>
 
-            <div className="flex flex-col items-stretch justify-between gap-4 border-t border-white/[0.06] pt-8 sm:flex-row sm:items-center">
+            <div className="flex flex-col items-stretch justify-between gap-4 border-t border-border pt-8 sm:flex-row sm:items-center">
               <p className="font-body text-xs text-muted-foreground">Revise o nome, a data e a lista antes de guardar.</p>
               <button
                 type="button"
                 onClick={createWorkout}
                 disabled={creating}
-                className="group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-8 font-display text-sm font-bold uppercase tracking-[0.12em] text-white transition-[filter] hover:brightness-110 disabled:opacity-50 sm:w-auto"
+                className="group flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50 sm:w-auto"
               >
                 {creating ? "A guardar…" : "Guardar treino"}
                 {!creating && <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />}
@@ -945,36 +943,36 @@ export function TrainerWorkoutBuilderDialog({
     return (
       <>
         <div className="relative -mx-6 flex min-h-[calc(100dvh-11.5rem)] flex-col sm:min-h-[calc(100dvh-9rem)] md:-mx-16">
-          <header className="sticky top-0 z-20 shrink-0 border-b border-white/[0.06] bg-background/90 px-2 pb-5 pt-1 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 sm:px-4 md:px-0">
+          <header className="sticky top-0 z-20 shrink-0 border-b border-border bg-background/95 px-2 pb-5 pt-1 backdrop-blur-md supports-[backdrop-filter]:bg-background/90 sm:px-4 md:px-0">
             <div className="mx-auto w-full max-w-4xl space-y-4">
               {onPageBack ? (
                 <button
                   type="button"
                   onClick={onPageBack}
-                  className="group inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white/60 transition-colors hover:border-white/20 hover:text-white"
+                  className="group inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-primary/30 hover:text-primary"
                 >
                   <ArrowLeft className="h-4 w-4 shrink-0" />
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">Voltar</span>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.2em]">Voltar</span>
                 </button>
               ) : null}
               <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0 space-y-1.5">
-                  <p className="font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-primary">Agendar treino</p>
-                  <h1 className="font-display text-2xl font-bold uppercase tracking-tight text-white md:text-3xl">Novo treino</h1>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-primary">Agendar treino</p>
+                  <h1 className="text-3xl font-medium tracking-[-0.04em] text-foreground md:text-4xl">Novo treino</h1>
                   <p className="font-body text-sm text-muted-foreground">
                     Defina o nome, a data e os exercícios. O atleta vê isto como a sessão do dia.
                   </p>
                 </div>
-                <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:flex-row sm:rounded-xl sm:border sm:border-white/[0.08] sm:bg-white/[0.03] sm:p-1">
+                <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:flex-row sm:rounded-full sm:border sm:border-border sm:bg-card sm:p-1">
                   <div className="grid grid-cols-2 gap-2 sm:contents sm:gap-0">
                     <button
                       type="button"
                       onClick={() => setBuilderMode("form")}
                       className={cn(
-                        "rounded-lg px-4 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.18em] transition-colors sm:py-2",
+                        "rounded-full px-4 py-3 text-sm font-medium transition-colors sm:py-2",
                         builderMode === "form"
-                          ? "bg-primary text-white"
-                          : "border border-white/[0.08] bg-white/[0.04] text-white/45 hover:border-white/15 hover:text-white sm:border-0 sm:bg-transparent",
+                          ? "bg-primary text-primary-foreground"
+                          : "border border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary sm:border-0 sm:bg-transparent",
                       )}
                     >
                       Formulário
@@ -983,10 +981,10 @@ export function TrainerWorkoutBuilderDialog({
                       type="button"
                       onClick={() => setBuilderMode("smart")}
                       className={cn(
-                        "rounded-lg px-4 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.18em] transition-colors sm:py-2",
+                        "rounded-full px-4 py-3 text-sm font-medium transition-colors sm:py-2",
                         builderMode === "smart"
-                          ? "bg-primary text-white"
-                          : "border border-white/[0.08] bg-white/[0.04] text-white/45 hover:border-white/15 hover:text-white sm:border-0 sm:bg-transparent",
+                          ? "bg-primary text-primary-foreground"
+                          : "border border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary sm:border-0 sm:bg-transparent",
                       )}
                     >
                       Texto livre
@@ -1019,27 +1017,27 @@ export function TrainerWorkoutBuilderDialog({
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
         {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
-        <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto rounded-2xl border border-white/[0.08] bg-[#121212] p-0 shadow-2xl">
-          <DialogHeader className="border-b border-white/[0.06] p-6 md:p-8">
+        <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto rounded-[28px] border border-border bg-card p-0">
+          <DialogHeader className="border-b border-border p-6 md:p-8">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0 space-y-1.5">
-                <p className="font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-primary">Agendar treino</p>
-                <DialogTitle className="font-display text-2xl font-bold uppercase tracking-tight text-white md:text-3xl">
+                <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-primary">Agendar treino</p>
+                <DialogTitle className="text-3xl font-medium tracking-[-0.04em] text-foreground md:text-4xl">
                   Novo treino
                 </DialogTitle>
                 <p className="font-body text-sm text-muted-foreground">
                   Defina o nome, a data e os exercícios. O atleta vê isto como a sessão do dia.
                 </p>
               </div>
-              <div className="flex shrink-0 rounded-xl border border-white/[0.08] bg-white/[0.03] p-1">
+              <div className="flex shrink-0 rounded-full border border-border bg-background p-1">
                 <button
                   type="button"
                   onClick={() => setBuilderMode("form")}
                   className={cn(
-                    "rounded-lg px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.18em] transition-colors",
+                    "rounded-full px-4 py-2 text-sm font-medium transition-colors",
                     builderMode === "form"
-                      ? "bg-primary text-white"
-                      : "text-white/45 hover:bg-white/[0.06] hover:text-white",
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-primary",
                   )}
                 >
                   Formulário
@@ -1048,10 +1046,10 @@ export function TrainerWorkoutBuilderDialog({
                   type="button"
                   onClick={() => setBuilderMode("smart")}
                   className={cn(
-                    "rounded-lg px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.18em] transition-colors",
+                    "rounded-full px-4 py-2 text-sm font-medium transition-colors",
                     builderMode === "smart"
-                      ? "bg-primary text-white"
-                      : "text-white/45 hover:bg-white/[0.06] hover:text-white",
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-primary",
                   )}
                 >
                   Texto livre

@@ -27,9 +27,11 @@ const TrainerCreateWorkoutPage = ({ mode }: { mode: ScopedMode }) => {
 
   if (loadingMeta) {
     return (
-      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 rounded-2xl border border-white/[0.08] bg-[#121212] px-8 py-24 text-white/30">
-        <Dumbbell className="h-12 w-12 animate-pulse text-white/20" />
-        <p className="font-mono text-[10px] uppercase tracking-widest">A carregar…</p>
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 rounded-[28px] border border-border bg-card px-8 py-24 text-muted-foreground">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-background text-primary">
+          <Dumbbell className="h-7 w-7 animate-pulse" />
+        </div>
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em]">A carregar criador de treino…</p>
       </div>
     );
   }
