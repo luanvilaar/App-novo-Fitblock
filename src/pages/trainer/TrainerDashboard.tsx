@@ -21,12 +21,14 @@ import {
   MessageSquare,
   ChevronRight,
   Check,
+  type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import PremiumActivityChart from "@/components/PremiumActivityChart";
 import { TrainerPanelCard, TrainerPanelCardMedia } from "@/components/trainer/TrainerPanelCard";
+import { cn } from "@/lib/utils";
 import heroImage from "@/assets/crossfit-program.jpg";
 
 interface PendingStudent {
@@ -69,26 +71,65 @@ const ActivePill = () => (
   </div>
 );
 
-const StatCard = ({ label, value, icon: Icon }: { label: string; value: number; icon: any }) => (
+const StatCard = ({
+  label,
+  value,
+  icon: Icon,
+  tone = "light",
+  helper,
+}: {
+  label: string;
+  value: number;
+  icon: LucideIcon;
+  tone?: "light" | "dark";
+  helper: string;
+}) => (
   <motion.div 
-    initial={{ opacity: 0, y: 20 }} 
+    initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }} 
     className="h-full min-w-0"
   >
-    <div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[3rem] border border-black/5 bg-white p-10 transition-all hover:shadow-zen hover:ring-1 hover:ring-black/5">
+    <div
+      className={cn(
+        "group relative flex h-full flex-col justify-between overflow-hidden rounded-[2.25rem] border p-7 transition-all duration-300",
+        tone === "dark"
+          ? "border-black bg-black text-white shadow-[0_18px_42px_rgba(0,0,0,0.18)]"
+          : "border-black/10 bg-[#f2f2f0] text-black shadow-[0_10px_24px_rgba(0,0,0,0.08)] hover:border-black/20 hover:shadow-[0_14px_30px_rgba(0,0,0,0.12)]",
+      )}
+    >
       <div className="flex items-start justify-between">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#f3f3f3] text-black/20 transition-all group-hover:bg-black group-hover:text-white">
-          <Icon className="h-7 w-7" strokeWidth={2} />
+        <div
+          className={cn(
+            "flex h-14 w-14 items-center justify-center rounded-full transition-all",
+            tone === "dark"
+              ? "bg-white/10 text-white"
+              : "bg-white text-black/65 ring-1 ring-black/8 group-hover:bg-black group-hover:text-white",
+          )}
+        >
+          <Icon className="h-6 w-6" strokeWidth={2.2} />
         </div>
-        <div className="h-2 w-2 rounded-full bg-black/10 group-hover:bg-black transition-colors" />
+        <div className={cn("h-2.5 w-2.5 rounded-full", tone === "dark" ? "bg-white/35" : "bg-black/20")} />
       </div>
       
-      <div className="space-y-1 pt-12">
-        <p className="font-sans text-6xl font-black tracking-tighter text-black tabular-nums leading-none lg:text-7xl">
+      <div className="space-y-2 pt-10">
+        <p
+          className={cn(
+            "font-sans text-5xl font-black tracking-tighter tabular-nums leading-none lg:text-6xl",
+            tone === "dark" ? "text-white" : "text-black",
+          )}
+        >
           {value}
         </p>
-        <p className="font-mono text-[9px] font-black uppercase tracking-[0.3em] text-black/20">
+        <p
+          className={cn(
+            "font-mono text-[9px] font-black uppercase tracking-[0.24em]",
+            tone === "dark" ? "text-white/55" : "text-black/45",
+          )}
+        >
           {label}
+        </p>
+        <p className={cn("max-w-[18ch] text-sm leading-snug", tone === "dark" ? "text-white/72" : "text-black/55")}>
+          {helper}
         </p>
       </div>
     </div>
@@ -336,8 +377,11 @@ const TrainerDashboard = () => {
             completed: logMap.get(w.id)?.has(id) || false
           }));
 
-          const groupsData = w.groups as any;
-          const groupName = Array.isArray(groupsData) ? groupsData[0]?.name : groupsData?.name || null;
+          const groupsData = w.groups;
+          const groupName =
+            typeof groupsData === "object" && groupsData !== null && "name" in groupsData
+              ? (groupsData as { name?: string }).name || null
+              : null;
 
           return {
             workout_id: w.id,
@@ -415,23 +459,26 @@ const TrainerDashboard = () => {
 
   return (
     <div className="space-y-24">
-      <header className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
-        <div className="space-y-4">
-          <p className="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-black/20">Coach Workspace</p>
-          <h1 className="font-sans text-5xl font-black tracking-tighter text-black sm:text-6xl lg:text-8xl">
+      <header className="flex flex-col gap-8 rounded-[2.5rem] border border-black/6 bg-[#f6f5f2] px-8 py-8 shadow-[0_14px_36px_rgba(0,0,0,0.06)] lg:flex-row lg:items-end lg:justify-between lg:px-10">
+        <div className="max-w-3xl space-y-3">
+          <p className="font-mono text-[10px] font-black uppercase tracking-[0.26em] text-black/28">Coach Workspace</p>
+          <h1 className="font-sans text-4xl font-black tracking-tighter text-black sm:text-5xl lg:text-6xl">
             Performance.
           </h1>
+          <p className="max-w-2xl text-sm leading-relaxed text-black/55 sm:text-base">
+            Visão rápida do que precisa de atenção agora: atletas ativos, comunidades em andamento e protocolos publicados.
+          </p>
         </div>
-        <div className="flex shrink-0 items-center gap-4">
+        <div className="flex shrink-0 flex-wrap items-center gap-3">
           <button
             type="button"
             onClick={() => navigate("/trainer/treinos")}
-            className="h-16 rounded-full bg-black px-10 text-sm font-black uppercase tracking-widest text-white transition-all active:scale-95 shadow-xl"
+            className="h-14 rounded-full bg-black px-7 text-sm font-black uppercase tracking-[0.18em] text-white transition-all active:scale-95 shadow-[0_14px_32px_rgba(0,0,0,0.18)]"
           >
             Novo protocolo
           </button>
           <NavLink to="/trainer/atletas">
-            <button className="h-16 rounded-full border border-black/5 bg-[#f3f3f3] px-10 text-sm font-black uppercase tracking-widest text-black/40 transition-all hover:bg-black hover:text-white">
+            <button className="h-14 rounded-full border border-black/10 bg-white px-7 text-sm font-black uppercase tracking-[0.18em] text-black/55 transition-all hover:border-black/25 hover:bg-black hover:text-white">
               Atletas
             </button>
           </NavLink>
@@ -439,10 +486,26 @@ const TrainerDashboard = () => {
       </header>
 
       {/* ── STATS GRID ── */}
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
-        <StatCard label="Atletas Ativos" value={stats.students} icon={Users} />
-        <StatCard label="Comunidades" value={stats.groups} icon={Layers} />
-        <StatCard label="Protocolos" value={stats.workouts} icon={Dumbbell} />
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
+        <StatCard
+          label="Atletas Ativos"
+          value={stats.students}
+          icon={Users}
+          tone="dark"
+          helper="Atletas em acompanhamento com acesso e vínculo ativos."
+        />
+        <StatCard
+          label="Comunidades"
+          value={stats.groups}
+          icon={Layers}
+          helper="Grupos atualmente organizados no seu workspace."
+        />
+        <StatCard
+          label="Protocolos"
+          value={stats.workouts}
+          icon={Dumbbell}
+          helper="Protocolos publicados e prontos para execução."
+        />
       </div>
 
       {pendingLinkCount > 0 && (

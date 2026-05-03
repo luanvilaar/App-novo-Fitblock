@@ -29,6 +29,8 @@ O trabalho cobre:
 - shell e dashboards do aluno
 - alinhamento das rotas públicas/de apoio ao mesmo sistema
 - redesign da timeline de periodização para coach e aluno
+- ajuste de contraste monocromático dos cards de atletas (coach)
+- simplificação visual do hero e dos cards de métricas no dashboard do coach
 
 Fica fora do escopo:
 - alterações de schema ou regras Supabase
@@ -81,6 +83,8 @@ Fica fora do escopo:
 - [x] Redesenhar shell e páginas principais do treinador
 - [x] Redesenhar shell e páginas principais do aluno
 - [x] Redesenhar o calendário de periodização como timeline compacta com edição em lote para coach
+- [x] Ajustar contraste dos cards de atletas para melhor separação do background
+- [x] Simplificar hero e métricas do dashboard para melhorar leitura e hierarquia
 - [x] Rodar quality gates
 - [x] Atualizar checklist e file list antes de concluir
 
@@ -115,6 +119,8 @@ Fica fora do escopo:
 
 - `npm test`: ✅ passou (`11` arquivos, `125` testes)
 - `npm run build`: ✅ passou
+- `npx eslint src/pages/trainer/TrainerDashboard.tsx`: ⚠️ 1 warning preexistente de dependência em `useEffect` (`fetchData`)
+- `npx eslint src/pages/trainer/TrainerAthletes.tsx`: ⚠️ falhou por `no-explicit-any` preexistente no próprio arquivo (`catch`), sem relação com o ajuste visual
 - `npx eslint src/components/client/StudentPeriodizationStrip.tsx src/hooks/useTrainingPeriodWeeks.ts src/lib/training-periodization.ts`: ✅ passou sem warnings
 - `npm run lint`: ⚠️ falhou por problemas preexistentes no workspace, incluindo `.aiox-core`, regras `no-explicit-any`, parsing errors em templates e issues antigas fora do redesign
 - `npm run typecheck`: ⚠️ falhou por problemas preexistentes de tipagem em fluxos Supabase, trainer builders e utilitários já existentes no repo
@@ -155,4 +161,5 @@ O redesign não introduziu uma nova classe dominante de falhas nos gates; os blo
 - [x] `src/pages/client/ClientHome.tsx`
 - [x] `src/pages/client/ClientProgress.tsx`
 - [x] `src/pages/trainer/TrainerAthletes.tsx`
+- [x] `src/pages/trainer/TrainerDashboard.tsx`
 - [x] `src/pages/trainer/TrainerWorkouts.tsx`

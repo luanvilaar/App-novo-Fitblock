@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import EditAthleteDialog from "@/components/trainer/EditAthleteDialog";
+import { cn } from "@/lib/utils";
 
 interface Student {
   id: string;
@@ -295,15 +296,15 @@ const TrainerAthletes = () => {
             {pendingLinks.map((req) => (
               <div
                 key={req.id}
-                className="relative group space-y-10 rounded-[3rem] border border-black/5 bg-white p-10 shadow-sm transition-all hover:shadow-zen"
+                className="relative group space-y-10 rounded-[3rem] border border-black/10 bg-[#f7f7f7] p-10 ring-1 ring-black/10 shadow-[0_6px_14px_rgba(0,0,0,0.08)] transition-all duration-300 hover:ring-black/18 hover:shadow-[0_10px_22px_rgba(0,0,0,0.12)]"
               >
                 <div className="space-y-2">
                   <div className="font-sans text-3xl font-black tracking-tighter text-black">{req.athleteName.toLowerCase()}</div>
-                  <div className="truncate font-mono text-[9px] font-black text-black/30 uppercase tracking-widest">{req.athleteEmail}</div>
+                  <div className="truncate font-mono text-[9px] font-black text-black/40 uppercase tracking-widest">{req.athleteEmail}</div>
                 </div>
                 
-                <div className="flex items-center justify-between border-t border-black/5 pt-8">
-                   <div className="font-mono text-[9px] font-black uppercase tracking-widest text-black/20">
+                <div className="flex items-center justify-between border-t border-black/10 pt-8">
+                   <div className="font-mono text-[9px] font-black uppercase tracking-widest text-black/35">
                       {req.requested_at ? format(new Date(req.requested_at), "dd MMM yy") : "N/A"}
                    </div>
                    <div className="flex gap-3">
@@ -317,7 +318,7 @@ const TrainerAthletes = () => {
                       <button
                         disabled={linkActionId === req.id}
                         onClick={() => resolveLinkRequest(req.id, "rejected")}
-                        className="flex h-14 w-14 items-center justify-center rounded-full bg-[#f3f3f3] text-black/30 transition-all active:scale-90 hover:bg-red-500 hover:text-white"
+                        className="flex h-14 w-14 items-center justify-center rounded-full bg-[#e9e9e9] text-black/45 transition-all active:scale-90 hover:bg-red-500 hover:text-white"
                       >
                         <UserX className="w-6 h-6" strokeWidth={3} />
                       </button>
@@ -331,12 +332,12 @@ const TrainerAthletes = () => {
 
       <div className="flex flex-col lg:flex-row gap-12 items-start lg:items-center justify-between border-t border-black/5 pt-16">
          <div className="flex gap-6">
-            <div className="min-w-[180px] rounded-[3rem] bg-white ring-1 ring-black/5 p-10 shadow-sm">
-               <div className="font-mono text-[9px] font-black uppercase tracking-widest text-black/20 mb-4">Ativos</div>
+            <div className="min-w-[180px] rounded-[3rem] bg-[#f7f7f7] ring-1 ring-black/10 p-10 shadow-[0_4px_12px_rgba(0,0,0,0.07)]">
+               <div className="font-mono text-[9px] font-black uppercase tracking-widest text-black/35 mb-4">Ativos</div>
                <div className="font-sans text-6xl font-black leading-none tracking-tighter text-black">{activeCount}</div>
             </div>
-            <div className="min-w-[180px] rounded-[3rem] bg-white ring-1 ring-black/5 p-10 shadow-sm">
-               <div className="font-mono text-[9px] font-black uppercase tracking-widest text-black/20 mb-4">Pendentes</div>
+            <div className="min-w-[180px] rounded-[3rem] bg-[#f7f7f7] ring-1 ring-black/10 p-10 shadow-[0_4px_12px_rgba(0,0,0,0.07)]">
+               <div className="font-mono text-[9px] font-black uppercase tracking-widest text-black/35 mb-4">Pendentes</div>
                <div className="font-sans text-6xl font-black leading-none tracking-tighter text-black">{inactiveCount}</div>
             </div>
          </div>
@@ -373,15 +374,15 @@ const TrainerAthletes = () => {
               className="group"
             >
               <div className={cn(
-                "flex h-full flex-col space-y-12 rounded-[3rem] p-10 transition-all duration-500 ring-1",
+                "flex h-full flex-col space-y-12 rounded-[3rem] p-10 transition-all duration-300 ring-1",
                 !s.active 
-                  ? "bg-[#f3f3f3] ring-black/5" 
-                  : "bg-white ring-black/5 group-hover:ring-black/10 shadow-sm hover:shadow-zen"
+                  ? "bg-[#ececec] ring-black/12 shadow-[0_4px_10px_rgba(0,0,0,0.05)]" 
+                  : "bg-[#f7f7f7] ring-black/10 shadow-[0_6px_14px_rgba(0,0,0,0.08)] group-hover:ring-black/18 group-hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)]"
               )} >
                 <div className="flex items-center gap-8">
                    <div className={cn(
                      "flex h-24 w-24 shrink-0 items-center justify-center rounded-full font-sans text-4xl font-black tracking-tighter transition-all duration-500",
-                     s.active ? "bg-black text-white" : "bg-black/10 text-white"
+                     s.active ? "bg-black text-white" : "bg-black/15 text-black/70"
                    )}>
                      {s.name ? s.name.charAt(0).toUpperCase() : "?"}
                    </div>
@@ -389,21 +390,21 @@ const TrainerAthletes = () => {
                       <h3 className="truncate font-sans text-3xl font-black tracking-tighter text-black transition-colors group-hover:text-black/70">
                         {s.name ? s.name.toLowerCase() : "sem nome"}
                       </h3>
-                      <p className="truncate font-mono text-[9px] font-black uppercase tracking-widest text-black/30">{s.email}</p>
+                      <p className="truncate font-mono text-[9px] font-black uppercase tracking-widest text-black/40">{s.email}</p>
                    </div>
                 </div>
 
                 {!s.active && (
-                   <div className="flex items-center gap-3 rounded-full bg-black/5 px-6 py-2.5 w-fit">
-                      <span className="h-2 w-2 rounded-full bg-black/20 animate-pulse" />
-                      <span className="font-mono text-[9px] font-black uppercase tracking-widest text-black/40">Inativo</span>
+                   <div className="flex w-fit items-center gap-3 rounded-full bg-black/10 px-6 py-2.5">
+                      <span className="h-2 w-2 rounded-full bg-black/35 animate-pulse" />
+                      <span className="font-mono text-[9px] font-black uppercase tracking-widest text-black/55">Inativo</span>
                    </div>
                 )}
 
-                <div className="flex items-center justify-between gap-6 border-t border-black/5 pt-10">
+                <div className="flex items-center justify-between gap-6 border-t border-black/10 pt-10">
                    <button
                      onClick={() => navigate(`/trainer/atletas/${s.id}/treinos`)}
-                     className="h-14 flex-1 rounded-full bg-[#f3f3f3] text-[10px] font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-white flex items-center justify-center gap-3"
+                     className="flex h-14 flex-1 items-center justify-center gap-3 rounded-full border border-black/10 bg-black/5 text-[10px] font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-white"
                    >
                      <Calendar className="w-5 h-5" strokeWidth={3} /> Agenda
                    </button>
@@ -411,13 +412,13 @@ const TrainerAthletes = () => {
                    <div className="flex gap-3">
                       <button
                         onClick={() => { setEditStudent(s); setEditOpen(true); }}
-                        className="h-14 w-14 flex items-center justify-center rounded-full bg-[#f3f3f3] text-black/30 transition-all hover:bg-black hover:text-white"
+                        className="flex h-14 w-14 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/45 transition-all hover:bg-black hover:text-white"
                       >
                         <Pencil className="w-5 h-5" strokeWidth={3} />
                       </button>
                       <button
                         onClick={() => { setDeleteStudentId(s.id); setShowDeleteConfirm(true); }}
-                        className="h-14 w-14 flex items-center justify-center rounded-full bg-[#f3f3f3] text-black/30 transition-all hover:bg-red-500 hover:text-white"
+                        className="flex h-14 w-14 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/45 transition-all hover:bg-red-500 hover:text-white"
                       >
                         <Trash2 className="w-5 h-5" strokeWidth={3} />
                       </button>
