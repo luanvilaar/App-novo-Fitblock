@@ -1,0 +1,5 @@
+
+ALTER TABLE public.exercises
+  ADD COLUMN IF NOT EXISTS param1_type text DEFAULT NULL,
+  ADD COLUMN IF NOT EXISTS param2_type text DEFAULT NULL,
+  ADD COLUMN IF NOT EXISTS param3_type text DEFAULT NULL;

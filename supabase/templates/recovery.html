@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>RESET_PASSWORD // FITBLOCK</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body style="margin: 0; padding: 0; background-color: #f1f0e9; font-family: 'Montserrat', sans-serif; color: #121212;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f1f0e9;">
+    <tr>
+      <td align="center" style="padding: 60px 20px;">
+        
+        <!-- Industrial Branding -->
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width: 500px; margin-bottom: 20px;">
+          <tr>
+            <td align="left">
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.3em; color: #41226b; font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">
+                [ SECURITY_PROTOCOL // AUTH_RECOVERY ]
+              </div>
+              <div style="height: 2px; width: 40px; background-color: #FF3300; margin-bottom: 20px;"></div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Main Container -->
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width: 500px; background-color: #ffffff; border: 1px solid #121212;">
+          <tr>
+            <!-- Left Contrast Bar (Industrial Look) -->
+            <td width="6" style="background-color: #121212;"></td>
+            
+            <td style="padding: 45px 35px;">
+              <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 26px; line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; margin: 0 0 25px 0;">
+                Redefinir<br><span style="color: #41226b;">Acesso.</span>
+              </h1>
+              
+              <p style="font-size: 14px; line-height: 1.6; color: #121212; margin-bottom: 30px;">
+                Foi detectada uma solicitação de alteração de senha para o ID:<br>
+                <strong style="font-family: 'JetBrains Mono', monospace; background-color: #f1f0e9; padding: 2px 4px; font-size: 13px;">{{ .Email }}</strong>
+              </p>
+              
+              <p style="font-size: 13px; line-height: 1.6; color: #666666; margin-bottom: 35px; border-left: 2px solid #f1f0e9; padding-left: 15px;">
+                Se você não iniciou este processo, nenhuma ação é necessária. Caso contrário, utilize o comando abaixo para prosseguir.
+              </p>
+
+              <!-- Bold CTA -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="left">
+                <tr>
+                  <td align="center" style="background-color: #FF3300;">
+                    <a href="{{ .ConfirmationURL }}" style="display: inline-block; padding: 20px 35px; background-color: #FF3300; color: #ffffff; text-decoration: none; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; border: 1px solid #FF3300; font-family: 'Montserrat', sans-serif;">
+                      Executar Redefinição &rarr;
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <div style="clear: both; height: 50px;"></div>
+
+              <!-- Direct Link -->
+              <div style="padding-top: 25px; border-top: 1px dashed #121212;">
+                <p style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #999999; margin: 0; line-height: 1.4; text-transform: uppercase;">
+                  Link de emergência (copie e cole):<br>
+                  <a href="{{ .ConfirmationURL }}" style="color: #41226b; text-decoration: none;">{{ .ConfirmationURL }}</a>
+                </p>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Technical Footer -->
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width: 500px; margin-top: 25px;">
+          <tr>
+            <td align="left" style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #666666; text-transform: uppercase; letter-spacing: 0.1em;">
+              FITBLOCK_CORE_v2.0 // EST. 2026<br>
+              SYSTEM_STATUS: <span style="color: #00CC66;">OPERATIONAL</span>
+            </td>
+            <td align="right">
+              <h2 style="font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; letter-spacing: -0.05em; color: #121212; margin: 0;">
+                FIT<span style="color: #41226b;">BLOCK</span>
+              </h2>
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

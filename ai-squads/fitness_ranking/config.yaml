@@ -1,0 +1,36 @@
+# Fitness Ranking Squad Squad Configuration
+# Generated: 2026-03-13
+
+squad:
+  slug: fitness_ranking
+  display_name: "Fitness Ranking Squad"
+  created_at: "2026-03-13"
+  status: in_development
+
+metadata:
+  source_mind: null
+  target_domain: null
+  description: null
+
+workspace_integration:
+  level: read_write
+  rationale: "PENDING - define why this level is required"
+  read_paths: []
+  write_paths: []
+  template_namespace: null
+
+# Agent definitions (populated during scaffolding phase)
+agents: []
+
+# Task definitions (populated during task anatomy phase)
+tasks: []
+
+# Quality gates
+quality:
+  checkpoint_required: true
+  checkpoint_phase: quality_gate
+
+# Pipeline configuration
+pipeline:
+  workflow: create-squad
+  current_phase: init

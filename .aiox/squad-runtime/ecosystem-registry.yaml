@@ -1,0 +1,89 @@
+metadata:
+  version: 1.3.0
+  last_updated: '2026-03-13'
+  total_squads: 1
+  maintainer: squad-creator
+  generated_by: "scripts/refresh-registry.py --write (100% deterministic)"
+squads:
+  squad-creator:
+    path: squads/squad-creator/
+    version: 4.0.0
+    score: 7.5
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: "Base meta-squad para criar squads de agentes via templates e validacao estrutural. Orchestrator: @squad-chief\
+      \ (triage, routing, criacao template-driven de squads). Base mode: 24 tasks, 3 workflows, 1 agent. Pro mode: auto-detected\
+      \ via squad-creator-pro/ (adds mind cloning, DNA extraction, multi-agent orchestration, model routing, advanced optimization).\
+      \ v4.0: Base/Pro split — template-driven base, mind-cloning pro."
+    slashPrefix: squadCreator
+    counts:
+      agents: 1
+      tasks: 24
+      workflows: 3
+      templates: 18
+      checklists: 9
+      data_files: 10
+    agent_names:
+    - squad-chief
+    has_readme: true
+    has_changelog: true
+    domain: squad-creator
+    keywords:
+    - creator
+    - base
+    - meta-squad
+    - criar
+    - squads
+    - agentes
+    - via
+    - templates
+    - validacao
+    - estrutural
+    - orchestrator
+    - squad-chief
+    highlights:
+    - 1 agents, 24 tasks
+    - 3 workflows available
+    - README documented
+    - Command prefix /squadCreator
+    example_use: Use /squadCreator to execute squad-creator workflows in squad-creator.
+domain_index:
+  squad-creator:
+  - squad-creator
+  creator:
+  - squad-creator
+  base:
+  - squad-creator
+  meta-squad:
+  - squad-creator
+  criar:
+  - squad-creator
+  squads:
+  - squad-creator
+  agentes:
+  - squad-creator
+  via:
+  - squad-creator
+  templates:
+  - squad-creator
+  validacao:
+  - squad-creator
+  estrutural:
+  - squad-creator
+  orchestrator:
+  - squad-creator
+  squad-chief:
+  - squad-creator
+summary:
+  total_agents: 1
+  total_tasks: 24
+  total_workflows: 3
+  total_templates: 18
+  total_checklists: 9
+  total_data_files: 10
+maturity_summary:
+  DRAFT: 0
+  DEVELOPING: 1
+  OPERATIONAL: 0

@@ -1,0 +1,1 @@
+ALTER TABLE public.workout_logs ADD COLUMN total_time_seconds INTEGER DEFAULT NULL;
