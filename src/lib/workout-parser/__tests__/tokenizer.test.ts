@@ -155,6 +155,12 @@ describe('tokenizeLine', () => {
       expect(token.type).toBe('PRESCRIPTION');
       expect(token.value.text).toBe('A cada 1min30seg por 5sets');
     });
+
+    it('does not treat "a cada 8 repetições" as EMOM format', () => {
+      const token = tokenizeLine('a cada 8 repetições baixe a carga', 1);
+      expect(token.type).toBe('TEXT');
+      expect(token.value.text).toBe('a cada 8 repetições baixe a carga');
+    });
   });
 
   // ── Prescription ──────────────────────────────────────────────

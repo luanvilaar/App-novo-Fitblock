@@ -49,21 +49,21 @@ const PublicRanking = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border backdrop-blur-md bg-background/80">
-        <div className="max-w-2xl mx-auto flex items-center justify-between px-4 py-3">
+      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/88 backdrop-blur-md">
+        <div className="mx-auto flex max-w-2xl items-center justify-between px-safe py-3">
           <Link
             to="/"
-            className="flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors uppercase tracking-wider"
+            className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-primary"
           >
             <ArrowLeft className="w-4 h-4" />
             Home
           </Link>
 
           <Button
-            variant="outline"
+            variant="secondary-pill"
             size="sm"
             onClick={handleShare}
-            className="gap-2 text-xs uppercase tracking-wider"
+            className="gap-2"
           >
             <Share2 className="w-3.5 h-3.5" />
             Compartilhar
@@ -71,12 +71,12 @@ const PublicRanking = () => {
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-8 sm:py-12">
+      <main className="mx-auto max-w-2xl px-safe py-8 sm:py-12">
         {/* Branding hero */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+          className="card-premium mb-8 rounded-[32px] p-6 text-center sm:p-8"
         >
           {branding?.logo_url && (
             <img
@@ -85,7 +85,7 @@ const PublicRanking = () => {
               className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-2xl object-contain"
             />
           )}
-          <h1 className="text-2xl sm:text-3xl font-light tracking-tight uppercase mb-1">
+          <h1 className="mb-1 text-2xl font-display sm:text-3xl">
             {branding ? (
               <>
                 Ranking{" "}
@@ -99,7 +99,7 @@ const PublicRanking = () => {
               </>
             )}
           </h1>
-          <p className="text-muted-foreground text-xs sm:text-sm font-medium uppercase tracking-widest">
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground sm:text-xs">
             WODs de Segunda a Sexta · Menor pontuação = melhor posição
           </p>
         </motion.div>
@@ -128,7 +128,7 @@ const PublicRanking = () => {
         )}
 
         {!loading && error && (
-          <div className="rounded-xl border border-border bg-secondary/20 px-4 py-6 text-center text-sm text-muted-foreground">
+          <div className="card-premium rounded-[28px] px-4 py-6 text-center text-sm text-muted-foreground">
             <Trophy className="w-8 h-8 mx-auto mb-2 text-muted-foreground/50" />
             {error.toLowerCase().includes("relation") ||
             error.toLowerCase().includes("does not exist")
@@ -138,7 +138,7 @@ const PublicRanking = () => {
         )}
 
         {!loading && !error && ranking.length === 0 && (
-          <div className="rounded-xl border border-border bg-secondary/20 px-4 py-6 text-center text-sm text-muted-foreground">
+          <div className="card-premium rounded-[28px] px-4 py-6 text-center text-sm text-muted-foreground">
             <Trophy className="w-8 h-8 mx-auto mb-2 text-muted-foreground/50" />
             Nenhum atleta encontrado com os filtros selecionados para esta
             semana.
@@ -155,10 +155,10 @@ const PublicRanking = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border py-6 text-center">
+      <footer className="border-t border-border/70 py-6 text-center">
         <Link
           to="/"
-          className="text-xs text-muted-foreground hover:text-primary transition-colors uppercase tracking-widest font-semibold"
+          className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-primary"
         >
           FitBlock Training System
         </Link>

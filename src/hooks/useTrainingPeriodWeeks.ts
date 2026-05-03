@@ -20,13 +20,6 @@ export function useScopedPeriodWeeks(scope: PeriodWeekScope | null, weekStarts: 
   const [rows, setRows] = useState<TrainingPeriodWeekRow[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const scopeKey =
-    scope?.kind === "student"
-      ? `s:${scope.studentId}`
-      : scope?.kind === "group"
-        ? `g:${scope.groupId}`
-        : "";
-
   const fetchRows = useCallback(async () => {
     if (!scope || weekStarts.length === 0) {
       setRows([]);
@@ -57,7 +50,7 @@ export function useScopedPeriodWeeks(scope: PeriodWeekScope | null, weekStarts: 
       else setRows([]);
     }
     setLoading(false);
-  }, [scopeKey, weekStarts.join(",")]);
+  }, [scope, weekStarts]);
 
   useEffect(() => {
     void fetchRows();
@@ -81,6 +74,29 @@ export function useScopedPeriodWeeks(scope: PeriodWeekScope | null, weekStarts: 
     await fetchRows();
   };
 
+  const upsertManyPhases = async (weekStartsToWrite: string[], phase: PeriodPhase) => {
+    if (!scope) throw new Error("scope");
+    if (weekStartsToWrite.length === 0) return;
+
+    const writes = weekStartsToWrite.map((weekStart) =>
+      scope.kind === "student"
+        ? supabase.from("training_period_weeks").upsert(
+            { student_id: scope.studentId, week_start: weekStart, phase },
+            { onConflict: "student_id,week_start" },
+          )
+        : supabase.from("group_training_period_weeks").upsert(
+            { group_id: scope.groupId, week_start: weekStart, phase },
+            { onConflict: "group_id,week_start" },
+          ),
+    );
+
+    const results = await Promise.all(writes);
+    const failed = results.find((result) => result.error);
+    if (failed?.error) throw failed.error;
+
+    await fetchRows();
+  };
+
   const clearWeek = async (weekStart: string) => {
     if (!scope) throw new Error("scope");
     if (scope.kind === "student") {
@@ -101,7 +117,30 @@ export function useScopedPeriodWeeks(scope: PeriodWeekScope | null, weekStarts: 
     await fetchRows();
   };
 
-  return { rows, loading, refetch: fetchRows, upsertPhase, clearWeek };
+  const clearManyWeeks = async (weekStartsToClear: string[]) => {
+    if (!scope) throw new Error("scope");
+    if (weekStartsToClear.length === 0) return;
+
+    if (scope.kind === "student") {
+      const { error } = await supabase
+        .from("training_period_weeks")
+        .delete()
+        .eq("student_id", scope.studentId)
+        .in("week_start", weekStartsToClear);
+      if (error) throw error;
+    } else {
+      const { error } = await supabase
+        .from("group_training_period_weeks")
+        .delete()
+        .eq("group_id", scope.groupId)
+        .in("week_start", weekStartsToClear);
+      if (error) throw error;
+    }
+
+    await fetchRows();
+  };
+
+  return { rows, loading, refetch: fetchRows, upsertPhase, upsertManyPhases, clearWeek, clearManyWeeks };
 }
 
 /** Aluno (dashboard): fases próprias + fases dos grupos a que pertence (prioridade ao aluno). */
@@ -140,6 +179,7 @@ export function useMergedPeriodWeeksForStudent(studentId: string | null, weekSta
         .lte("week_start", maxD);
       groupRows = (gr ?? []) as TrainingPeriodWeekRow[];
     }
+    const normalizedStudentRows = (studentRows ?? []) as TrainingPeriodWeekRow[];
 
     const byWeek = new Map<string, TrainingPeriodWeekRow>();
     const sortedGroup = [...groupRows].sort((a, b) => {
@@ -150,12 +190,12 @@ export function useMergedPeriodWeeksForStudent(studentId: string | null, weekSta
     for (const r of sortedGroup) {
       if (!byWeek.has(r.week_start)) byWeek.set(r.week_start, r);
     }
-    for (const r of studentRows ?? []) {
+    for (const r of normalizedStudentRows) {
       byWeek.set(r.week_start, r);
     }
     setRows(Array.from(byWeek.values()));
     setLoading(false);
-  }, [studentId, weekStarts.join(",")]);
+  }, [studentId, weekStarts]);
 
   useEffect(() => {
     void fetchRows();

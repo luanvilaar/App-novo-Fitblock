@@ -299,9 +299,9 @@ const ClientHome = () => {
             <Activity className="h-7 w-7 text-primary" />
           </div>
           <div className="min-w-0 space-y-1">
-            <p className="font-mono text-[9px] uppercase tracking-[0.24em] text-primary">Dashboard</p>
-            <p className="font-body text-sm text-muted-foreground">{getGreeting()}</p>
-            <h1 className="line-clamp-2 break-words font-display text-4xl font-normal tracking-[-0.06em] text-foreground sm:text-5xl md:text-[4rem] md:leading-[0.95]">
+            <p className="font-mono text-[10px] uppercase tracking-[1.4px] text-primary">Dashboard</p>
+            <p className="font-body text-xs text-muted-foreground">{getGreeting()}</p>
+            <h1 className="line-clamp-2 break-words font-display text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-[4rem] md:leading-[0.95]">
               {profileName || "Atleta"}
             </h1>
             <p className="max-w-md font-body text-sm text-muted-foreground">
@@ -371,23 +371,23 @@ const ClientHome = () => {
           loading="lazy"
         />
         <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_85%_at_50%_40%,transparent_25%,rgba(247,247,244,0.55)_100%)] md:hidden"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_85%_at_50%_40%,transparent_25%,rgba(18,18,18,0.72)_100%)] md:hidden"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#f7f7f4]/90 via-[#f7f7f4]/26 to-transparent md:hidden"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#101010]/95 via-[#101010]/35 to-transparent md:hidden"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-[#f7f7f4]/94 via-[#f7f7f4]/44 to-transparent md:block"
+          className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-[#101010]/96 via-[#101010]/52 to-transparent md:block"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-[#f7f7f4]/72 via-transparent to-white/35 md:block"
+          className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-[#101010]/78 via-transparent to-white/10 md:block"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(ellipse_100%_120%_at_65%_50%,transparent_0%,rgba(51,33,74,0.12)_100%)] md:block"
+          className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(ellipse_100%_120%_at_65%_50%,transparent_0%,rgba(30,215,96,0.12)_100%)] md:block"
           aria-hidden
         />
       </motion.div>

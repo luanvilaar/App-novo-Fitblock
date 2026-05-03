@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ArrowLeft, ArrowRight, BadgeCheck, KeyRound, Loader2, ShieldCheck } from "lucide-react";
+
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
-import { ArrowRight, Loader2, Trophy, Key } from "lucide-react";
 import logo from "@/assets/logo_fit.png";
+import heroImage from "@/assets/crossfit-program.jpg";
 
 const TrainerRegister = () => {
   const navigate = useNavigate();
@@ -19,29 +21,32 @@ const TrainerRegister = () => {
   const [franchiseUnit, setFranchiseUnit] = useState("");
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
-  const [codeError, setCodeError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) navigate("/redirect", { replace: true });
+    void supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        navigate("/redirect", { replace: true });
+        return;
+      }
       setPageLoading(false);
     });
   }, [navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setCodeError("");
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setErrorMessage("");
 
     if (!name.trim() || !email.trim() || !password || !confirmPassword || !accessCode.trim() || !franchiseUnit.trim()) {
-      toast.error("Preencha todos os campos");
+      setErrorMessage("Preencha todos os campos para continuar.");
       return;
     }
     if (password !== confirmPassword) {
-      toast.error("Senhas não coincidem");
+      setErrorMessage("As senhas não coincidem.");
       return;
     }
     if (password.length < 6) {
-      toast.error("Senha deve ter no mínimo 6 caracteres");
+      setErrorMessage("A senha precisa ter pelo menos 6 caracteres.");
       return;
     }
 
@@ -55,198 +60,252 @@ const TrainerRegister = () => {
         },
       });
 
-      if (signUpError) throw signUpError;
-      await new Promise((r) => setTimeout(r, 1500));
+      if (signUpError) {
+        throw signUpError;
+      }
 
-      const { data: result, error: fnError } = await supabase.functions.invoke("validate-trainer-code", {
-        body: {
-          access_code: accessCode.trim().toUpperCase(),
-          franchise_unit: franchiseUnit.trim(),
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+
+      const { data: result, error: fnError } = await supabase.functions.invoke(
+        "validate-trainer-code",
+        {
+          body: {
+            access_code: accessCode.trim().toUpperCase(),
+            franchise_unit: franchiseUnit.trim(),
+          },
         },
-      });
+      );
 
-      if (fnError) {
-        setCodeError("Código não reconhecido. Verifique com a franquia FitBlock.");
-        toast.error("Erro ao validar código de acesso");
+      if (fnError || !result?.success) {
+        setErrorMessage(
+          result?.message || "Código não reconhecido. Verifique com a sua franquia FitBlock.",
+        );
+        toast.error("Falha na validação do código");
         setLoading(false);
         return;
       }
 
-      if (!result?.success) {
-        setCodeError(result?.message || "Código não reconhecido. Verifique com a franquia FitBlock.");
-        toast.error("Código de acesso inválido");
-        setLoading(false);
-        return;
-      }
-
-      toast.success("Bem-vindo, Treinador Oficial FitBlock! 🏆");
-      await new Promise((r) => setTimeout(r, 800));
+      toast.success("Cadastro oficial concluído.");
+      await new Promise((resolve) => setTimeout(resolve, 700));
       navigate("/redirect");
-    } catch (err: any) {
-      if (err.message?.includes("duplicate") || err.message?.includes("already registered")) {
-        toast.error("Este email já está registrado");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Não foi possível concluir o cadastro.";
+      if (message.includes("duplicate") || message.includes("already registered")) {
+        setErrorMessage("Este email já está registrado.");
       } else {
-        toast.error(err.message || "Erro ao criar conta");
+        setErrorMessage(message);
       }
+      toast.error("Erro ao criar conta");
     } finally {
       setLoading(false);
     }
   };
 
-  if (pageLoading) return null;
+  if (pageLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Loader2 className="h-9 w-9 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-6 relative overflow-hidden selection:bg-primary selection:text-white">
-      {/* ── Background Layer ── */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=2800&q=80" 
-          alt="FitBlock Industrial" 
-          className="w-full h-full object-cover opacity-30 grayscale mix-blend-luminosity scale-110 blur-[2px]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
-        <div className="absolute inset-0 dot-grid opacity-30" />
+    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
+      <div className="absolute inset-0">
+        <img src={heroImage} alt="" className="h-full w-full object-cover opacity-[0.16] saturate-0" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,18,18,0.72),rgba(18,18,18,0.98)_52%,rgba(18,18,18,1)_100%)]" />
       </div>
 
-      {/* ── Register Interface ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-xl relative z-20"
-      >
-        <div className="relative group">
-          <div className="absolute -inset-0.5 bg-gradient-to-b from-white/10 to-transparent clip-cut-corner-lg opacity-50" />
-          <div className="bg-[#0a0a0a]/95 backdrop-blur-2xl p-10 relative clip-cut-corner-lg border border-white/5">
-            
-            {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-white/5 pb-8">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_10px_rgba(51,33,74,0.45)]" />
-                   <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-primary font-bold">OFFICIAL_TRAINER_ENROLLMENT</span>
-                </div>
-                <h1 className="font-display text-4xl uppercase tracking-tighter text-white leading-none">
-                  Cadastro <span className="text-primary italic">Oficial</span>
-                </h1>
-              </div>
-              <div className="flex justify-center md:justify-end">
-                <img src={logo} alt="FitBlock" className="h-20 w-auto object-contain brightness-110 drop-shadow-[0_0_30px_rgba(51,33,74,0.18)]" />
-              </div>
-            </div>
+      <div className="relative z-10 min-h-screen px-safe pt-safe pb-safe">
+        <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center py-8">
+          <div className="split-layout w-full items-stretch gap-4 lg:gap-6">
+            <motion.section
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+              className="card-terminal flex flex-col justify-between rounded-[32px] p-6 sm:p-8 lg:p-10"
+            >
+              <div className="space-y-8">
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary"
+                >
+                  <ArrowLeft className="h-3.5 w-3.5" />
+                  voltar ao acesso principal
+                </Link>
 
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Seção 1: Credenciais */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <Label className="font-mono text-[8px] uppercase tracking-[0.4em] text-muted-foreground ml-1">Full_Name</Label>
+                <div className="flex items-center gap-3">
+                  <img src={logo} alt="FitBlock Training" className="h-14 w-auto object-contain" />
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
+                      treinador oficial
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Área dedicada a coaches aprovados pela operação FitBlock.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h1 className="max-w-xl font-display text-4xl leading-[0.94] sm:text-5xl lg:text-6xl">
+                    Cadastro premium com validação da franquia.
+                  </h1>
+                  <p className="max-w-xl text-sm leading-relaxed text-text-soft sm:text-base">
+                    Ative seu acesso de treinador, valide o código oficial da unidade e entre
+                    no painel com tudo pronto para prescrição e acompanhamento.
+                  </p>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="app-surface-soft rounded-[24px] p-4">
+                    <BadgeCheck className="h-5 w-5 text-primary" />
+                    <p className="mt-3 text-sm text-foreground">Fluxo validado por código e unidade.</p>
+                  </div>
+                  <div className="app-surface-soft rounded-[24px] p-4">
+                    <KeyRound className="h-5 w-5 text-primary" />
+                    <p className="mt-3 text-sm text-foreground">Credencial exclusiva para treinadores oficiais.</p>
+                  </div>
+                  <div className="app-surface-soft rounded-[24px] p-4">
+                    <ShieldCheck className="h-5 w-5 text-primary" />
+                    <p className="mt-3 text-sm text-foreground">Liberação segura antes do acesso ao painel.</p>
+                  </div>
+                </div>
+              </div>
+            </motion.section>
+
+            <motion.section
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, ease: "easeOut", delay: 0.08 }}
+              className="card-premium rounded-[32px] p-5 sm:p-7 lg:p-8"
+            >
+              <div className="mb-6 space-y-2">
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
+                  validação de treinador
+                </p>
+                <h2 className="font-display text-3xl leading-[0.96] sm:text-4xl">
+                  Solicite seu acesso oficial
+                </h2>
+                <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
+                  Preencha seus dados, confirme a senha e informe o código de acesso da sua unidade.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {errorMessage && (
+                  <div className="rounded-[24px] border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                    {errorMessage}
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label htmlFor="trainer-name" className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                    Nome completo
+                  </Label>
                   <Input
-                    placeholder="NOME_COMPLETO"
+                    id="trainer-name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="Seu nome"
                     disabled={loading}
-                    className="h-14 border-white/10 bg-white/5 focus:border-primary font-mono text-xs tracking-widest uppercase outline-none transition-all"
                   />
                 </div>
-                <div className="space-y-3">
-                  <Label className="font-mono text-[8px] uppercase tracking-[0.4em] text-muted-foreground ml-1">Network_Identity</Label>
+
+                <div className="space-y-2">
+                  <Label htmlFor="trainer-email" className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                    Email
+                  </Label>
                   <Input
+                    id="trainer-email"
                     type="email"
-                    placeholder="EMAIL_DE_ACESSO"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(event) => setEmail(event.target.value)}
+                    placeholder="coach@fitblock.com"
                     disabled={loading}
-                    className="h-14 border-white/10 bg-white/5 focus:border-primary font-mono text-xs tracking-widest uppercase outline-none transition-all"
                   />
                 </div>
-                <div className="space-y-3">
-                  <Label className="font-mono text-[8px] uppercase tracking-[0.4em] text-muted-foreground ml-1">Master_Key</Label>
-                  <Input
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={loading}
-                    className="h-14 border-white/10 bg-white/5 focus:border-primary font-mono text-xs tracking-widest uppercase outline-none transition-all"
-                  />
-                </div>
-                <div className="space-y-3">
-                  <Label className="font-mono text-[8px] uppercase tracking-[0.4em] text-muted-foreground ml-1">Key_Verification</Label>
-                  <Input
-                    type="password"
-                    placeholder="••••••••"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    disabled={loading}
-                    className="h-14 border-white/10 bg-white/5 focus:border-primary font-mono text-xs tracking-widest uppercase outline-none transition-all"
-                  />
-                </div>
-              </div>
 
-              {/* Seção 2: Validação Industrial */}
-              <div className="bg-white/[0.02] border border-white/5 p-6 space-y-6 clip-cut-corner-sm">
-                <div className="flex items-center gap-3">
-                  <Key className="w-4 h-4 text-primary" />
-                  <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-white/60 font-bold">SECURITY_VERIFICATION</span>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <Label className="font-mono text-[8px] uppercase tracking-[0.4em] text-muted-foreground ml-1">Access_Auth_Code</Label>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="trainer-password" className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                      Senha
+                    </Label>
                     <Input
-                      placeholder="FBK-XXXX-XX"
+                      id="trainer-password"
+                      type="password"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                      placeholder="••••••••"
+                      disabled={loading}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="trainer-password-confirm" className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                      Confirmar senha
+                    </Label>
+                    <Input
+                      id="trainer-password-confirm"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(event) => setConfirmPassword(event.target.value)}
+                      placeholder="••••••••"
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="trainer-access-code" className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                      Código de acesso
+                    </Label>
+                    <Input
+                      id="trainer-access-code"
                       value={accessCode}
-                      onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+                      onChange={(event) => setAccessCode(event.target.value.toUpperCase())}
+                      placeholder="FBK-XXXX-XX"
                       disabled={loading}
-                      className={cn(
-                        "h-14 border-white/10 bg-white/5 focus:border-primary font-mono text-xs tracking-widest uppercase outline-none transition-all",
-                        codeError && "border-destructive text-destructive"
-                      )}
                     />
-                    {codeError && <p className="font-mono text-[7px] text-destructive uppercase tracking-widest ml-1">{codeError}</p>}
                   </div>
-                  <div className="space-y-3">
-                    <Label className="font-mono text-[8px] uppercase tracking-[0.4em] text-muted-foreground ml-1">Franchise_Unit</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="trainer-franchise-unit" className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                      Unidade
+                    </Label>
                     <Input
-                      placeholder="UNIDADE_EX_MOEMA"
+                      id="trainer-franchise-unit"
                       value={franchiseUnit}
-                      onChange={(e) => setFranchiseUnit(e.target.value)}
+                      onChange={(event) => setFranchiseUnit(event.target.value)}
+                      placeholder="Ex.: Moema"
                       disabled={loading}
-                      className="h-14 border-white/10 bg-white/5 focus:border-primary font-mono text-xs tracking-widest uppercase outline-none transition-all"
                     />
                   </div>
                 </div>
-              </div>
 
-              <div className="flex flex-col items-center gap-6 pt-4">
-                <button
+                <Button
                   type="submit"
+                  variant="primary-pill"
+                  size="xl"
+                  className="mt-2 w-full"
                   disabled={loading}
-                  className="w-full h-16 bg-white text-black font-display-wide font-extrabold uppercase text-xs hover:bg-white/90 transition-all flex items-center justify-between px-10 group disabled:opacity-50 shadow-2xl rounded-2xl"
                 >
                   {loading ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      INITIALIZING_REGISTRY
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      validando cadastro
                     </>
                   ) : (
                     <>
-                      <span>EFETIVAR_CADASTRO_MESTRE</span>
-                      <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" strokeWidth={3} />
+                      concluir cadastro oficial
+                      <ArrowRight className="h-4 w-4" />
                     </>
                   )}
-                </button>
-
-                <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
-                  Já possui credenciais?{" "}
-                  <Link to="/login" className="text-primary hover:text-white transition-colors font-bold">
-                    VOLTAR_AO_LOGIN
-                  </Link>
-                </p>
-              </div>
-            </form>
+                </Button>
+              </form>
+            </motion.section>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

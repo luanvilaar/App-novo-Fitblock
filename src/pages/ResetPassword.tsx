@@ -1,13 +1,14 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { AlertCircle, ArrowLeft, ArrowRight, Loader2, Shield } from "lucide-react";
+
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { Loader2, ArrowLeft, ArrowRight, AlertCircle, Shield } from "lucide-react";
-import { motion } from "framer-motion";
-import logoLight from "@/assets/fitblock-logo.png";
+import logo from "@/assets/logo_fit.png";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -53,11 +54,12 @@ const ResetPassword = () => {
       };
     };
 
-    handleRecovery();
+    void handleRecovery();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
     if (password !== confirmPassword) {
       toast.error("As senhas não coincidem");
       return;
@@ -66,25 +68,29 @@ const ResetPassword = () => {
       toast.error("A senha deve ter pelo menos 6 caracteres");
       return;
     }
+
     setLoading(true);
     try {
       const { error } = await supabase.auth.updateUser({ password });
-      if (error) throw error;
-      toast.success("Senha atualizada com sucesso!");
-      setTimeout(() => navigate("/redirect"), 2000);
-    } catch (error: any) {
-      toast.error(error.message);
+      if (error) {
+        throw error;
+      }
+      toast.success("Senha atualizada com sucesso.");
+      setTimeout(() => navigate("/redirect"), 1600);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Erro ao atualizar senha.";
+      toast.error(message);
       setLoading(false);
     }
   };
 
   if (checking) {
     return (
-      <div className="min-h-screen bg-[#F6F3EE] flex items-center justify-center p-4">
-        <div className="text-center space-y-4">
-          <Loader2 className="w-10 h-10 animate-spin text-muted-foreground mx-auto" />
-          <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium">
-            Validando acesso...
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="space-y-4 text-center">
+          <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary" />
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+            validando acesso
           </p>
         </div>
       </div>
@@ -92,116 +98,100 @@ const ResetPassword = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F6F3EE] flex items-center justify-center p-4 sm:p-6">
+    <div className="flex min-h-screen items-center justify-center bg-background px-safe pt-safe pb-safe">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-        className="w-full max-w-md"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="card-premium w-full max-w-md rounded-[32px] p-6 sm:p-8"
       >
-        <motion.div
-          key={isRecovery ? "recovery" : "invalid"}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-          className="card-premium rounded-2xl border border-border/60 bg-card p-8 sm:p-10 shadow-sm space-y-8"
-        >
-          <div className="flex justify-center pb-4 border-b border-border/40">
-            <img
-              src={logoLight}
-              alt="FitBlock Training"
-              className="h-28 w-auto sm:h-32 max-w-[min(100%,420px)] object-contain object-center"
-            />
+        <div className="mb-8 flex justify-center border-b border-border pb-6">
+          <img src={logo} alt="FitBlock Training" className="h-20 w-auto object-contain" />
+        </div>
+
+        {!isRecovery ? (
+          <div className="space-y-6">
+            <div className="space-y-3 text-center">
+              <h1 className="font-display text-3xl text-foreground">Link inválido</h1>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                O link de recuperação expirou, foi usado anteriormente ou não está completo.
+              </p>
+            </div>
+
+            <div className="rounded-[24px] border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+              Solicite um novo email de recuperação a partir da tela principal de acesso.
+            </div>
+
+            <Button type="button" variant="secondary-pill" className="w-full" onClick={() => navigate("/")}>
+              <ArrowLeft className="h-4 w-4" />
+              voltar ao acesso
+            </Button>
           </div>
-
-          {!isRecovery ? (
-            <div className="space-y-6">
-              <div className="text-center space-y-2">
-                <h1 className="text-2xl font-black tracking-tight text-foreground">Link inválido</h1>
-                <p className="text-xs text-muted-foreground uppercase tracking-widest">
-                  Recuperação de senha
-                </p>
+        ) : (
+          <div className="space-y-6">
+            <div className="space-y-3 text-center">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-primary">
+                <Shield className="h-6 w-6" />
               </div>
-
-              <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-destructive font-medium leading-relaxed">
-                  O link parece estar corrompido, expirado ou já foi utilizado. Solicite um novo e-mail de
-                  recuperação na tela de login.
-                </p>
-              </div>
-
-              <Button type="button" variant="outline" className="w-full" onClick={() => navigate("/")}>
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Voltar ao início
-              </Button>
+              <h1 className="font-display text-3xl text-foreground">Defina sua nova senha</h1>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Escolha uma senha segura para concluir a recuperação e voltar ao app.
+              </p>
             </div>
-          ) : (
-            <div className="space-y-6">
-              <div className="text-center space-y-3">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/15 text-primary ring-1 ring-primary/20">
-                  <Shield className="h-6 w-6" aria-hidden />
-                </div>
-                <h1 className="text-2xl font-black tracking-tight text-foreground">Nova senha</h1>
-                <p className="text-sm text-muted-foreground leading-relaxed px-1">
-                  Defina uma senha segura para sua conta.
-                </p>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="reset-password" className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Nova senha
+                </Label>
+                <Input
+                  id="reset-password"
+                  type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="••••••••"
+                  disabled={loading}
+                />
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="reset-password">Nova senha</Label>
-                  <Input
-                    id="reset-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={loading}
-                    className="h-12 rounded-xl bg-secondary border-border"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="reset-password-confirm">Confirmar senha</Label>
-                  <Input
-                    id="reset-password-confirm"
-                    type="password"
-                    placeholder="••••••••"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    disabled={loading}
-                    className="h-12 rounded-xl bg-secondary border-border"
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="reset-password-confirm" className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Confirmar senha
+                </Label>
+                <Input
+                  id="reset-password-confirm"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  placeholder="••••••••"
+                  disabled={loading}
+                />
+              </div>
 
-                <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Atualizando...
-                    </>
-                  ) : (
-                    <>
-                      Atualizar senha
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </>
-                  )}
-                </Button>
-              </form>
-
-              <Button
-                type="button"
-                variant="ghost"
-                className="w-full text-xs font-semibold uppercase tracking-widest text-muted-foreground hover:text-foreground"
-                onClick={() => navigate("/")}
-              >
-                Voltar ao login
+              <Button type="submit" variant="primary-pill" size="xl" className="w-full" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    atualizando
+                  </>
+                ) : (
+                  <>
+                    atualizar senha
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
               </Button>
-            </div>
-          )}
-        </motion.div>
+            </form>
+
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="inline-flex w-full items-center justify-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-primary"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              voltar ao login
+            </button>
+          </div>
+        )}
       </motion.div>
     </div>
   );

@@ -6,6 +6,11 @@ export function isPerSetIntervalLine(line: string): boolean {
   return /\bA\s+CADA\b/i.test(t) && /\bpor\s+\d+\s*(?:sets?|séries)\b/i.test(t);
 }
 
+/** "A cada" só vira EMOM quando houver unidade temporal explícita. */
+export function isNaturalEmomLine(line: string): boolean {
+  return /\b(?:A\s+CADA|EVERY)\s+\d+\s*(?:minutos?|mins?|m|'|segundos?|segs?|s(?:ec)?|")/i.test(line.trim());
+}
+
 // ── Format pattern definitions ──────────────────────────────────
 
 interface FormatPattern {
@@ -28,7 +33,7 @@ const FORMAT_PATTERNS: FormatPattern[] = [
   },
   {
     type: 'EMOM',
-    patterns: [/\bE\d*MOM\b/i, /\bA CADA\b/i, /\bEVERY\s+\d+/i],
+    patterns: [/\bE\d*MOM\b/i, /\bEVERY\s+\d+\s*(?:minutos?|mins?|m|'|segundos?|segs?|s(?:ec)?|")/i],
   },
   {
     type: 'CIRCUITO',
@@ -53,7 +58,7 @@ const MINUTES_RE = /(\d+)\s*(?:min(?:utos?)?|m(?:in)?|')/i;
 // ── EMOM interval detection ─────────────────────────────────────
 
 const EMOM_EXPLICIT_RE = /\bE(\d+)MOM\b/i;
-const EMOM_NATURAL_RE = /\b(?:A CADA|EVERY)\s+(\d+)\s*(?:min|m|'|minutos?)/i;
+const EMOM_NATURAL_RE = /\b(?:A CADA|EVERY)\s+(\d+)\s*(?:minutos?|mins?|m|'|segundos?|segs?|s(?:ec)?|")/i;
 
 function resolveEmomType(line: string): FormatType {
   const explicitMatch = line.match(EMOM_EXPLICIT_RE);
@@ -84,6 +89,18 @@ export function detectFormat(line: string): FormatDetectionResult | null {
 
   if (isPerSetIntervalLine(trimmed)) {
     return null;
+  }
+
+  if (/\bA\s+CADA\b/i.test(trimmed) && !isNaturalEmomLine(trimmed)) {
+    return null;
+  }
+
+  if (isNaturalEmomLine(trimmed)) {
+    return {
+      formatType: resolveEmomType(trimmed),
+      ...(trimmed.match(ROUNDS_RE) ? { rounds: trimmed.match(ROUNDS_RE)?.[1] } : {}),
+      ...(trimmed.match(MINUTES_RE) ? { timeCap: trimmed.match(MINUTES_RE)?.[1] } : {}),
+    };
   }
 
   for (const fmt of FORMAT_PATTERNS) {

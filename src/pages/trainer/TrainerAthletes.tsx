@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { Plus, Search, UserCheck, UserX, Mail, Trash2, Users, Pencil, Radar, Target, Loader2, Inbox, Calendar } from "lucide-react";
+import { Plus, Search, UserCheck, UserX, Mail, Trash2, Users, Pencil, Radar, Target, Loader2, Inbox, Calendar, Activity } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { format } from "date-fns";

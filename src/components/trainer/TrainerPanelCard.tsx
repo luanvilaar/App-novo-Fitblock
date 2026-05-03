@@ -119,7 +119,7 @@ export function TrainerPanelCardMedia({
 }) {
   return (
     <div
-      className={cn("relative h-full min-h-[200px] w-full bg-[#f1efe7] lg:min-h-0", className)}
+      className={cn("relative h-full min-h-[200px] w-full bg-[#101010] lg:min-h-0", className)}
     >
       <img
         src={src}
@@ -127,7 +127,7 @@ export function TrainerPanelCardMedia({
         className="h-full w-full object-cover saturate-[0.88]"
         loading="lazy"
       />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#f7f7f4]/92 via-[#f7f7f4]/12 to-transparent lg:bg-gradient-to-l" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#101010] via-transparent to-transparent lg:bg-gradient-to-l" />
     </div>
   );
 }

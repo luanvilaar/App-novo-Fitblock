@@ -1,5 +1,5 @@
 import type { Token, TokenType } from './types';
-import { isPerSetIntervalLine } from './format-detector';
+import { isNaturalEmomLine, isPerSetIntervalLine } from './format-detector';
 
 // ── Regex patterns (ordered by priority) ────────────────────────
 
@@ -50,7 +50,7 @@ const FORMAT_PATTERNS: Array<{ key: string; patterns: RegExp[] }> = [
   { key: 'AMRAP', patterns: [/\bAMRAP\b/i, /\bO MÁXIMO DE\b/i, /\bMAX REPS\b/i, /\bAS MANY\b/i] },
   { key: 'NOT_FOR_TIME', patterns: [/\bNOT\s+FOR\s+TIME\b/i, /\bNFT\b/i, /\bSEM TEMPO\b/i] },
   { key: 'FOR_TIME', patterns: [/\bFOR\s+TIME\b/i, /\bPOR TEMPO\b/i, /\bPELO TEMPO\b/i, /\bCRON[OÔ]METRO\b/i] },
-  { key: 'EMOM', patterns: [/\bE\d*MOM\b/i, /\bEMOM\b/i, /\bA CADA\b/i, /\bEVERY\s+\d+/i] },
+  { key: 'EMOM', patterns: [/\bE\d*MOM\b/i, /\bEMOM\b/i, /\bEVERY\s+\d+\s*(?:minutos?|mins?|m|'|segundos?|segs?|s(?:ec)?|")/i] },
   { key: 'CIRCUITO', patterns: [/\bCIRCUITO\b/i, /\bROUND ROBIN\b/i, /\bESTA[ÇC][OÕ]ES\b/i, /\bCIRCUIT\b/i] },
   { key: 'INTERVALADO', patterns: [/\bINTERVALADO\b/i, /\bTABATA\b/i, /\bREST[\s-]?PAUSE\b/i] },
   { key: 'ROUNDS_FIXOS', patterns: [/\b(\d+)\s*ROUNDS?\b/i, /\b(\d+)\s*RODADAS?\b/i] },
@@ -67,6 +67,8 @@ function isUpperCaseBlockHeader(line: string): boolean {
 
 function matchFormatIndicator(line: string): { key: string } | null {
   if (isPerSetIntervalLine(line)) return null;
+  if (/\bA\s+CADA\b/i.test(line) && !isNaturalEmomLine(line)) return null;
+  if (isNaturalEmomLine(line)) return { key: 'EMOM' };
   for (const fmt of FORMAT_PATTERNS) {
     for (const pattern of fmt.patterns) {
       if (pattern.test(line)) {

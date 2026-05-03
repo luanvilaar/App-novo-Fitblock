@@ -149,19 +149,19 @@ const ClientProgress = () => {
   }, [selectedExercise, studentId]);
 
   const chartColors = {
-    stroke: "hsl(245, 58%, 52%)",
-    fill: "hsl(245, 58%, 52%)",
-    grid: "hsl(220, 18%, 86%)",
-    text: "hsl(220, 10%, 44%)",
-    tooltipBg: "hsl(0, 0%, 100%)",
-    tooltipBorder: "hsl(220, 18%, 88%)",
+    stroke: "hsl(141, 76%, 48%)",
+    fill: "hsl(141, 76%, 48%)",
+    grid: "hsla(0, 0%, 100%, 0.08)",
+    text: "hsla(0, 0%, 100%, 0.62)",
+    tooltipBg: "hsl(0, 0%, 10%)",
+    tooltipBorder: "hsla(0, 0%, 100%, 0.12)",
   };
 
   const tooltipStyle = {
     background: chartColors.tooltipBg,
     border: `1px solid ${chartColors.tooltipBorder}`,
     borderRadius: "12px",
-    color: "hsl(220, 25%, 10%)",
+    color: "hsl(0, 0%, 100%)",
     fontSize: "12px",
   };
 
@@ -218,7 +218,7 @@ const ClientProgress = () => {
               <XAxis dataKey="week" tick={{ fontSize: 9, fill: chartColors.text }} />
               <YAxis tick={{ fontSize: 9, fill: chartColors.text }} width={30} />
               <Tooltip contentStyle={tooltipStyle} />
-              <Bar dataKey="volume" fill="hsl(245, 50%, 60%)" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="volume" fill="hsl(141, 76%, 48%)" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>

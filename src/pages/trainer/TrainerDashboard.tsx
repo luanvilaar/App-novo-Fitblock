@@ -60,9 +60,9 @@ interface StudentExerciseFeedback {
 }
 
 const ActivePill = () => (
-  <div className="flex min-w-0 items-center gap-1 rounded-full border border-primary/15 bg-primary/5 px-2 py-0.5 md:px-2 md:py-0.5">
-    <span className="h-1 w-1 shrink-0 rounded-full bg-primary md:h-1.5 md:w-1.5" />
-    <span className="font-mono text-[6px] uppercase tracking-widest text-primary/80 md:text-[7px]">Active</span>
+  <div className="flex min-w-0 items-center gap-1 rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5">
+    <span className="h-1 w-1 shrink-0 rounded-full bg-primary" />
+    <span className="font-mono text-[7px] uppercase tracking-[1.4px] text-primary">Active</span>
   </div>
 );
 
@@ -422,11 +422,11 @@ const TrainerDashboard = () => {
     <div className="w-full min-w-0 max-w-full space-y-8 overflow-x-hidden pb-12 pt-4 sm:space-y-10 sm:pt-6">
       <div className="flex min-w-0 max-w-full flex-col gap-4 rounded-[28px] border border-border bg-card p-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6 md:p-8">
         <div className="min-w-0 space-y-1">
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-primary">
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[1.4px] text-primary">
             <Activity className="h-3 w-3 shrink-0" />
             Dashboard
           </div>
-          <h1 className="text-5xl font-medium leading-[0.92] tracking-[-0.06em] text-foreground sm:text-6xl md:text-[4.5rem]">
+          <h1 className="text-4xl font-bold leading-[0.92] tracking-tight text-white sm:text-5xl md:text-[4rem]">
             Monitor de <span className="text-primary">performance</span>
           </h1>
         </div>

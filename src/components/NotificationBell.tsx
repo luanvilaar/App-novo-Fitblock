@@ -95,10 +95,15 @@ const NotificationBell = ({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className={cn("relative rounded-xl p-2 transition-colors hover:bg-secondary", triggerClassName)}>
+        <button
+          className={cn(
+            "relative flex h-11 w-11 items-center justify-center rounded-full border border-border bg-secondary text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary",
+            triggerClassName,
+          )}
+        >
           <Bell className={cn("h-5 w-5 text-muted-foreground", iconClassName)} />
           {unreadCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}
@@ -108,12 +113,12 @@ const NotificationBell = ({
         className="w-80 p-0 bg-card border-border"
         align="end"
       >
-        <div className="flex items-center justify-between p-3 border-b border-border">
-          <h3 className="font-bold text-sm">Notificações</h3>
+        <div className="flex items-center justify-between border-b border-border p-3">
+          <h3 className="font-display text-lg text-foreground">Notificações</h3>
           {unreadCount > 0 && (
             <button
               onClick={markAllAsRead}
-              className="text-xs text-primary hover:underline"
+              className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary hover:underline"
             >
               Marcar todas como lidas
             </button>
@@ -132,7 +137,7 @@ const NotificationBell = ({
                   if (!n.read) markAsRead(n.id);
                 }}
                 className={cn(
-                  "p-3 border-b border-border/50 cursor-pointer hover:bg-secondary/50 transition-colors",
+                  "cursor-pointer border-b border-border/50 p-3 transition-colors hover:bg-secondary/50",
                   !n.read && "bg-primary/5"
                 )}
               >

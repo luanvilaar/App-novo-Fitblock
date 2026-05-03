@@ -102,7 +102,7 @@ const TrainerWorkouts = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar atletas ou grupos..."
-          className="h-14 w-full rounded-lg border border-border bg-card pl-14 pr-6 text-sm text-foreground placeholder:text-muted-foreground/65 transition-all focus:border-primary focus:bg-white focus:outline-none"
+          className="h-14 w-full rounded-full border border-border bg-card pl-14 pr-6 text-sm text-foreground placeholder:text-muted-foreground/65 transition-all focus:border-primary focus:bg-secondary focus:outline-none"
         />
       </div>
 

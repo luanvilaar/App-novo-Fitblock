@@ -118,4 +118,40 @@ describe('parsedWorkoutToWorkoutItems', () => {
     expect(row.parsed_name).toBe('back squat costas');
     expect(row.video_url).toBe('https://example.com/v');
   });
+
+  it('preserva observações de drop-set sem converter o bloco em EMOM', () => {
+    const text = [
+      '<Back Squat>',
+      '4 x 6',
+      'cargas moderadas e execução explosiva.',
+      'descanse 60 a 90 seg entre as séries.',
+      '',
+      '<Leg Extension Machine>',
+      '4 x 24',
+      'drop-set',
+      'a cada 8 repetições baixe a carga',
+      'descanse 60 a 90 seg entre as séries.',
+    ].join('\n');
+
+    const parsed = parseWorkoutText(text);
+    const catalog: ExerciseCatalogEntry[] = [
+      { id: 'bs-1', name: 'Back Squat', video_url: null },
+      { id: 'lem-1', name: 'Leg Extension Machine', video_url: null },
+    ];
+    const { items, missingCatalogCount } = parsedWorkoutToWorkoutItems(parsed, catalog);
+
+    expect(missingCatalogCount).toBe(0);
+    expect(items).toHaveLength(2);
+    expect(items.every((row) => row.type === 'exercise')).toBe(true);
+
+    const row = items[1];
+    expect(row.type).toBe('exercise');
+    if (row.type !== 'exercise') return;
+
+    expect(row.exercise_id).toBe('lem-1');
+    expect(row.notes.toLowerCase()).toContain('drop-set');
+    expect(row.notes.toLowerCase()).toContain('a cada 8 repetições');
+    expect(row.notes.toLowerCase()).toContain('baixe a carga');
+    expect(row.notes.toLowerCase()).toContain('descanse 60 a 90 seg');
+  });
 });

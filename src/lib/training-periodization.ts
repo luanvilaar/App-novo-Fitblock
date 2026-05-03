@@ -20,19 +20,16 @@ export const PHASE_LABELS_COMPACT_PT: Record<PeriodPhase, string> = {
 
 /** Célula da semana: cor = período (a legenda explica o significado). */
 export const PHASE_CELL_CLASSES: Record<PeriodPhase, string> = {
-  accumulation:
-    "border border-[#d7d3e0] bg-[#f1eef7] text-[#33214A]",
-  transmutation:
-    "border border-primary/25 bg-primary/10 text-primary",
-  realization:
-    "border border-[#d7c1a1] bg-[#efe4d4] text-[#8a5a1f]",
+  accumulation: "border border-white/12 bg-white/[0.04] text-white/82",
+  transmutation: "border border-primary/28 bg-primary/10 text-primary",
+  realization: "border border-[#f6c278]/24 bg-[#f6c278]/10 text-[#f6c278]",
 };
 
 /** Quadrado da legenda (sem depender de split de classes). */
 export const PHASE_LEGEND_SWATCH: Record<PeriodPhase, string> = {
-  accumulation: "border border-[#d7d3e0] bg-[#f1eef7]",
-  transmutation: "border border-primary/25 bg-primary/10",
-  realization: "border border-[#d7c1a1] bg-[#efe4d4]",
+  accumulation: "border border-white/20 bg-white/75",
+  transmutation: "border border-primary/28 bg-primary/70",
+  realization: "border border-[#f6c278]/24 bg-[#f6c278]",
 };
 
 export function normalizeWeekStartMonday(d: Date): Date {

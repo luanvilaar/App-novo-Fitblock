@@ -14,7 +14,7 @@ const AguardandoAprovacao = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-safe pt-safe pb-safe">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -22,12 +22,12 @@ const AguardandoAprovacao = () => {
         className="w-full max-w-md text-center space-y-8"
       >
         <div className="flex justify-center mb-6">
-          <img src={logo} alt="FitBlock" className="h-32 w-auto object-contain" />
+          <img src={logo} alt="FitBlock" className="h-24 w-auto object-contain" />
         </div>
 
-        <div className="card-premium p-8 space-y-6">
+        <div className="card-premium rounded-[32px] p-8 space-y-6">
           <div className="flex justify-center">
-            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
               <Clock className="w-8 h-8 text-primary animate-pulse" />
             </div>
           </div>
@@ -40,7 +40,7 @@ const AguardandoAprovacao = () => {
             </p>
           </div>
 
-          <div className="bg-secondary/50 rounded-xl p-4 space-y-3 text-left">
+          <div className="app-surface-soft rounded-[24px] p-4 space-y-3 text-left">
             <div className="flex items-center gap-3 text-sm">
               <CheckCircle2 className="w-4 h-4 text-primary" />
               <span>Conta criada com sucesso</span>
@@ -55,7 +55,7 @@ const AguardandoAprovacao = () => {
             </div>
           </div>
 
-          <Button variant="outline" className="w-full" onClick={handleLogout}>
+          <Button variant="secondary-pill" className="w-full" onClick={handleLogout}>
             Sair da conta
           </Button>
         </div>

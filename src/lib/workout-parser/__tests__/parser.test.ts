@@ -201,6 +201,35 @@ describe('parseWorkoutText', () => {
       expect(exercises[0].name).toBe('Burpees');
       expect(exercises[0].prescription.reps).toBe('10');
     });
+
+    it('keeps "a cada 8 repetições..." as exercise note instead of block EMOM', () => {
+      const text = [
+        '<Back Squat>',
+        '4 x 6',
+        'cargas moderadas e execução explosiva.',
+        'descanse 60 a 90 seg entre as séries.',
+        '',
+        '<Leg Extension Machine>',
+        '4 x 24',
+        'drop-set',
+        'a cada 8 repetições baixe a carga',
+        'descanse 60 a 90 seg entre as séries.',
+      ].join('\n');
+
+      const result = parseWorkoutText(text);
+      expect(result.blocks).toHaveLength(1);
+      expect(result.blocks[0].formatType).toBeNull();
+      expect(result.blocks[0].exercises).toHaveLength(2);
+
+      const legExtension = result.blocks[0].exercises[1];
+      expect(legExtension.name).toBe('Leg Extension Machine');
+      expect(legExtension.prescription.sets).toBe('4');
+      expect(legExtension.prescription.reps).toBe('24');
+      expect(legExtension.prescription.notes?.toLowerCase()).toContain('drop-set');
+      expect(legExtension.prescription.notes?.toLowerCase()).toContain('a cada 8 repetições');
+      expect(legExtension.prescription.notes?.toLowerCase()).toContain('baixe a carga');
+      expect(legExtension.prescription.interval?.toLowerCase()).toContain('descanse 60 a 90 seg');
+    });
   });
 
   // ── Full workout (golden test) ────────────────────────────────
