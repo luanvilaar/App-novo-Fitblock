@@ -67,11 +67,11 @@ export function TrainerWorkoutCalendarPanel({
         title={weekRangeTitle}
         subtitle="Escolha um dia da semana para filtrar a lista em baixo."
       >
-        <div className="mt-2 flex items-center justify-between gap-4 border-b border-white/[0.06] pb-6">
+        <div className="mt-2 flex items-center justify-between gap-4 border-b border-border pb-6">
           <button
             type="button"
             onClick={() => setWeekOffset((p) => p - 1)}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/50 transition-colors hover:border-white/20 hover:text-white"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-foreground/55 transition-colors hover:border-primary/20 hover:text-foreground"
             aria-label="Semana anterior"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -80,7 +80,7 @@ export function TrainerWorkoutCalendarPanel({
           <button
             type="button"
             onClick={() => setWeekOffset((p) => p + 1)}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/50 transition-colors hover:border-white/20 hover:text-white"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-foreground/55 transition-colors hover:border-primary/20 hover:text-foreground"
             aria-label="Semana seguinte"
           >
             <ChevronRight className="h-5 w-5" />
@@ -107,32 +107,32 @@ export function TrainerWorkoutCalendarPanel({
                   }
                 }}
                 className={cn(
-                  "relative flex h-[7.5rem] flex-col rounded-xl border p-2.5 transition-all duration-200 sm:h-32 sm:p-3",
+                  "relative flex h-[7.5rem] flex-col rounded-lg border p-2.5 transition-all duration-200 sm:h-32 sm:p-3",
                   isSelected
-                    ? "border-energy/50 bg-[#161616] shadow-[0_0_0_1px_rgba(51,33,74,0.2)]"
+                    ? "border-primary/30 bg-primary/5"
                     : isToday
-                      ? "border-dashed border-white/20 bg-white/[0.03]"
-                      : "border-white/[0.06] bg-white/[0.02] hover:border-white/15",
+                      ? "border-dashed border-primary/20 bg-background"
+                      : "border-border bg-card hover:border-primary/15",
                 )}
               >
                 <div className="mb-1.5 flex items-center justify-between">
                   <span
                     className={cn(
                       "font-mono text-[8px] font-bold uppercase tracking-wider sm:text-[9px]",
-                      isSelected ? "text-energy" : "text-white/35",
+                      isSelected ? "text-primary" : "text-foreground/35",
                     )}
                   >
                     {format(day, "EEE", { locale: ptBR }).replace(".", "")}
                   </span>
                   {allCompleted && (
-                    <Check className={cn("h-3.5 w-3.5", isSelected ? "text-energy" : "text-energy/80")} strokeWidth={2.5} />
+                    <Check className={cn("h-3.5 w-3.5", isSelected ? "text-primary" : "text-primary/75")} strokeWidth={2.5} />
                   )}
                 </div>
 
                 <span
                   className={cn(
-                    "font-display text-xl font-bold leading-none sm:text-2xl",
-                    isSelected ? "text-white" : "text-white/85",
+                    "font-display text-xl font-normal leading-none tracking-[-0.04em] sm:text-2xl",
+                    isSelected ? "text-foreground" : "text-foreground/85",
                   )}
                 >
                   {format(day, "dd")}
@@ -159,8 +159,8 @@ export function TrainerWorkoutCalendarPanel({
                         className={cn(
                           "truncate rounded-md border px-1.5 py-0.5 font-mono text-[6px] uppercase tracking-wide sm:text-[7px]",
                           isCompleted
-                            ? "border-energy/25 bg-energy/10 text-energy"
-                            : "border-white/10 bg-white/[0.04] text-white/45 hover:border-white/20 hover:text-white/70",
+                            ? "border-primary/20 bg-primary/10 text-primary"
+                            : "border-border bg-background text-foreground/45 hover:border-primary/20 hover:text-foreground/70",
                         )}
                       >
                         {isCompleted && "✓ "}
@@ -169,7 +169,7 @@ export function TrainerWorkoutCalendarPanel({
                     );
                   })}
                   {dayWorkouts.length > 2 && (
-                    <span className="font-mono text-[6px] uppercase tracking-widest text-white/25 sm:text-[7px]">
+                    <span className="font-mono text-[6px] uppercase tracking-widest text-foreground/25 sm:text-[7px]">
                       +{dayWorkouts.length - 2}
                     </span>
                   )}
@@ -185,16 +185,16 @@ export function TrainerWorkoutCalendarPanel({
           {loading ? (
             <>
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-24 animate-pulse rounded-2xl border border-white/[0.06] bg-[#0a0a0a]" />
+                <div key={i} className="h-24 animate-pulse rounded-xl border border-border bg-background" />
               ))}
             </>
           ) : getWorkoutsForDay(selectedDate).length === 0 ? (
-            <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-6 py-14 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-[#121212]">
-                <Dumbbell className="h-7 w-7 text-white/25" />
+            <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border bg-background px-6 py-14 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-border bg-card">
+                <Dumbbell className="h-7 w-7 text-foreground/25" />
               </div>
               <div className="space-y-1">
-                <p className="font-body text-base font-medium text-white/80">Nenhum treino nesta data</p>
+                <p className="font-body text-base font-medium text-foreground/80">Nenhum treino nesta data</p>
                 <p className="font-body text-sm text-muted-foreground">Use &quot;Novo treino&quot; para agendar a primeira sessão.</p>
               </div>
             </div>
@@ -205,16 +205,16 @@ export function TrainerWorkoutCalendarPanel({
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: Math.min(i * 0.04, 0.2) }}
-                className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/[0.08] bg-[#121212] transition-colors hover:border-white/15"
+                className="group relative cursor-pointer overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/15"
                 onClick={() => goToWorkout(w.id)}
               >
                 <div className="relative flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
                   <div className="flex min-w-0 flex-1 items-start gap-4">
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] transition-colors group-hover:border-primary/30 group-hover:bg-primary/10">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-border bg-background transition-colors group-hover:border-primary/30 group-hover:bg-primary/5">
                       <Dumbbell className="h-6 w-6 text-primary" />
                     </div>
                     <div className="min-w-0 space-y-2">
-                      <h4 className="font-display text-lg font-bold uppercase leading-tight tracking-tight text-white sm:text-xl">
+                      <h4 className="font-display text-lg font-normal leading-tight tracking-[-0.04em] text-foreground sm:text-xl">
                         {w.title}
                       </h4>
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-body text-xs text-muted-foreground">
@@ -236,7 +236,7 @@ export function TrainerWorkoutCalendarPanel({
                     <button
                       type="button"
                       onClick={() => goToWorkout(w.id)}
-                      className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/50 transition-colors hover:border-white/20 hover:text-white"
+                      className="flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-background text-foreground/50 transition-colors hover:border-primary/20 hover:text-foreground"
                       title="Editar treino"
                     >
                       <Pencil className="h-4 w-4" />
@@ -244,7 +244,7 @@ export function TrainerWorkoutCalendarPanel({
                     <button
                       type="button"
                       onClick={() => onOpenCopyWorkout(w)}
-                      className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/50 transition-colors hover:border-primary/35 hover:text-primary"
+                      className="flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-background text-foreground/50 transition-colors hover:border-primary/35 hover:text-primary"
                       title="Copiar treino (outro atleta ou grupo)"
                     >
                       <Copy className="h-4 w-4" />
@@ -252,7 +252,7 @@ export function TrainerWorkoutCalendarPanel({
                     <button
                       type="button"
                       onClick={() => onDeleteWorkout(w.id)}
-                      className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/35 transition-colors hover:border-destructive/50 hover:bg-destructive/15 hover:text-destructive"
+                      className="flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-background text-foreground/35 transition-colors hover:border-destructive/50 hover:bg-destructive/10 hover:text-destructive"
                       title="Remover"
                     >
                       <Trash2 className="h-4 w-4" />

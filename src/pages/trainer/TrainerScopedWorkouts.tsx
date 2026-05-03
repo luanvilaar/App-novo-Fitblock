@@ -74,19 +74,19 @@ const TrainerScopedWorkouts = ({ mode }: { mode: ScopedMode }) => {
           <button
             type="button"
             onClick={() => navigate(mode === "student" ? "/trainer/atletas" : "/trainer/grupos")}
-            className="group inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-white/60 transition-colors hover:border-white/20 hover:text-white"
+            className="group inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-foreground/60 transition-colors hover:border-primary/20 hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4 shrink-0" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em]">Voltar</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em]">Voltar</span>
           </button>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/[0.08] bg-[#121212] shadow-inner">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-border bg-background">
               {mode === "student" ? <Users className="h-6 w-6 text-primary" /> : <Layers className="h-6 w-6 text-primary" />}
             </div>
             <div className="min-w-0 space-y-1">
-              <p className="font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-primary">{cycleEyebrow}</p>
-              <h1 className="font-display text-2xl font-bold uppercase tracking-tight text-white md:text-3xl">
+              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-primary">{cycleEyebrow}</p>
+              <h1 className="font-display text-3xl font-normal tracking-[-0.05em] text-foreground md:text-[2.4rem]">
                 {entityName || "…"}
               </h1>
               <p className="font-body text-sm text-muted-foreground">
@@ -102,16 +102,16 @@ const TrainerScopedWorkouts = ({ mode }: { mode: ScopedMode }) => {
           <button
             type="button"
             onClick={() => navigate(createWorkoutPath)}
-            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border-2 border-white/90 bg-[#121212] px-5 py-3 font-mono text-[10px] font-bold uppercase leading-tight tracking-[0.18em] text-white shadow-sm ring-2 ring-primary/90 transition-colors hover:border-white/20 hover:bg-white/[0.04] sm:w-auto sm:px-8"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-mono text-[10px] uppercase leading-tight tracking-[0.16em] text-primary-foreground transition-colors hover:opacity-90 sm:w-auto sm:px-8"
           >
-            <Plus className="h-4 w-4 shrink-0 text-energy" />
+            <Plus className="h-4 w-4 shrink-0" />
             <span className="flex flex-col items-center leading-none sm:items-end">
               <span>Novo</span>
               <span>treino</span>
             </span>
           </button>
         ) : (
-          <div className="h-12 w-full animate-pulse rounded-2xl border border-white/[0.08] bg-[#121212] sm:w-48" />
+          <div className="h-12 w-full animate-pulse rounded-lg border border-border bg-background sm:w-48" />
         )}
       </div>
 
@@ -136,7 +136,7 @@ const TrainerScopedWorkouts = ({ mode }: { mode: ScopedMode }) => {
         onSuccess={() => void refetch()}
       />
 
-      <div className="border-t border-white/[0.06] pt-8">
+      <div className="border-t border-border pt-8">
         {showCalendar ? (
           <TrainerWorkoutCalendarPanel
             weekStart={currentWeekStart}
@@ -154,8 +154,8 @@ const TrainerScopedWorkouts = ({ mode }: { mode: ScopedMode }) => {
             cycleLabel={mode === "student" ? "Treino semanal" : "Treino do grupo"}
           />
         ) : (
-          <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-white/[0.08] bg-[#121212] px-8 py-24 text-white/30">
-            <Dumbbell className="h-12 w-12 animate-pulse text-white/20" />
+          <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-border bg-card px-8 py-24 text-foreground/30">
+            <Dumbbell className="h-12 w-12 animate-pulse text-foreground/20" />
             <p className="font-mono text-[10px] uppercase tracking-widest">A carregar…</p>
           </div>
         )}

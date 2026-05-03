@@ -46,6 +46,18 @@ const PHASE_I18N_HINT: Record<PeriodPhase, string> = {
   realization: "Fase laranja (competição / realização)",
 };
 
+const PHASE_TIMELINE_CARD: Record<PeriodPhase, string> = {
+  accumulation: "border-[#d7d3e0] bg-[#f1eef7]",
+  transmutation: "border-primary/25 bg-primary/10",
+  realization: "border-[#d7c1a1] bg-[#efe4d4]",
+};
+
+const PHASE_TIMELINE_TEXT: Record<PeriodPhase, string> = {
+  accumulation: "text-[#5a5270]",
+  transmutation: "text-primary",
+  realization: "text-[#8a5a1f]",
+};
+
 export function StudentPeriodizationStrip({
   studentId = null,
   groupId = null,
@@ -173,11 +185,11 @@ export function StudentPeriodizationStrip({
   return (
     <TrainerPanelCard compact eyebrow="Periodização" title="Mesociclo em semanas" subtitle={subtitle}>
       <div className="mt-1 flex flex-col gap-6">
-        <div className="flex items-center justify-between gap-2 border-b border-white/[0.06] pb-4 sm:gap-3">
+        <div className="flex items-center justify-between gap-2 border-b border-border pb-4 sm:gap-3">
           <button
             type="button"
             onClick={() => setPage((p) => p - 1)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/[0.05] text-white/75 transition-colors hover:border-white/35 hover:bg-white/[0.08] hover:text-white"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-foreground/65 transition-colors hover:border-primary/20 hover:text-foreground"
             aria-label="Semanas anteriores"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -189,7 +201,7 @@ export function StudentPeriodizationStrip({
           <button
             type="button"
             onClick={() => setPage((p) => p + 1)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/[0.05] text-white/75 transition-colors hover:border-white/35 hover:bg-white/[0.08] hover:text-white"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-foreground/65 transition-colors hover:border-primary/20 hover:text-foreground"
             aria-label="Semanas seguintes"
           >
             <ChevronRight className="h-5 w-5" />
@@ -197,9 +209,9 @@ export function StudentPeriodizationStrip({
         </div>
 
         {canEdit && trainerEditorId ? (
-          <div className="space-y-3 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
+          <div className="space-y-4 rounded-xl border border-border bg-background p-5">
             <div>
-              <p className="font-body text-sm font-semibold text-white">Nomes da legenda</p>
+              <p className="font-display text-xl font-normal tracking-[-0.03em] text-foreground">Nomes da legenda</p>
               <p className="mt-1 font-body text-xs text-muted-foreground">
                 As semanas usam a cor de cada período; o texto abaixo personaliza a legenda (opcional). Deixe em branco
                 para o padrão FitBlock.
@@ -210,7 +222,7 @@ export function StudentPeriodizationStrip({
                 <div key={p} className="space-y-1.5">
                   <div className="flex items-center gap-2">
                     <span className={cn("h-3 w-3 shrink-0 rounded-sm", PHASE_LEGEND_SWATCH[p])} aria-hidden />
-                    <Label htmlFor={`phase-label-${p}`} className="text-[10px] font-medium text-muted-foreground">
+                    <Label htmlFor={`phase-label-${p}`} className="text-[10px] text-muted-foreground">
                       {PHASE_I18N_HINT[p]}
                     </Label>
                   </div>
@@ -219,7 +231,7 @@ export function StudentPeriodizationStrip({
                     value={labelDraft[p]}
                     onChange={(e) => setLabelDraft((prev) => ({ ...prev, [p]: e.target.value }))}
                     placeholder={PHASE_LABELS_PT[p]}
-                    className="h-10 border-white/10 bg-[#0f0f0f] text-sm text-white"
+                    className="h-10 rounded-lg border-border bg-card text-sm text-foreground"
                   />
                 </div>
               ))}
@@ -229,7 +241,7 @@ export function StudentPeriodizationStrip({
                 type="button"
                 onClick={() => void onSaveLabels()}
                 disabled={savingLabels}
-                className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-primary/40 bg-primary/20 px-4 text-xs font-semibold text-primary transition-colors hover:bg-primary/30 disabled:opacity-50"
+                className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-xs font-semibold text-primary-foreground transition-colors hover:opacity-90 disabled:opacity-50"
               >
                 {savingLabels ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
                 Guardar nomes
@@ -238,7 +250,7 @@ export function StudentPeriodizationStrip({
                 type="button"
                 onClick={() => void onResetLabels()}
                 disabled={savingLabels}
-                className="h-9 rounded-lg border border-white/10 px-4 text-xs font-medium text-muted-foreground transition-colors hover:border-white/20 hover:text-white disabled:opacity-50"
+                className="h-9 rounded-lg border border-border px-4 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/20 hover:text-foreground disabled:opacity-50"
               >
                 Repor padrão
               </button>
@@ -247,100 +259,146 @@ export function StudentPeriodizationStrip({
         ) : null}
 
         {loading ? (
-          <div className="h-28 animate-pulse rounded-2xl bg-[#0a0a0a]" />
+          <div className="h-28 animate-pulse rounded-xl border border-border bg-background" />
         ) : (
           <>
-            <div className="grid grid-cols-5 gap-1.5 sm:grid-cols-10 sm:gap-1.5 md:gap-2">
-              {weekDates.map((d) => {
-                const iso = toISODateString(d);
-                const phase = phaseByWeek.get(iso);
-                const weekButtonLabel = phase
-                  ? `Semana de ${format(d, "d 'de' MMM", { locale: ptBR })}, ${resolvePhaseLabel(phase, phaseLabelOverrides)}`
-                  : `Semana de ${format(d, "d 'de' MMM", { locale: ptBR })}, sem período atribuído`;
-                return (
-                  <div key={iso} className="flex min-w-0 flex-col gap-1 sm:gap-1.5">
-                    {canEdit ? (
-                      <>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <p className="font-display text-xl font-normal tracking-[-0.03em] text-foreground">Linha do mesociclo</p>
+                  <p className="text-xs text-muted-foreground">
+                    {canEdit
+                      ? "Defina a fase de cada semana nesta sequência. Em mobile, deslize horizontalmente."
+                      : "Deslize para navegar pelas semanas do ciclo."}
+                  </p>
+                </div>
+                <span className="hidden rounded-full border border-border bg-background px-3 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground sm:inline-flex">
+                  {rows.length} semanas carregadas
+                </span>
+              </div>
+
+              <div className="relative -mx-1 overflow-hidden px-1">
+                <div className="pointer-events-none absolute left-3 right-3 top-[2.05rem] hidden h-px bg-border sm:block" />
+                <div className="grid auto-cols-[minmax(9.5rem,1fr)] grid-flow-col gap-3 overflow-x-auto pb-2 pr-1 snap-x snap-mandatory sm:auto-cols-fr sm:overflow-visible sm:pb-0">
+                  {weekDates.map((d) => {
+                    const iso = toISODateString(d);
+                    const phase = phaseByWeek.get(iso);
+                    const resolvedPhaseLabel = phase ? resolvePhaseLabel(phase, phaseLabelOverrides) : "Sem fase";
+                    const weekButtonLabel = phase
+                      ? `Semana de ${format(d, "d 'de' MMM", { locale: ptBR })}, ${resolvedPhaseLabel}`
+                      : `Semana de ${format(d, "d 'de' MMM", { locale: ptBR })}, sem período atribuído`;
+
+                    const HeaderComp = canEdit ? "div" : "button";
+
+                    return (
+                      <div key={iso} className="min-w-0 snap-start">
                         <div
                           className={cn(
-                            "rounded-xl px-0.5 py-1.5 text-center sm:px-1 sm:py-2",
-                            phase ? PHASE_CELL_CLASSES[phase] : "border border-white/10 bg-[#0c0c0c] text-white/45",
+                            "flex min-h-[12.5rem] flex-col rounded-xl border bg-card p-3 sm:min-h-[13rem] sm:p-3.5",
+                            phase ? PHASE_TIMELINE_CARD[phase] : "border-border bg-card",
                           )}
-                          aria-hidden
                         >
-                          <p className="font-mono text-[6px] uppercase leading-none tracking-wider opacity-80 sm:text-[7px]">
-                            {format(d, "EEE", { locale: ptBR })
-                              .replace(".", "")
-                              .slice(0, 3)}
-                          </p>
-                          <p className="font-display text-xs font-bold tabular-nums sm:text-sm">
-                            {format(d, "dd")}
-                          </p>
-                        </div>
-                        <Select value={phase ?? "none"} onValueChange={(v) => void onChangePhase(iso, v)}>
-                          <SelectTrigger
+                          <HeaderComp
+                            {...(!canEdit
+                              ? {
+                                  type: "button",
+                                  onClick: () => onWeekSelect?.(d),
+                                  "aria-label": weekButtonLabel,
+                                  title: phase ? resolvedPhaseLabel : "Sem fase atribuída",
+                                }
+                              : {})}
                             className={cn(
-                              "h-8 min-w-0 border bg-[#141414] px-1 text-left text-[8px] font-mono uppercase tracking-wide sm:text-[9px]",
-                              phase
-                                ? "border-white/20 text-white/90"
-                                : "border-white/10 text-white/50",
+                              "text-left",
+                              !canEdit && onWeekSelect ? "cursor-pointer transition-transform active:scale-[0.98]" : "",
                             )}
                           >
-                            <span className="inline-flex w-full min-w-0 items-center gap-1.5">
-                              {phase ? (
-                                <span className={cn("h-2 w-2 shrink-0 rounded-sm", PHASE_LEGEND_SWATCH[phase])} />
-                              ) : null}
-                              <SelectValue placeholder="Fase" />
-                            </span>
-                          </SelectTrigger>
-                          <SelectContent className="border-white/10 bg-[#1a1a1a]">
-                            <SelectItem value="none" className="font-mono text-xs">
-                              Sem fase
-                            </SelectItem>
-                            {PERIOD_PHASES.map((p) => (
-                              <SelectItem key={p} value={p} className="text-xs">
-                                {resolvePhaseLabel(p, phaseLabelOverrides)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => onWeekSelect?.(d)}
-                        className={cn(
-                          "w-full rounded-xl px-0.5 py-1.5 text-center sm:px-1 sm:py-2",
-                          phase
-                            ? PHASE_CELL_CLASSES[phase]
-                            : "border border-white/10 bg-[#0c0c0c] text-white/45",
-                          onWeekSelect && "cursor-pointer transition-transform active:scale-[0.98]",
-                          !onWeekSelect && "cursor-default",
-                        )}
-                        aria-label={weekButtonLabel}
-                        title={phase ? resolvePhaseLabel(phase, phaseLabelOverrides) : "Sem fase atribuída"}
-                      >
-                        <p className="font-mono text-[6px] uppercase leading-none tracking-wider opacity-80 sm:text-[7px]">
-                          {format(d, "EEE", { locale: ptBR })
-                            .replace(".", "")
-                            .slice(0, 3)}
-                        </p>
-                        <p className="font-display text-xs font-bold tabular-nums sm:text-sm">{format(d, "dd")}</p>
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
+                            <div className="mb-3 flex items-center justify-between gap-3">
+                              <span
+                                className={cn(
+                                  "inline-flex h-6 items-center rounded-full border px-2.5 font-mono text-[8px] uppercase tracking-[0.14em]",
+                                  phase
+                                    ? `${PHASE_TIMELINE_TEXT[phase]} bg-white/55 border-current/15`
+                                    : "border-border bg-background text-muted-foreground",
+                                )}
+                              >
+                                {format(d, "EEE", { locale: ptBR }).replace(".", "").slice(0, 3)}
+                              </span>
+                              <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-muted-foreground">
+                                {format(d, "dd/MM")}
+                              </span>
+                            </div>
+
+                            <div className="space-y-1">
+                              <p className="font-display text-[1.9rem] font-normal leading-none tracking-[-0.05em] text-foreground">
+                                {format(d, "dd")}
+                              </p>
+                              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground">
+                                semana {format(d, "II")}
+                              </p>
+                            </div>
+                          </HeaderComp>
+
+                          <div className="mt-auto space-y-3 pt-5">
+                            {canEdit ? (
+                              <Select value={phase ?? "none"} onValueChange={(v) => void onChangePhase(iso, v)}>
+                                <SelectTrigger
+                                  className={cn(
+                                    "h-10 min-w-0 rounded-lg border bg-white/70 px-3 text-left text-[9px] font-mono uppercase tracking-[0.12em]",
+                                    phase ? "border-current/15 text-foreground" : "border-border text-foreground/50",
+                                  )}
+                                >
+                                  <span className="inline-flex w-full min-w-0 items-center gap-2">
+                                    {phase ? (
+                                      <span className={cn("h-2.5 w-2.5 shrink-0 rounded-sm", PHASE_LEGEND_SWATCH[phase])} />
+                                    ) : null}
+                                    <SelectValue placeholder="Fase" />
+                                  </span>
+                                </SelectTrigger>
+                                <SelectContent className="border-border bg-card">
+                                  <SelectItem value="none" className="font-mono text-xs">
+                                    Sem fase
+                                  </SelectItem>
+                                  {PERIOD_PHASES.map((p) => (
+                                    <SelectItem key={p} value={p} className="text-xs">
+                                      {resolvePhaseLabel(p, phaseLabelOverrides)}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            ) : (
+                              <div
+                                className={cn(
+                                  "rounded-lg border px-3 py-2",
+                                  phase ? "border-current/15 bg-white/60" : "border-border bg-background",
+                                )}
+                              >
+                                <div className="flex items-center gap-2">
+                                  {phase ? (
+                                    <span className={cn("h-2.5 w-2.5 shrink-0 rounded-sm", PHASE_LEGEND_SWATCH[phase])} />
+                                  ) : null}
+                                  <span className="truncate font-mono text-[9px] uppercase tracking-[0.12em] text-foreground/75">
+                                    {resolvedPhaseLabel}
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
 
             {!editable && !hasAnyPhase && (
-              <p className="text-center font-body text-sm text-muted-foreground">
+              <p className="rounded-xl border border-border bg-background px-6 py-6 text-center font-body text-sm text-muted-foreground">
                 O seu treinador ainda não definiu fases para estas semanas.
               </p>
             )}
 
             <div
-              className="grid grid-cols-1 gap-3 border-t border-white/[0.06] pt-4 sm:grid-cols-3 sm:gap-x-4 sm:gap-y-2"
+              className="grid grid-cols-1 gap-3 border-t border-border pt-4 sm:grid-cols-3 sm:gap-x-4 sm:gap-y-2"
               role="list"
             >
               {PERIOD_PHASES.map((p) => (
