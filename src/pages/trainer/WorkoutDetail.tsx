@@ -495,40 +495,37 @@ const WorkoutDetail = () => {
     return String.fromCharCode(65 + Math.max(0, pos));
   };
 
-  if (loading) return <div className="p-6 max-w-4xl mx-auto space-y-3">{[1,2,3].map(i => <div key={i} className="card-premium p-4 h-16 animate-pulse" />)}</div>;
+  if (loading) return <div className="mx-auto max-w-4xl space-y-3 p-6">{[1,2,3].map(i => <div key={i} className="h-16 animate-pulse rounded-[24px] border border-border bg-card p-4" />)}</div>;
 
   return (
-    <div className="space-y-10 pb-12 pt-6 page-enter max-w-7xl mx-auto">
-      
-      {/* ── CLEAN PREMIUM HEADER ── */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 sticky top-0 z-30 bg-background/80 backdrop-blur-2xl pb-6 border-b border-white/5">
+    <div className="mx-auto max-w-7xl space-y-10 pb-12 pt-6">
+      <div className="sticky top-0 z-30 flex flex-col items-start justify-between gap-6 border-b border-border bg-background/95 pb-6 backdrop-blur-xl md:flex-row md:items-center">
         <div className="flex items-center gap-4">
           <button 
             type="button" 
             onClick={() => navigate(plannerBack)} 
-            className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/40 transition-all"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-primary/30 hover:text-primary"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="space-y-0.5">
-            <div className="flex items-center gap-2 text-primary font-mono text-[9px] uppercase tracking-[0.3em] font-bold">
+            <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-primary">
               <Pencil className="w-3 h-3" />
-              Protocol Designer
+              Treino
             </div>
-            <h1 className="font-display text-3xl uppercase tracking-tighter text-white leading-none">
-              Editar <span className="text-white/40 italic">Treino</span>
+            <h1 className="text-3xl font-medium leading-none tracking-[-0.05em] text-foreground">
+              Editar treino
             </h1>
           </div>
         </div>
 
         <div className="flex items-center gap-6 w-full md:w-auto">
-          {/* iOS STYLE MODE TOGGLE */}
-          <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 w-full md:w-auto">
+          <div className="flex w-full rounded-full border border-border bg-card p-1 md:w-auto">
             <button 
               onClick={() => setBuilderMode('form')}
               className={cn(
-                "flex-1 md:flex-none px-6 py-2 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all",
-                builderMode === 'form' ? "bg-primary text-white shadow-lg" : "text-white/40 hover:text-white/60"
+                "flex-1 rounded-full px-6 py-2 text-sm font-medium transition-colors md:flex-none",
+                builderMode === 'form' ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-primary"
               )}
             >
               Formulário
@@ -536,25 +533,25 @@ const WorkoutDetail = () => {
             <button 
               onClick={() => setBuilderMode('smart')}
               className={cn(
-                "flex-1 md:flex-none px-6 py-2 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all",
-                builderMode === 'smart' ? "bg-primary text-white shadow-lg" : "text-white/40 hover:text-white/60"
+                "flex-1 rounded-full px-6 py-2 text-sm font-medium transition-colors md:flex-none",
+                builderMode === 'smart' ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-primary"
               )}
             >
-              Inteligente
+              Texto livre
             </button>
           </div>
 
           <button 
             onClick={saveWorkout} 
             disabled={saving}
-            className="btn-action px-8 h-12 flex items-center justify-center gap-3 whitespace-nowrap shadow-xl"
+            className="flex h-12 items-center justify-center gap-3 whitespace-nowrap rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             {saving ? (
               <Activity className="w-4 h-4 animate-spin" />
             ) : (
               <Save className="w-4 h-4" />
             )}
-            {saving ? "Salvando..." : "Salvar Protocolo"}
+            {saving ? "Salvando..." : "Salvar treino"}
           </button>
         </div>
       </div>
@@ -562,31 +559,30 @@ const WorkoutDetail = () => {
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label className="text-xs font-semibold text-white/20 uppercase tracking-widest ml-1">Identificação do Protocolo</Label>
-            <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="EX: STRENGTH A / METCON SATURDAY" className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-primary/50 text-white text-lg font-display uppercase tracking-tight" />
+            <Label className="ml-1 text-xs font-medium text-muted-foreground">Nome do treino</Label>
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ex.: Força A / sábado" className="h-12 rounded-2xl border-border bg-card text-foreground" />
           </div>
           <div className="space-y-2">
-            <Label className="text-xs font-semibold text-white/20 uppercase tracking-widest ml-1">Data de Execução</Label>
-            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-primary/50 text-white text-lg font-display" />
+            <Label className="ml-1 text-xs font-medium text-muted-foreground">Data de execução</Label>
+            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-12 rounded-2xl border-border bg-card text-foreground" />
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 pt-6">
-          {/* Editor Column */}
           <div className="space-y-8">
             <div className="flex items-center justify-between px-2">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-primary/20 bg-primary/10">
                   <Pencil className="w-4 h-4 text-primary" />
                 </div>
-                <h3 className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold">Edição Técnica</h3>
+                <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Editor</h3>
               </div>
               {builderMode === 'smart' ? (
                 <div className="flex gap-2">
                   <button
                     onClick={convertSmartToForm}
                     disabled={!smartText.trim() || isConverting}
-                    className="h-10 px-6 bg-primary/10 border border-primary/20 text-primary hover:bg-primary hover:text-white rounded-xl font-mono text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-2"
+                    className="flex h-10 items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground disabled:opacity-50"
                   >
                     {isConverting ? (
                       <>
@@ -601,14 +597,14 @@ const WorkoutDetail = () => {
                 </div>
               ) : (
                 <div className="flex flex-wrap gap-2">
-                  <button onClick={addExercise} className="h-9 px-4 bg-white/5 border border-white/10 hover:border-primary/40 text-white/60 hover:text-primary rounded-lg font-mono text-[8px] font-bold uppercase tracking-widest transition-all flex items-center gap-2">
+                  <button onClick={addExercise} className="flex h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary">
                     <Plus className="w-3 h-3" /> Exercício
                   </button>
-                  <button onClick={addBiSet} className="h-9 px-4 bg-white/5 border border-white/10 hover:border-primary/40 text-white/60 hover:text-primary rounded-lg font-mono text-[8px] font-bold uppercase tracking-widest transition-all flex items-center gap-2">
+                  <button onClick={addBiSet} className="flex h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary">
                     <Link2 className="w-3 h-3" /> Bi-Set
                   </button>
-                  <button onClick={addMetcon} className="h-9 px-4 bg-white/5 border border-white/10 hover:border-primary/40 text-white/60 hover:text-primary rounded-lg font-mono text-[8px] font-bold uppercase tracking-widest transition-all flex items-center gap-2">
-                    <Layers className="w-3 h-3" /> METCON
+                  <button onClick={addMetcon} className="flex h-10 items-center gap-2 rounded-full border border-primary bg-primary px-4 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
+                    <Layers className="w-3 h-3" /> Bloco
                   </button>
                 </div>
               )}
@@ -626,7 +622,7 @@ const WorkoutDetail = () => {
               ) : (
                 <div className="space-y-2">
                   {workoutItems.length === 0 ? (
-                    <div className="p-6 border border-border/50 bg-secondary/20 clip-cut-corner-sm text-sm text-muted-foreground">
+                    <div className="rounded-[24px] border border-border bg-card p-6 text-sm text-muted-foreground">
                       Nenhum item ainda. Use “Converter” no modo Inteligente ou adicione exercícios.
                     </div>
                   ) : (
@@ -681,18 +677,18 @@ const WorkoutDetail = () => {
           {/* Preview Column */}
           <div className="space-y-8">
             <div className="flex items-center gap-3 px-2">
-              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-primary/20 bg-primary/10">
                 <Eye className="w-4 h-4 text-primary" />
               </div>
-              <h3 className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold">Visualização do Atleta</h3>
+              <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Pré-visualização do atleta</h3>
             </div>
-            <div className="bg-card/30 backdrop-blur-md border border-white/5 rounded-[2.5rem] p-8 shadow-2xl min-h-[500px] overflow-y-auto max-h-[800px] custom-scrollbar">
+            <div className="custom-scrollbar min-h-[500px] max-h-[800px] overflow-y-auto rounded-[28px] border border-border bg-card p-8">
               {builderMode === 'smart' && parsedWorkout ? (
                 <SmartWorkoutView workout={parsedWorkout} mode="minimal" />
               ) : (
-                <div className="flex flex-col items-center justify-center h-full text-center p-12 space-y-4">
-                  <Activity className="w-12 h-12 text-white/5" />
-                  <p className="text-xs font-medium text-white/20 uppercase tracking-widest">Utilize o modo Inteligente para ver a pré-visualização</p>
+                <div className="flex h-full flex-col items-center justify-center space-y-4 p-12 text-center">
+                  <Activity className="w-12 h-12 text-muted-foreground/20" />
+                  <p className="text-sm text-muted-foreground">Use o modo texto livre para gerar a pré-visualização do atleta.</p>
                 </div>
               )}
             </div>
@@ -701,18 +697,18 @@ const WorkoutDetail = () => {
       </div>
 
       <Dialog open={showNewExercise} onOpenChange={(open) => { if (!open) { setShowNewExercise(false); setPendingExerciseIdx(null); setNewExerciseName(""); } }}>
-        <DialogContent className="bg-card/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-2xl">
-          <DialogHeader className="space-y-2 mb-6">
-            <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-primary font-bold">Move Library Update</div>
-            <DialogTitle className="font-display text-3xl uppercase tracking-tight text-white">Novo Movimento</DialogTitle>
+        <DialogContent className="rounded-[28px] border border-border bg-card p-8">
+          <DialogHeader className="mb-6 space-y-2">
+            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">Biblioteca</div>
+            <DialogTitle className="text-3xl font-medium tracking-[-0.04em] text-foreground">Novo movimento</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
-            <Label className="text-xs font-semibold text-white/40 uppercase tracking-wider ml-1">Identificação do Exercício</Label>
+            <Label className="ml-1 text-xs font-medium text-muted-foreground">Nome do exercício</Label>
             <Input
               value={newExerciseName}
               onChange={(e) => setNewExerciseName(e.target.value)}
               placeholder="Ex: Bulgarian Split Squat"
-              className="h-14 rounded-2xl bg-white/5 border-white/10 focus:border-primary text-white text-lg font-display uppercase tracking-tight"
+              className="h-12 rounded-2xl border-border bg-background text-foreground"
               autoFocus
               onKeyDown={(e) => e.key === "Enter" && handleNewExercise()}
             />
@@ -720,14 +716,14 @@ const WorkoutDetail = () => {
           <DialogFooter className="gap-3 mt-8">
             <button 
               onClick={() => { setShowNewExercise(false); setPendingExerciseIdx(null); setNewExerciseName(""); }}
-              className="h-12 px-6 text-white/40 hover:text-white font-bold uppercase tracking-widest text-[10px] transition-all"
+              className="h-12 px-6 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               Cancelar
             </button>
             <button 
               onClick={handleNewExercise} 
               disabled={savingExercise || !newExerciseName.trim()}
-              className="btn-action px-8 h-12 flex items-center justify-center font-bold"
+              className="flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
             >
               {savingExercise ? <Activity className="w-4 h-4 animate-spin" /> : "Salvar no Catálogo"}
             </button>
@@ -735,12 +731,11 @@ const WorkoutDetail = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Premium editor (single standard) */}
       <Dialog open={editingIdx !== null} onOpenChange={(open) => { if (!open) closeEditor(); }}>
-        <DialogContent className="bg-card/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-2xl max-w-2xl">
-          <DialogHeader className="space-y-2 mb-6">
-            <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-primary font-bold">Element Configuration</div>
-            <DialogTitle className="font-display text-3xl uppercase tracking-tight text-white">Ajustar Componente</DialogTitle>
+        <DialogContent className="max-w-2xl rounded-[28px] border border-border bg-card p-8">
+          <DialogHeader className="mb-6 space-y-2">
+            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">Editor</div>
+            <DialogTitle className="text-3xl font-medium tracking-[-0.04em] text-foreground">Ajustar item</DialogTitle>
           </DialogHeader>
 
           {currentEditingItem?.type === "exercise" ? (
@@ -790,35 +785,35 @@ const WorkoutDetail = () => {
               </div>
 
               {!!currentEditingItem.superset_group_id && (
-                <div className="text-[10px] font-bold uppercase tracking-widest text-primary">
-                  🔗 BI-SET
+                <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-primary">
+                  Bi-set ativo
                 </div>
               )}
 
               <div className="grid grid-cols-3 gap-3">
                 <div className="space-y-1">
-                  <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Séries</Label>
+                  <Label className="text-[10px] font-medium text-muted-foreground">Séries</Label>
                   <Input
                     type="number"
                     value={currentEditingItem.sets || 1}
                     onChange={(e) => updateItemField(editingIdx!, "sets", Number(e.target.value))}
-                    className="h-10 bg-secondary/30 border-border clip-cut-corner-sm text-center"
+                    className="h-10 rounded-xl border-border bg-background text-center"
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Reps</Label>
+                  <Label className="text-[10px] font-medium text-muted-foreground">Reps</Label>
                   <Input
                     value={currentEditingItem.reps || ""}
                     onChange={(e) => updateItemField(editingIdx!, "reps", e.target.value)}
-                    className="h-10 bg-secondary/30 border-border clip-cut-corner-sm text-center"
+                    className="h-10 rounded-xl border-border bg-background text-center"
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Carga</Label>
+                  <Label className="text-[10px] font-medium text-muted-foreground">Carga</Label>
                   <Input
                     value={currentEditingItem.suggested_load || ""}
                     onChange={(e) => updateItemField(editingIdx!, "suggested_load", e.target.value)}
-                    className="h-10 bg-secondary/30 border-border clip-cut-corner-sm text-center"
+                    className="h-10 rounded-xl border-border bg-background text-center"
                     placeholder="kg"
                   />
                 </div>
@@ -826,9 +821,9 @@ const WorkoutDetail = () => {
 
               <div className="space-y-2">
                 <div className="grid grid-cols-[40px_1fr_1fr] gap-2 items-center">
-                  <Label className="text-[9px] uppercase tracking-widest text-muted-foreground text-center">Série</Label>
-                  <Label className="text-[9px] uppercase tracking-widest text-muted-foreground text-center">Reps</Label>
-                  <Label className="text-[9px] uppercase tracking-widest text-muted-foreground text-center">Carga</Label>
+                  <Label className="text-center text-[9px] font-medium text-muted-foreground">Série</Label>
+                  <Label className="text-center text-[9px] font-medium text-muted-foreground">Reps</Label>
+                  <Label className="text-center text-[9px] font-medium text-muted-foreground">Carga</Label>
                 </div>
                 {Array.from({ length: Math.max(1, Number(currentEditingItem.sets || 1)) }, (_, setIdx) => (
                   <div key={`editing-set-row-${setIdx}`} className="grid grid-cols-[40px_1fr_1fr] gap-2 items-center">
@@ -843,7 +838,7 @@ const WorkoutDetail = () => {
                         nextScheme[setIdx] = e.target.value;
                         updateItemField(editingIdx!, "reps_scheme", nextScheme);
                       }}
-                      className="h-9 bg-secondary/30 border-border clip-cut-corner-sm text-center text-xs"
+                      className="h-9 rounded-xl border-border bg-background text-center text-xs"
                       placeholder={currentEditingItem.reps || "reps"}
                     />
                     <Input
@@ -856,7 +851,7 @@ const WorkoutDetail = () => {
                         nextScheme[setIdx] = e.target.value;
                         updateItemField(editingIdx!, "load_scheme", nextScheme);
                       }}
-                      className="h-9 bg-secondary/30 border-border clip-cut-corner-sm text-center text-xs"
+                      className="h-9 rounded-xl border-border bg-background text-center text-xs"
                       placeholder={currentEditingItem.suggested_load || "kg"}
                     />
                   </div>
@@ -864,11 +859,12 @@ const WorkoutDetail = () => {
               </div>
 
               <div className="space-y-2">
-               <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Observações</Label>                <Textarea
+                <Label className="text-[10px] font-medium text-muted-foreground">Observações</Label>
+                <Textarea
                   value={currentEditingItem.notes || ""}
                   onChange={(e) => updateItemField(editingIdx!, "notes", e.target.value)}
                   placeholder="Observações"
-                  className="min-h-[120px] bg-secondary/20 border-border clip-cut-corner-sm"
+                  className="min-h-[120px] rounded-[20px] border-border bg-background"
                 />
               </div>
             </div>
@@ -876,11 +872,11 @@ const WorkoutDetail = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex-1">
-                  <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Título</Label>
+                  <Label className="text-[10px] font-medium text-muted-foreground">Título</Label>
                   <Input
                     value={currentEditingItem.metcon_title || ""}
                     onChange={(e) => updateItemField(editingIdx!, "metcon_title", e.target.value)}
-                    className="h-10 bg-secondary/30 border-border clip-cut-corner-sm"
+                    className="h-10 rounded-xl border-border bg-background"
                     placeholder="Título do bloco (opcional)"
                   />
                 </div>
@@ -912,16 +908,16 @@ const WorkoutDetail = () => {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Tipo</Label>
+                <Label className="text-[10px] font-medium text-muted-foreground">Tipo</Label>
                 <div className="flex gap-2 flex-wrap">
                   {METCON_TYPES.map((t) => (
                     <button
                       key={t}
                       onClick={() => updateItemField(editingIdx!, "metcon_type", t)}
-                      className={`px-3 py-2 clip-cut-corner-sm text-[11px] font-bold uppercase tracking-wider border transition-colors ${
+                      className={`rounded-full border px-3 py-2 text-[11px] font-medium transition-colors ${
                         currentEditingItem.metcon_type === t
-                          ? "bg-primary text-white border-primary"
-                          : "bg-secondary/30 text-muted-foreground border-border hover:border-primary"
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background text-muted-foreground hover:border-primary hover:text-primary"
                       }`}
                     >
                       {t}
@@ -931,17 +927,17 @@ const WorkoutDetail = () => {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Descrição</Label>
+                <Label className="text-[10px] font-medium text-muted-foreground">Descrição</Label>
                 <Textarea
                   value={currentEditingItem.metcon_description || ""}
                   onChange={(e) => updateItemField(editingIdx!, "metcon_description", e.target.value)}
-                  className="min-h-[180px] bg-secondary/20 border-border clip-cut-corner-sm"
+                  className="min-h-[180px] rounded-[20px] border-border bg-background"
                   placeholder={"Descreva o bloco livre...\nEx: For Time:\n500m Corrida\n35 Goblet Squat #32/24kg\n..."}
                 />
               </div>
 
               <div className="flex items-center justify-between border-t border-border/60 pt-3">
-                <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+                <div className="flex items-center gap-2 text-[10px] font-medium text-muted-foreground">
                   <Trophy className="w-3.5 h-3.5" /> Referência de ranking
                 </div>
                 <Button variant="outline" size="sm" onClick={() => toggleRankingReference(editingIdx!)}>
@@ -953,7 +949,7 @@ const WorkoutDetail = () => {
 
           <DialogFooter className="gap-2">
             <Button variant="outline" onClick={closeEditor}>Fechar</Button>
-            <Button variant="hero" onClick={closeEditor}>OK</Button>
+            <Button className="rounded-full bg-primary text-primary-foreground hover:opacity-90" onClick={closeEditor}>OK</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

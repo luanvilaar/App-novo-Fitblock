@@ -207,11 +207,11 @@ const TrainerGroups = () => {
       
       <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.24em] text-primary">
+          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-primary">
             <Users className="w-3 h-3" />
-            Group Logistics
+            Grupos
           </div>
-          <h1 className="font-display text-5xl font-normal leading-[0.92] tracking-[-0.06em] text-foreground md:text-[4.25rem]">
+          <h1 className="text-5xl font-medium leading-[0.92] tracking-[-0.06em] text-foreground md:text-[4.25rem]">
             Gestão de <span className="text-primary">grupos</span>
           </h1>
         </div>
@@ -220,34 +220,34 @@ const TrainerGroups = () => {
           <DialogTrigger asChild>
             <button className="btn-action px-8 h-12 flex items-center justify-center gap-3">
               <Plus className="w-4 h-4" />
-              Criar Novo Grupo
+              Criar grupo
             </button>
           </DialogTrigger>
-          <DialogContent className="rounded-xl border border-border bg-card p-10">
+          <DialogContent className="rounded-[28px] border border-border bg-card p-8">
             <DialogHeader className="space-y-2 mb-8">
-              <div className="font-mono text-[9px] uppercase tracking-[0.24em] text-primary">New Operational Cluster</div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">Novo grupo</div>
               <DialogTitle className="font-display text-3xl font-normal tracking-[-0.04em] text-foreground">Novo grupo</DialogTitle>
               <p className="text-sm text-muted-foreground">Configure um novo agrupamento de atletas para programação coletiva.</p>
             </DialogHeader>
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label className="ml-1 text-xs uppercase tracking-[0.16em] text-muted-foreground">Identificação do Grupo</Label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="EX: TURMA_DELTA_06H" className="h-12 rounded-lg border-border bg-background text-sm text-foreground focus:border-primary" />
+                <Label className="ml-1 text-xs font-medium text-muted-foreground">Nome do grupo</Label>
+                <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex.: Turma das 6h" className="h-12 rounded-2xl border-border bg-background text-sm text-foreground focus:border-primary" />
               </div>
               <div className="space-y-2">
-                <Label className="ml-1 text-xs uppercase tracking-[0.16em] text-muted-foreground">Descrição (Briefing)</Label>
-                <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="ESPECIFICAÇÕES OPCIONAIS" className="h-12 rounded-lg border-border bg-background text-sm text-foreground focus:border-primary" />
+                <Label className="ml-1 text-xs font-medium text-muted-foreground">Descrição</Label>
+                <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Especificações opcionais" className="h-12 rounded-2xl border-border bg-background text-sm text-foreground focus:border-primary" />
               </div>
               <div className="space-y-2">
-                <Label className="ml-1 text-xs uppercase tracking-[0.16em] text-muted-foreground">Vincular Unidade (Box)</Label>
+                <Label className="ml-1 text-xs font-medium text-muted-foreground">Vincular box</Label>
                 <Select value={selectedBoxId} onValueChange={setSelectedBoxId}>
-                  <SelectTrigger className="h-12 rounded-lg border-border bg-background text-sm text-foreground focus:border-primary">
-                    <SelectValue placeholder="SELECIONAR UNIDADE" />
+                  <SelectTrigger className="h-12 rounded-2xl border-border bg-background text-sm text-foreground focus:border-primary">
+                    <SelectValue placeholder="Selecionar unidade" />
                   </SelectTrigger>
                   <SelectContent className="border-border bg-card text-foreground">
-                    <SelectItem value="none" className="focus:bg-background">NENHUMA</SelectItem>
+                    <SelectItem value="none" className="focus:bg-background">Nenhuma</SelectItem>
                     {boxes.map((b) => (
-                      <SelectItem key={b.id} value={b.id} className="focus:bg-background">{b.name.toUpperCase()}</SelectItem>
+                      <SelectItem key={b.id} value={b.id} className="focus:bg-background">{b.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -263,10 +263,10 @@ const TrainerGroups = () => {
         </Dialog>
 
         <Dialog open={!!editingGroup} onOpenChange={(open) => !open && setEditingGroup(null)}>
-          <DialogContent className="flex max-h-[min(90dvh,calc(100dvh-2rem))] w-[calc(100%-1.5rem)] max-w-lg flex-col gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 sm:w-full">
+          <DialogContent className="flex max-h-[min(90dvh,calc(100dvh-2rem))] w-[calc(100%-1.5rem)] max-w-lg flex-col gap-0 overflow-hidden rounded-[28px] border border-border bg-card p-0 sm:w-full">
             <div className="custom-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain px-6 pb-8 pt-8 sm:p-10 sm:pb-10">
               <DialogHeader className="space-y-2 pr-8 text-left sm:pr-10">
-                <div className="font-mono text-[9px] uppercase tracking-[0.24em] text-primary">Editar grupo</div>
+                <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">Editar grupo</div>
                 <DialogTitle className="font-display text-2xl font-normal tracking-[-0.04em] text-foreground sm:text-3xl">
                   {editingGroup?.name ?? "Configurar grupo"}
                 </DialogTitle>
@@ -277,7 +277,7 @@ const TrainerGroups = () => {
             {editingGroup && (
               <div className="mt-8 space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="edit-group-name" className="ml-1 text-xs uppercase tracking-[0.16em] text-muted-foreground">Nome do grupo</Label>
+                  <Label htmlFor="edit-group-name" className="ml-1 text-xs font-medium text-muted-foreground">Nome do grupo</Label>
                   <Input id="edit-group-name" value={editGroupName} onChange={(e) => setEditGroupName(e.target.value)} onBlur={async () => {
                     if (!editGroupName.trim() || editGroupName === editingGroup.name) return;
                     const { error } = await supabase.from("groups").update({ name: editGroupName.trim() }).eq("id", editingGroup.id);
@@ -289,11 +289,11 @@ const TrainerGroups = () => {
                     toast.success("Nome atualizado");
                     setEditingGroup({ ...editingGroup, name: editGroupName.trim() });
                     if (trainerId) fetchGroups(trainerId);
-                  }} className="h-12 rounded-lg border-border bg-background text-sm text-foreground focus:border-primary" />
+                  }} className="h-12 rounded-2xl border-border bg-background text-sm text-foreground focus:border-primary" />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label className="ml-1 text-xs uppercase tracking-[0.16em] text-muted-foreground">Vincular Unidade (Box)</Label>
+                  <Label className="ml-1 text-xs font-medium text-muted-foreground">Vincular box</Label>
                   <Select value={editBoxId} onValueChange={async (val) => {
                     const newBoxId = val === "none" ? null : val;
                     const { error } = await supabase.from("groups").update({ box_id: newBoxId }).eq("id", editingGroup.id);
@@ -303,20 +303,20 @@ const TrainerGroups = () => {
                     if (trainerId) fetchGroups(trainerId);
                     setEditingGroup({ ...editingGroup, box_id: newBoxId });
                   }}>
-                    <SelectTrigger className="h-12 rounded-lg border-border bg-background text-sm text-foreground focus:border-primary">
-                      <SelectValue placeholder="SELECIONAR UNIDADE" />
+                    <SelectTrigger className="h-12 rounded-2xl border-border bg-background text-sm text-foreground focus:border-primary">
+                      <SelectValue placeholder="Selecionar unidade" />
                     </SelectTrigger>
                     <SelectContent className="border-border bg-card text-foreground">
-                      <SelectItem value="none" className="focus:bg-background">NENHUMA</SelectItem>
+                      <SelectItem value="none" className="focus:bg-background">Nenhuma</SelectItem>
                       {boxes.map((b) => (
-                        <SelectItem key={b.id} value={b.id} className="focus:bg-background">{b.name.toUpperCase()}</SelectItem>
+                        <SelectItem key={b.id} value={b.id} className="focus:bg-background">{b.name}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-3">
-                  <Label className="ml-1 text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                  <Label className="ml-1 text-xs font-medium text-muted-foreground">
                     Membros ({editingGroup.group_members?.length || 0})
                   </Label>
                   <div className="custom-scrollbar max-h-[min(12rem,35dvh)] space-y-2 overflow-y-auto rounded-xl border border-border bg-background p-4">
@@ -345,13 +345,13 @@ const TrainerGroups = () => {
                 </div>
 
                 <div className="space-y-3 border-t border-border pt-6">
-                  <Label htmlFor="edit-add-member" className="ml-1 text-xs uppercase tracking-[0.16em] text-primary">Adicionar atleta</Label>
+                  <Label htmlFor="edit-add-member" className="ml-1 text-xs font-medium text-primary">Adicionar atleta</Label>
                   <div className="flex flex-col gap-2 sm:flex-row">
                     <select
                       id="edit-add-member"
                       value={editSelectedStudent}
                       onChange={(e) => setEditSelectedStudent(e.target.value)}
-                      className="min-h-12 flex-1 cursor-pointer appearance-none rounded-lg border border-border bg-background px-4 text-sm text-foreground focus:border-primary focus:outline-none disabled:opacity-50"
+                      className="min-h-12 flex-1 cursor-pointer appearance-none rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:border-primary focus:outline-none disabled:opacity-50"
                       disabled={getAvailableStudents(editingGroup).length === 0}
                     >
                       {getAvailableStudents(editingGroup).length === 0 ? (
@@ -409,11 +409,11 @@ const TrainerGroups = () => {
           ? [1, 2, 3, 4].map((i) => <div key={i} className="h-56 animate-pulse rounded-xl border border-border bg-background" />)
           : groups.length === 0
           ? (
-            <div className="col-span-full flex flex-col items-center justify-center gap-6 rounded-xl border border-border bg-card py-24 text-center opacity-50">
+            <div className="col-span-full flex flex-col items-center justify-center gap-6 rounded-[28px] border border-border bg-card py-24 text-center opacity-50">
               <Activity className="w-16 h-16 text-foreground/20" />
               <div className="space-y-1">
                 <p className="font-display text-2xl font-normal tracking-[-0.04em] text-foreground">Nenhum grupo detectado</p>
-                <p className="font-mono text-[9px] uppercase tracking-[0.24em] text-foreground/40">AGUARDANDO INICIALIZAÇÃO DE CÉLULAS</p>
+                <p className="text-sm text-muted-foreground">Crie um grupo para iniciar a programação coletiva.</p>
               </div>
             </div>
           )
@@ -425,7 +425,7 @@ const TrainerGroups = () => {
                 transition={{ delay: i * 0.03 }}
                 className="relative group"
               >
-                <div className="space-y-5 overflow-hidden rounded-xl border border-border bg-card p-6 transition-all duration-500 group-hover:border-primary/15 sm:space-y-6 sm:p-8">
+                <div className="space-y-5 overflow-hidden rounded-[24px] border border-border bg-card p-6 transition-all duration-500 group-hover:border-primary/15 sm:space-y-6 sm:p-8">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-6">
                     <div className="flex min-w-0 flex-1 gap-4">
                       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-border bg-background transition-all duration-500 group-hover:border-primary/40 group-hover:bg-primary/5 sm:h-16 sm:w-16">
@@ -456,10 +456,10 @@ const TrainerGroups = () => {
                       <button
                         type="button"
                         onClick={() => navigate(`/trainer/grupos/${g.id}/treinos`)}
-                        className="inline-flex h-10 items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-4 font-body text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                        className="inline-flex h-10 items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 text-sm font-medium text-primary transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
                       >
                         <Dumbbell className="h-4 w-4 shrink-0" />
-                        <span className="hidden sm:inline">Protocolos</span>
+                        <span className="hidden sm:inline">Treinos</span>
                       </button>
                       <button
                         type="button"

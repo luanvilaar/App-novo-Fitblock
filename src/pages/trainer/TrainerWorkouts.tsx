@@ -67,13 +67,13 @@ const TrainerWorkouts = () => {
 
   return (
     <div className="space-y-10 pb-12 pt-6">
-      <div className="flex flex-col items-start justify-between gap-6 rounded-xl border border-border bg-card p-6 md:flex-row md:items-center">
+      <div className="flex flex-col items-start justify-between gap-6 rounded-[28px] border border-border bg-card p-6 md:flex-row md:items-center">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-primary font-mono text-[10px] uppercase tracking-[0.24em]">
+          <div className="flex items-center gap-2 text-primary font-mono text-[11px] uppercase tracking-[0.22em]">
             <Dumbbell className="w-3 h-3" />
-            Protocol Distribution
+            Treinos
           </div>
-          <h1 className="font-display text-5xl font-normal leading-[0.92] tracking-[-0.06em] text-foreground md:text-[4.25rem]">
+          <h1 className="text-5xl font-medium leading-[0.92] tracking-[-0.06em] text-foreground md:text-[4.25rem]">
             Treinos por <span className="text-primary">contexto</span>
           </h1>
         </div>
@@ -81,13 +81,13 @@ const TrainerWorkouts = () => {
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => navigate("/trainer/atletas")}
-            className="flex h-11 items-center gap-2 rounded-lg border border-border bg-background px-6 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/65 transition-all hover:border-primary/40 hover:text-primary"
+            className="flex h-11 items-center gap-2 rounded-full border border-border bg-background px-6 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
           >
             <Users className="w-4 h-4" /> Atletas
           </button>
           <button
             onClick={() => navigate("/trainer/grupos")}
-            className="flex h-11 items-center gap-2 rounded-lg border border-border bg-background px-6 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/65 transition-all hover:border-primary/40 hover:text-primary"
+            className="flex h-11 items-center gap-2 rounded-full border border-border bg-background px-6 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
           >
             <Layers className="w-4 h-4" /> Grupos
           </button>
@@ -112,7 +112,7 @@ const TrainerWorkouts = () => {
         {/* ATHLETE LISTING */}
         <section className="space-y-6">
           <div className="flex items-center gap-4 px-2">
-             <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-foreground/40">Atletas Individuais</div>
+             <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Atletas individuais</div>
              <div className="h-px flex-1 bg-border" />
           </div>
 
@@ -130,15 +130,15 @@ const TrainerWorkouts = () => {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: Math.min(i * 0.02, 0.3) }}
-                  className="group flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/30"
+                  className="group flex items-center justify-between gap-4 rounded-[24px] border border-border bg-card p-6 transition-colors hover:border-primary/30"
                 >
                   <div className="min-w-0">
-                     <span className="block truncate font-display text-2xl font-normal tracking-[-0.04em] text-foreground transition-colors group-hover:text-primary">{s.name}</span>
-                     <span className="font-mono text-[8px] uppercase tracking-[0.18em] text-foreground/28">Athlete Node ID: {s.id.substring(0,8).toUpperCase()}</span>
+                     <span className="block truncate text-2xl font-medium tracking-[-0.04em] text-foreground transition-colors group-hover:text-primary">{s.name}</span>
+                     <span className="text-xs text-muted-foreground">Abrir calendário individual</span>
                   </div>
                   <button
                     onClick={() => navigate(`/trainer/atletas/${s.id}/treinos`)}
-                    className="flex h-10 shrink-0 items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-5 font-mono text-[9px] uppercase tracking-[0.16em] text-primary transition-all hover:bg-primary hover:text-white"
+                    className="flex h-10 shrink-0 items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
                   >
                     <Calendar className="w-3.5 h-3.5" /> Calendário
                   </button>
@@ -151,7 +151,7 @@ const TrainerWorkouts = () => {
         {/* GROUP LISTING */}
         <section className="space-y-6">
           <div className="flex items-center gap-4 px-2">
-             <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-foreground/40">Células Operacionais</div>
+             <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Grupos</div>
              <div className="h-px flex-1 bg-border" />
           </div>
 
@@ -169,15 +169,15 @@ const TrainerWorkouts = () => {
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: Math.min(i * 0.02, 0.3) }}
-                  className="group flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/30"
+                  className="group flex items-center justify-between gap-4 rounded-[24px] border border-border bg-card p-6 transition-colors hover:border-primary/30"
                 >
                   <div className="min-w-0">
-                     <span className="block truncate font-display text-2xl font-normal tracking-[-0.04em] text-foreground transition-colors group-hover:text-primary">{g.name}</span>
-                     <span className="font-mono text-[8px] uppercase tracking-[0.18em] text-foreground/28">Group Cluster ID: {g.id.substring(0,8).toUpperCase()}</span>
+                     <span className="block truncate text-2xl font-medium tracking-[-0.04em] text-foreground transition-colors group-hover:text-primary">{g.name}</span>
+                     <span className="text-xs text-muted-foreground">Abrir calendário do grupo</span>
                   </div>
                   <button
                     onClick={() => navigate(`/trainer/grupos/${g.id}/treinos`)}
-                    className="flex h-10 shrink-0 items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-5 font-mono text-[9px] uppercase tracking-[0.16em] text-primary transition-all hover:bg-primary hover:text-white"
+                    className="flex h-10 shrink-0 items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
                   >
                     <Calendar className="w-3.5 h-3.5" /> Calendário
                   </button>

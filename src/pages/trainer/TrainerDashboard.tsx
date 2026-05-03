@@ -420,13 +420,13 @@ const TrainerDashboard = () => {
 
   return (
     <div className="w-full min-w-0 max-w-full space-y-8 overflow-x-hidden pb-12 pt-4 sm:space-y-10 sm:pt-6">
-      <div className="flex min-w-0 max-w-full flex-col gap-4 rounded-xl border border-border bg-card p-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6 md:p-8">
+      <div className="flex min-w-0 max-w-full flex-col gap-4 rounded-[28px] border border-border bg-card p-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6 md:p-8">
         <div className="min-w-0 space-y-1">
-          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.24em] text-primary">
+          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-primary">
             <Activity className="h-3 w-3 shrink-0" />
-            Control Center
+            Dashboard
           </div>
-          <h1 className="font-display text-5xl font-normal leading-[0.92] tracking-[-0.06em] text-foreground sm:text-6xl md:text-[4.5rem]">
+          <h1 className="text-5xl font-medium leading-[0.92] tracking-[-0.06em] text-foreground sm:text-6xl md:text-[4.5rem]">
             Monitor de <span className="text-primary">performance</span>
           </h1>
         </div>
@@ -442,10 +442,10 @@ const TrainerDashboard = () => {
           </button>
           <NavLink
             to="/trainer/atletas"
-            className="flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-lg border border-border bg-background px-4 font-body text-sm font-normal text-foreground transition-all hover:border-primary/15 hover:bg-card sm:min-w-0 sm:flex-initial sm:px-6"
+            className="flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium text-foreground transition-colors hover:border-primary/15 hover:text-primary sm:min-w-0 sm:flex-initial sm:px-6"
           >
             <Users className="h-4 w-4 shrink-0" />
-            <span className="truncate">Gestão Atletas</span>
+            <span className="truncate">Ver atletas</span>
           </NavLink>
         </div>
       </div>
@@ -462,7 +462,7 @@ const TrainerDashboard = () => {
                   <Inbox className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.24em] text-primary">Ação Requerida</div>
+                  <div className="mb-1 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">Ação requerida</div>
                   <h3 className="font-body text-xl font-normal leading-snug tracking-tight text-foreground md:text-2xl">
                     {pendingLinkCount === 1 ? "Nova solicitação de acesso" : `${pendingLinkCount} solicitações pendentes`}
                   </h3>
@@ -482,7 +482,7 @@ const TrainerDashboard = () => {
 
       {exerciseFeedback.length > 0 && (
         <TrainerPanelCard
-          eyebrow="Athletes // Feedback"
+          eyebrow="Feedback"
           title="Notas e adaptações dos atletas"
           subtitle="Substituições de exercício e observações deixadas durante os treinos."
         >
@@ -534,8 +534,8 @@ const TrainerDashboard = () => {
       <div className="grid min-w-0 max-w-full grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
         <div className="flex h-full min-h-0 w-full min-w-0 max-w-full lg:col-span-8">
           <TrainerPanelCard
-            eyebrow="Metrics // Analytics"
-            title="Fluxo de rendimento"
+          eyebrow="Métricas"
+          title="Fluxo de rendimento"
             subtitle="Visão semanal de check-ins e resultados postados."
             aside={<TrainerPanelCardMedia src={heroImage} alt="" />}
             features={["Dados consolidados dos seus atletas", "Leitura rápida da semana"]}
@@ -559,7 +559,7 @@ const TrainerDashboard = () => {
         <div className="flex h-full min-h-0 w-full min-w-0 max-w-full lg:col-span-4">
           <TrainerPanelCard
             className="flex h-full min-h-0 w-full flex-1 flex-col"
-            eyebrow="Live // Operational"
+            eyebrow="Hoje"
             title="Check-ins hoje"
             subtitle="Protocolos do dia e progresso por atleta."
           >
@@ -568,7 +568,7 @@ const TrainerDashboard = () => {
             {dailyProgress.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center opacity-20 space-y-4">
                 <BarChart3 className="w-10 h-10" />
-                <p className="font-mono text-[10px] uppercase tracking-widest leading-relaxed">Nenhum protocolo<br/>ativo para hoje</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">Nenhum protocolo ativo para hoje.</p>
               </div>
             ) : (
               dailyProgress.map((p) => (
@@ -602,9 +602,9 @@ const TrainerDashboard = () => {
 
           <NavLink
             to="/trainer/treinos"
-            className="w-full rounded-xl border border-border bg-transparent py-3.5 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-foreground/75 transition-all hover:border-primary/20 hover:bg-primary/5"
+            className="w-full rounded-full border border-border bg-transparent py-3.5 text-center text-sm font-medium text-foreground/75 transition-colors hover:border-primary/20 hover:bg-primary/5 hover:text-primary"
           >
-            Ver Todos Protocolos
+            Ver todos os protocolos
           </NavLink>
           </div>
           </TrainerPanelCard>
@@ -614,8 +614,8 @@ const TrainerDashboard = () => {
       <div className="min-w-0 max-w-full space-y-6 sm:space-y-8">
         <div className="flex min-w-0 max-w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <div className="min-w-0 space-y-1">
-            <div className="font-mono text-[9px] font-bold uppercase tracking-[0.3em] text-foreground/40">
-              Operational // Sync
+            <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+              Status
             </div>
             <h2 className="font-body text-2xl font-normal tracking-tight text-foreground sm:text-3xl md:text-4xl">
               Status dos protocolos
@@ -623,8 +623,8 @@ const TrainerDashboard = () => {
           </div>
           <div className="flex w-fit max-w-full shrink-0 items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-3 py-2 sm:gap-3 sm:px-4 sm:py-2">
             <div className="h-2 w-2 shrink-0 rounded-full bg-primary shadow-[0_0_8px_rgba(90,26,169,0.28)]" />
-            <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-primary/70 sm:text-[9px]">
-              Live Sync
+            <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-primary/70">
+              Atualização ao vivo
             </span>
           </div>
         </div>
@@ -641,7 +641,7 @@ const TrainerDashboard = () => {
               <Activity className="h-16 w-16 text-foreground/15" />
               <div className="space-y-2">
                 <p className="font-body text-2xl font-normal tracking-tight text-foreground/50">Nenhum protocolo ativo hoje</p>
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-foreground/25 italic">Aguardando dados de performance...</p>
+                <p className="text-sm text-muted-foreground italic">Aguardando dados de performance.</p>
               </div>
             </div>
           </TrainerPanelCard>
@@ -667,7 +667,7 @@ const TrainerDashboard = () => {
                     <div className="flex flex-col h-full">
                     <div className="flex justify-between items-start mb-8 gap-4">
                       <div className="space-y-3 min-w-0 flex-1">
-                        <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-primary font-bold flex items-center gap-2">
+                        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
                           <div className={`w-1.5 h-1.5 rounded-full ${isComplete ? "bg-primary shadow-[0_0_8px_rgba(90,26,169,0.6)]" : "bg-foreground/20"}`} />
                           {dp.group_name || "Individual"}
                         </div>
@@ -675,7 +675,7 @@ const TrainerDashboard = () => {
                       </div>
                       <div className="text-right">
                         <div className={`font-body text-4xl tracking-tight leading-none font-semibold tabular-nums ${isComplete ? "text-primary" : "text-foreground/80"}`}>{perc}%</div>
-                        <div className="mt-2 font-mono text-[9px] font-bold uppercase tracking-widest text-foreground/30">{dp.completed_students}/{dp.total_students} Units</div>
+                        <div className="mt-2 text-xs text-muted-foreground">{dp.completed_students}/{dp.total_students} atletas</div>
                       </div>
                     </div>
 
@@ -700,14 +700,14 @@ const TrainerDashboard = () => {
                     </div>
                     
                     <div className="mt-8 flex min-w-0 max-w-full flex-col gap-2 border-t border-border/80 pt-6 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
-                      <span className="min-w-0 break-all font-mono text-[7px] uppercase tracking-widest text-foreground/20 sm:text-[8px] sm:break-normal">
-                        P-ID: {dp.workout_id.substring(0, 8).toUpperCase()}…
+                        <span className="min-w-0 break-all text-xs text-muted-foreground sm:break-normal">
+                        ID: {dp.workout_id.substring(0, 8).toUpperCase()}…
                       </span>
                       <NavLink
                         to="/trainer/treinos"
-                        className="shrink-0 font-mono text-[8px] font-bold uppercase tracking-[0.2em] text-primary transition-colors hover:text-foreground"
+                        className="shrink-0 text-xs font-medium text-primary transition-colors hover:text-foreground"
                       >
-                        Ver detalhes →
+                        Ver detalhes
                       </NavLink>
                     </div>
                   </div>

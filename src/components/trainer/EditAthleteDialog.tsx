@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
@@ -69,28 +68,27 @@ const EditAthleteDialog = ({ open, onOpenChange, student, onSaved }: EditAthlete
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-card border-white/10 clip-cut-corner-lg p-10 backdrop-blur-xl">
-        <DialogHeader className="space-y-2 mb-8">
-          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary font-bold">NODE_RECONFIGURATION_V.01</div>
-          <DialogTitle className="font-display text-4xl uppercase tracking-tighter text-white">Editar Atleta</DialogTitle>
-          <div className="h-0.5 w-12 bg-primary" />
+      <DialogContent className="rounded-[28px] border border-border bg-card p-8">
+        <DialogHeader className="mb-8 space-y-2">
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">Atleta</div>
+          <DialogTitle className="text-3xl font-medium tracking-[-0.04em] text-foreground">Editar atleta</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-8 mt-4">
-          <div className="p-5 bg-white/[0.03] border border-white/5 clip-cut-corner-sm">
-            <p className="font-display text-xl uppercase tracking-tight text-white mb-1">{student?.name || "UNNAMED_NODE"}</p>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground opacity-60">{student?.email}</p>
+          <div className="rounded-[24px] border border-border bg-background p-5">
+            <p className="mb-1 text-2xl font-medium tracking-[-0.03em] text-foreground">{student?.name || "Atleta"}</p>
+            <p className="text-sm text-muted-foreground">{student?.email}</p>
           </div>
 
           <div className="space-y-3">
-            <Label className="font-mono text-[9px] uppercase tracking-[0.4em] text-muted-foreground ml-1">Atribuição_de_Box</Label>
+            <Label className="ml-1 text-xs font-medium text-muted-foreground">Vincular box</Label>
             <Select value={selectedBoxId} onValueChange={setSelectedBoxId}>
-              <SelectTrigger className="h-14 border-white/10 bg-white/5 focus:ring-1 focus:ring-primary text-white font-mono text-xs tracking-widest uppercase rounded-none">
-                <SelectValue placeholder="SELECIONAR DESTINO" />
+              <SelectTrigger className="h-12 rounded-2xl border-border bg-background text-foreground focus:ring-1 focus:ring-primary">
+                <SelectValue placeholder="Selecionar destino" />
               </SelectTrigger>
-              <SelectContent className="bg-card border-white/10 text-white font-mono text-xs uppercase tracking-widest">
+              <SelectContent className="border-border bg-card text-foreground">
                 {boxes.map((b) => (
-                  <SelectItem key={b.id} value={b.id} className="hover:bg-primary/20 focus:bg-primary/20 cursor-pointer">
+                  <SelectItem key={b.id} value={b.id} className="cursor-pointer focus:bg-primary/10">
                     {b.name}
                   </SelectItem>
                 ))}
@@ -99,12 +97,12 @@ const EditAthleteDialog = ({ open, onOpenChange, student, onSaved }: EditAthlete
           </div>
 
           <div className="pt-4">
-            <button 
-              className="w-full h-14 bg-primary text-white font-display font-bold uppercase tracking-widest text-xs clip-cut-corner-sm hover:brightness-110 transition-all flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(65,31,128,0.2)] disabled:opacity-50 disabled:grayscale" 
+            <button
+              className="flex h-12 w-full items-center justify-center gap-3 rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
               onClick={handleSave} 
               disabled={saving || !selectedBoxId}
             >
-              {saving ? "PROCESSANDO..." : "SALVAR CONFIGURAÇÕES"}
+              {saving ? "Salvando..." : "Salvar alterações"}
             </button>
           </div>
         </div>

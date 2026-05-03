@@ -115,12 +115,12 @@ export function TrainerCopyWorkoutDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md border-white/10 bg-[#121212] text-white sm:max-w-lg">
+      <DialogContent className="max-w-md rounded-[28px] border border-border bg-card text-foreground sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="font-display uppercase tracking-tight">Copiar treino</DialogTitle>
+          <DialogTitle className="text-3xl font-medium tracking-[-0.04em] text-foreground">Copiar treino</DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            <span className="font-medium text-white/90">{sourceWorkout.title}</span>
-            <span className="text-white/40"> · </span>
+            <span className="font-medium text-foreground">{sourceWorkout.title}</span>
+            <span className="text-muted-foreground"> · </span>
             Prescrição, exercícios e metcons serão copiados.
           </DialogDescription>
         </DialogHeader>
@@ -129,7 +129,7 @@ export function TrainerCopyWorkoutDialog({
           <Button
             type="button"
             variant="outline"
-            className="w-full border-white/15 bg-white/[0.04] text-white hover:bg-white/[0.08]"
+            className="h-11 w-full rounded-full border-border bg-background text-foreground hover:border-primary/30 hover:text-primary"
             disabled={busy || !trainerId}
             onClick={() => void handleDuplicateHere()}
           >
@@ -138,8 +138,8 @@ export function TrainerCopyWorkoutDialog({
           </Button>
 
           <div className="relative">
-            <Separator className="bg-white/10" />
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#121212] px-2 font-mono text-[9px] uppercase tracking-widest text-white/35">
+            <Separator className="bg-border" />
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
               ou enviar para
             </span>
           </div>
@@ -150,15 +150,15 @@ export function TrainerCopyWorkoutDialog({
               onValueChange={(v) => setDestKind(v as DestKind)}
               className="grid gap-3"
             >
-              <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2">
+              <div className="flex items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3">
                 <RadioGroupItem value="student" id="dest-student" />
-                <Label htmlFor="dest-student" className="cursor-pointer font-mono text-xs uppercase tracking-wide text-white/80">
+                <Label htmlFor="dest-student" className="cursor-pointer text-sm font-medium text-foreground">
                   Outro atleta
                 </Label>
               </div>
-              <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2">
+              <div className="flex items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3">
                 <RadioGroupItem value="group" id="dest-group" />
-                <Label htmlFor="dest-group" className="cursor-pointer font-mono text-xs uppercase tracking-wide text-white/80">
+                <Label htmlFor="dest-group" className="cursor-pointer text-sm font-medium text-foreground">
                   Grupo
                 </Label>
               </div>
@@ -167,21 +167,21 @@ export function TrainerCopyWorkoutDialog({
 
           {effectiveKind === "student" ? (
             <div className="space-y-2">
-              <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              <Label className="text-xs font-medium text-muted-foreground">
                 Atleta de destino
               </Label>
               <StudentCombobox students={students} value={studentId} onChange={setStudentId} />
             </div>
           ) : (
             <div className="space-y-2">
-              <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              <Label className="text-xs font-medium text-muted-foreground">
                 Grupo de destino
               </Label>
               <select
                 value={groupId}
                 onChange={(e) => setGroupId(e.target.value)}
                 className={cn(
-                  "h-12 w-full rounded-xl border border-border bg-secondary px-3 font-body text-sm text-foreground",
+                  "h-12 w-full rounded-2xl border border-border bg-background px-4 font-body text-sm text-foreground",
                   "focus:border-primary focus:outline-none",
                 )}
               >
@@ -196,7 +196,7 @@ export function TrainerCopyWorkoutDialog({
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="copy-date" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+            <Label htmlFor="copy-date" className="text-xs font-medium text-muted-foreground">
               Data do treino no destino
             </Label>
             <input
@@ -204,7 +204,7 @@ export function TrainerCopyWorkoutDialog({
               type="date"
               value={targetDate}
               onChange={(e) => setTargetDate(e.target.value)}
-              className="h-12 w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 font-mono text-sm text-white focus:border-primary focus:outline-none"
+              className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:border-primary focus:outline-none"
             />
             <p className="font-body text-[11px] leading-snug text-muted-foreground">
               Por defeito usa a mesma data do treino original. Pode alterar antes de criar a cópia.
@@ -213,12 +213,12 @@ export function TrainerCopyWorkoutDialog({
         </div>
 
         <DialogFooter className="gap-2 sm:gap-0">
-          <Button type="button" variant="ghost" className="text-white/60" onClick={() => onOpenChange(false)} disabled={busy}>
+          <Button type="button" variant="ghost" className="text-muted-foreground" onClick={() => onOpenChange(false)} disabled={busy}>
             Cancelar
           </Button>
           <Button
             type="button"
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
+            className="rounded-full bg-primary text-primary-foreground hover:opacity-90"
             disabled={
               busy ||
               !trainerId ||

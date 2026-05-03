@@ -74,19 +74,19 @@ const TrainerScopedWorkouts = ({ mode }: { mode: ScopedMode }) => {
           <button
             type="button"
             onClick={() => navigate(mode === "student" ? "/trainer/atletas" : "/trainer/grupos")}
-            className="group inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-foreground/60 transition-colors hover:border-primary/20 hover:text-foreground"
+            className="group inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-muted-foreground transition-colors hover:border-primary/20 hover:text-primary"
           >
             <ArrowLeft className="h-4 w-4 shrink-0" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em]">Voltar</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.18em]">Voltar</span>
           </button>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-border bg-background">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-border bg-card">
               {mode === "student" ? <Users className="h-6 w-6 text-primary" /> : <Layers className="h-6 w-6 text-primary" />}
             </div>
             <div className="min-w-0 space-y-1">
-              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-primary">{cycleEyebrow}</p>
-              <h1 className="font-display text-3xl font-normal tracking-[-0.05em] text-foreground md:text-[2.4rem]">
+              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">{cycleEyebrow}</p>
+              <h1 className="text-3xl font-medium tracking-[-0.05em] text-foreground md:text-[2.6rem]">
                 {entityName || "…"}
               </h1>
               <p className="font-body text-sm text-muted-foreground">
@@ -102,16 +102,13 @@ const TrainerScopedWorkouts = ({ mode }: { mode: ScopedMode }) => {
           <button
             type="button"
             onClick={() => navigate(createWorkoutPath)}
-            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-mono text-[10px] uppercase leading-tight tracking-[0.16em] text-primary-foreground transition-colors hover:opacity-90 sm:w-auto sm:px-8"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:w-auto sm:px-8"
           >
             <Plus className="h-4 w-4 shrink-0" />
-            <span className="flex flex-col items-center leading-none sm:items-end">
-              <span>Novo</span>
-              <span>treino</span>
-            </span>
+            <span>Novo treino</span>
           </button>
         ) : (
-          <div className="h-12 w-full animate-pulse rounded-lg border border-border bg-background sm:w-48" />
+          <div className="h-12 w-full animate-pulse rounded-full border border-border bg-card sm:w-48" />
         )}
       </div>
 
@@ -154,9 +151,9 @@ const TrainerScopedWorkouts = ({ mode }: { mode: ScopedMode }) => {
             cycleLabel={mode === "student" ? "Treino semanal" : "Treino do grupo"}
           />
         ) : (
-          <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-border bg-card px-8 py-24 text-foreground/30">
+          <div className="flex flex-col items-center justify-center gap-4 rounded-[28px] border border-border bg-card px-8 py-24 text-muted-foreground">
             <Dumbbell className="h-12 w-12 animate-pulse text-foreground/20" />
-            <p className="font-mono text-[10px] uppercase tracking-widest">A carregar…</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em]">A carregar…</p>
           </div>
         )}
       </div>
