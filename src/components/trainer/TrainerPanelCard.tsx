@@ -39,13 +39,12 @@ export function TrainerPanelCard({
   asideReverse = false,
   ...rest
 }: TrainerPanelCardProps) {
-  const pad = flush ? "p-0" : compact ? "p-6 md:p-7" : "p-6 md:p-8 lg:p-10";
+  const pad = flush ? "p-0" : compact ? "p-8 md:p-10" : "p-10 md:p-12";
 
   return (
     <div
       className={cn(
-        "relative w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-border bg-card transition-colors duration-300",
-        accent && "border-primary/25",
+        "relative w-full min-w-0 max-w-full overflow-hidden rounded-[2.5rem] border border-black/5 bg-white shadow-sm ring-1 ring-black/5 transition-all duration-300",
         aside
           ? "flex h-full min-h-0 flex-col items-stretch lg:flex-row lg:items-stretch lg:gap-0"
           : "",
@@ -62,17 +61,19 @@ export function TrainerPanelCard({
         )}
       >
         {(eyebrow || title || subtitle) && (
-          <header className={cn("mb-6 space-y-1.5", compact && "mb-5")}>
+          <header className={cn("mb-8 space-y-2", compact && "mb-6")}>
             {eyebrow && (
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">{eyebrow}</p>
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">
+                {eyebrow.includes("·") ? eyebrow : eyebrow.split(" ").join(" · ")}
+              </p>
             )}
             {title && (
-              <h3 className="break-words font-display text-[1.5rem] font-normal tracking-[-0.04em] text-foreground sm:text-[1.7rem] md:text-[1.9rem]">
+              <h3 className="break-words font-sans text-3xl font-bold tracking-tight text-black sm:text-4xl">
                 {title}
               </h3>
             )}
             {subtitle && (
-              <p className="break-words font-body text-sm font-normal leading-relaxed text-muted-foreground">
+              <p className="break-words font-sans text-base font-medium text-black/40">
                 {subtitle}
               </p>
             )}
@@ -82,10 +83,10 @@ export function TrainerPanelCard({
         <div className="flex min-h-0 flex-1 flex-col">{children}</div>
 
         {features && features.length > 0 && (
-          <ul className={cn("mt-6 space-y-2.5", compact && "mt-5")}>
+          <ul className={cn("mt-8 space-y-3", compact && "mt-6")}>
             {features.map((line) => (
-              <li key={line} className="flex items-start gap-3 font-body text-sm text-foreground">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} aria-hidden />
+              <li key={line} className="flex items-start gap-3 font-sans text-sm font-medium text-black">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-black" strokeWidth={3} aria-hidden />
                 <span>{line}</span>
               </li>
             ))}
@@ -96,8 +97,8 @@ export function TrainerPanelCard({
       {aside && (
         <div
           className={cn(
-            "relative flex min-h-[200px] flex-1 overflow-hidden border-t border-border/80 lg:min-h-0 lg:max-w-[38%] lg:w-[38%] lg:flex-shrink-0 lg:shrink-0 lg:self-stretch lg:border-l lg:border-t-0 lg:border-border/80",
-            asideReverse && "order-1 lg:order-1 lg:border-l-0 lg:border-r lg:border-border/80"
+            "relative flex min-h-[200px] flex-1 overflow-hidden border-t border-black/5 lg:min-h-0 lg:max-w-[38%] lg:w-[38%] lg:flex-shrink-0 lg:shrink-0 lg:self-stretch lg:border-l lg:border-t-0 lg:border-black/5",
+            asideReverse && "order-1 lg:order-1 lg:border-l-0 lg:border-r lg:border-black/5"
           )}
         >
           {aside}

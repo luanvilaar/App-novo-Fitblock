@@ -48,49 +48,39 @@ const MinimalExerciseListItem = ({
         }
       }}
       className={cn(
-        "group relative flex cursor-pointer items-center gap-4 overflow-hidden rounded-2xl border p-5 transition-all duration-300 md:gap-5",
+        "group relative flex cursor-pointer items-center gap-4 overflow-hidden rounded-2xl p-5 transition-all",
         isCompleted
-          ? "border-primary/25 bg-primary/[0.08] shadow-[0_0_24px_rgba(65,31,128,0.08)]"
-          : "border-white/[0.08] bg-[#161616] hover:border-primary/30 hover:bg-white/[0.03]",
+          ? "bg-black text-white shadow-lg"
+          : "bg-[#f3f3f3] text-black hover:bg-[#e2e2e2]"
       )}
     >
       <div
         className={cn(
-          "flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border font-display text-lg font-bold transition-colors",
+          "flex h-12 w-12 shrink-0 items-center justify-center rounded-full font-sans text-lg font-bold",
           isCompleted
-            ? "border-primary/35 bg-primary/15 text-white"
-            : "border-white/[0.08] bg-white/[0.04] text-white/50 group-hover:border-primary/35 group-hover:text-primary",
+            ? "bg-white text-black"
+            : "bg-black text-white"
         )}
       >
-        {isCompleted ? <Check className="h-7 w-7" strokeWidth={2.5} /> : letter}
+        {isCompleted ? <Check className="h-6 w-6" strokeWidth={3} /> : letter}
       </div>
 
-      <div className="min-w-0 flex-1 space-y-1.5">
-        <h3
-          className={cn(
-            "line-clamp-2 font-display text-base font-bold uppercase leading-snug tracking-tight transition-colors md:text-lg",
-            isCompleted ? "text-white" : "text-white group-hover:text-primary",
-          )}
-        >
+      <div className="min-w-0 flex-1 space-y-1">
+        <p className="font-mono text-[9px] font-bold uppercase tracking-[1.4px] opacity-40">
+          {cat}
+        </p>
+        <h3 className="truncate font-sans text-lg font-bold leading-tight">
           {name}
         </h3>
-        <div className="flex flex-wrap items-center gap-2">
-          <span
-            className={cn(
-              "inline-flex rounded-md border px-2 py-0.5 font-body text-[11px] font-medium",
-              isCompleted ? "border-primary/25 text-primary/90" : "border-white/10 text-muted-foreground",
-            )}
-          >
-            {cat}
-          </span>
-          <span className="font-body text-xs tabular-nums text-muted-foreground">{prescription}</span>
-        </div>
+        <p className="font-sans text-xs font-medium opacity-60">
+          {prescription}
+        </p>
       </div>
 
       <ChevronRight
         className={cn(
-          "h-5 w-5 shrink-0 transition-all group-hover:translate-x-0.5",
-          isCompleted ? "text-primary/60" : "text-white/25 group-hover:text-primary",
+          "h-5 w-5 shrink-0 opacity-30 transition-transform group-hover:translate-x-1",
+          isCompleted && "opacity-100"
         )}
       />
     </motion.div>

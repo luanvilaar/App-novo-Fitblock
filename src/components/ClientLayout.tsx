@@ -21,24 +21,22 @@ const ClientLayout = () => {
     )?.[1] ?? routeLabels["/dashboard"];
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background pb-[calc(5.25rem+env(safe-area-inset-bottom,0px))] font-body text-foreground selection:bg-primary selection:text-primary-foreground">
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute left-[-15%] top-[8%] h-72 w-72 rounded-full bg-primary/10 blur-[120px]" />
-      </div>
-
-      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/88 px-safe pt-safe backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-lg items-center justify-between gap-3 md:max-w-4xl">
-          <div className="flex min-w-0 items-center gap-3">
-            <img src={logo} alt="FitBlock Training" className="h-11 w-auto object-contain" />
+    <div className="relative min-h-screen bg-white text-black selection:bg-black selection:text-white">
+      <header className="sticky top-0 z-40 border-b border-black/5 bg-white/90 px-safe pt-safe backdrop-blur-xl">
+        <div className="mx-auto flex h-20 max-w-4xl items-center justify-between px-6">
+          <div className="flex items-center gap-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-black">
+              <span className="font-sans text-xl font-bold text-white tracking-tighter">FB</span>
+            </div>
             <div className="min-w-0">
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">{current.eyebrow}</p>
-              <p className="truncate text-sm font-medium text-foreground">{current.title}</p>
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">{current.eyebrow}</p>
+              <h2 className="truncate font-sans text-lg font-bold text-black">{current.title}</h2>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto min-w-0 max-w-lg px-safe pt-5 md:max-w-4xl md:px-[max(2.5rem,env(safe-area-inset-left,0px))] md:pr-[max(2.5rem,env(safe-area-inset-right,0px))] md:pt-8">
+      <main className="mx-auto min-h-screen max-w-4xl px-6 pb-32 pt-8">
         <Outlet />
       </main>
 

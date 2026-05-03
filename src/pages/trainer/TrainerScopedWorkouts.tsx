@@ -68,58 +68,62 @@ const TrainerScopedWorkouts = ({ mode }: { mode: ScopedMode }) => {
   const cycleEyebrow = mode === "student" ? "Calendário do atleta" : "Calendário do grupo";
 
   return (
-    <div className="space-y-8 pb-12 pt-6">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div className="space-y-4">
-          <button
-            type="button"
-            onClick={() => navigate(mode === "student" ? "/trainer/atletas" : "/trainer/grupos")}
-            className="group inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-muted-foreground transition-colors hover:border-primary/20 hover:text-primary"
-          >
-            <ArrowLeft className="h-4 w-4 shrink-0" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.18em]">Voltar</span>
-          </button>
+    <div className="space-y-16 pb-32 pt-8 px-safe">
+      <div className="flex flex-col gap-10">
+        <header className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div className="space-y-6">
+            <button
+              type="button"
+              onClick={() => navigate(mode === "student" ? "/trainer/atletas" : "/trainer/grupos")}
+              className="group h-12 flex items-center gap-2 rounded-full border border-black/5 bg-[#f3f3f3] px-6 text-[10px] font-black uppercase tracking-widest text-black/40 transition-all hover:bg-black hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" strokeWidth={3} />
+              Voltar
+            </button>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-border bg-card">
-              {mode === "student" ? <Users className="h-6 w-6 text-primary" /> : <Layers className="h-6 w-6 text-primary" />}
-            </div>
-            <div className="min-w-0 space-y-1">
-              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">{cycleEyebrow}</p>
-              <h1 className="text-3xl font-medium tracking-[-0.05em] text-foreground md:text-[2.6rem]">
-                {entityName || "…"}
-              </h1>
-              <p className="font-body text-sm text-muted-foreground">
-                {mode === "student"
-                  ? "Planeie e acompanhe os treinos deste atleta."
-                  : "Planeie e acompanhe os treinos deste grupo."}
-              </p>
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-[1.5rem] bg-black text-white shadow-lg">
+                {mode === "student" ? <Users className="h-8 w-8" /> : <Layers className="h-8 w-8" />}
+              </div>
+              <div className="min-w-0 space-y-1">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">{cycleEyebrow}</p>
+                <h1 className="font-sans text-4xl font-black tracking-tighter text-black sm:text-5xl lg:text-6xl">
+                  {entityName?.toLowerCase() || "…"}
+                </h1>
+                <p className="font-sans text-sm font-medium text-black/40">
+                  {mode === "student"
+                    ? "Gestão e planejamento individual de protocolos."
+                    : "Gestão e planejamento coletivo de protocolos."}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {showCalendar && fixedScope ? (
-          <button
-            type="button"
-            onClick={() => navigate(createWorkoutPath)}
-            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:w-auto sm:px-8"
-          >
-            <Plus className="h-4 w-4 shrink-0" />
-            <span>Novo treino</span>
-          </button>
-        ) : (
-          <div className="h-12 w-full animate-pulse rounded-full border border-border bg-card sm:w-48" />
-        )}
+          {showCalendar && fixedScope ? (
+            <button
+              type="button"
+              onClick={() => navigate(createWorkoutPath)}
+              className="h-16 w-full sm:w-auto rounded-full bg-black px-10 text-sm font-black uppercase tracking-widest text-white shadow-xl transition-all active:scale-95 flex items-center justify-center gap-3"
+            >
+              <Plus className="h-5 w-5" strokeWidth={3} />
+              Novo Treino
+            </button>
+          ) : (
+            <div className="h-16 w-full sm:w-64 animate-pulse rounded-full bg-[#f3f3f3]" />
+          )}
+        </header>
+
+        {showCalendar && id && (mode === "student" || mode === "group") ? (
+          <div className="rounded-[2.5rem] border border-black/5 bg-white p-2 shadow-sm">
+            <StudentPeriodizationStrip
+              studentId={mode === "student" ? id : undefined}
+              groupId={mode === "group" ? id : undefined}
+              trainerEditorId={trainerId}
+              editable
+            />
+          </div>
+        ) : null}
       </div>
-
-      {showCalendar && id && (mode === "student" || mode === "group") ? (
-        <StudentPeriodizationStrip
-          studentId={mode === "student" ? id : undefined}
-          groupId={mode === "group" ? id : undefined}
-          trainerEditorId={trainerId}
-          editable
-        />
-      ) : null}
 
       <TrainerCopyWorkoutDialog
         open={copyWorkoutSource !== null}
@@ -133,7 +137,7 @@ const TrainerScopedWorkouts = ({ mode }: { mode: ScopedMode }) => {
         onSuccess={() => void refetch()}
       />
 
-      <div className="border-t border-border pt-8">
+      <div className="border-t border-black/5 pt-16">
         {showCalendar ? (
           <TrainerWorkoutCalendarPanel
             weekStart={currentWeekStart}
@@ -148,12 +152,12 @@ const TrainerScopedWorkouts = ({ mode }: { mode: ScopedMode }) => {
             plannerReturnPath={plannerReturnPath}
             onOpenCopyWorkout={(w) => setCopyWorkoutSource(w)}
             onDeleteWorkout={onDeleteWorkout}
-            cycleLabel={mode === "student" ? "Treino semanal" : "Treino do grupo"}
+            cycleLabel={mode === "student" ? "Ciclo Semanal" : "Ciclo do Grupo"}
           />
         ) : (
-          <div className="flex flex-col items-center justify-center gap-4 rounded-[28px] border border-border bg-card px-8 py-24 text-muted-foreground">
-            <Dumbbell className="h-12 w-12 animate-pulse text-foreground/20" />
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em]">A carregar…</p>
+          <div className="flex flex-col items-center justify-center py-32 rounded-[2.5rem] bg-[#f3f3f3] ring-1 ring-black/5">
+            <Dumbbell className="h-20 w-20 animate-pulse text-black/10 mb-8" />
+            <p className="font-mono text-[10px] font-black uppercase tracking-widest text-black/20">Sincronizando agenda…</p>
           </div>
         )}
       </div>

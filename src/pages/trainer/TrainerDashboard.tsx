@@ -19,7 +19,10 @@ import {
   Inbox,
   BarChart3,
   MessageSquare,
+  ChevronRight,
+  Check,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import PremiumActivityChart from "@/components/PremiumActivityChart";
@@ -66,37 +69,29 @@ const ActivePill = () => (
   </div>
 );
 
-const StatCard = ({ label, value, icon: Icon, accent }: { label: string; value: number; icon: any; accent?: boolean }) => (
-  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="h-full min-w-0 max-w-full">
-    <TrainerPanelCard
-      compact
-      accent={accent}
-      className="h-full min-w-0 max-w-full !p-3 hover:border-primary/20 sm:!p-4 md:!px-3.5 md:!py-2.5 lg:!px-4 lg:!py-3"
-    >
-      <div
-        className="grid min-h-[118px] grid-cols-2 grid-rows-[auto,1fr] gap-x-2 gap-y-1.5 sm:min-h-[128px] md:min-h-0 md:grid-cols-[auto,minmax(0,1fr),auto] md:grid-rows-1 md:items-center md:gap-2.5 md:gap-y-0 lg:gap-3"
-      >
-        <div className="col-start-1 row-start-1 self-start md:self-center">
-          <div className="rounded-lg border border-primary/10 bg-primary/5 p-1.5 md:p-1.5 lg:p-2">
-            <Icon className={`h-4 w-4 ${accent ? "text-primary" : "text-foreground/55"} md:h-[15px] md:w-[15px] lg:h-4 lg:w-4`} />
-          </div>
+const StatCard = ({ label, value, icon: Icon }: { label: string; value: number; icon: any }) => (
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }} 
+    animate={{ opacity: 1, y: 0 }} 
+    className="h-full min-w-0"
+  >
+    <div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[3rem] border border-black/5 bg-white p-10 transition-all hover:shadow-zen hover:ring-1 hover:ring-black/5">
+      <div className="flex items-start justify-between">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#f3f3f3] text-black/20 transition-all group-hover:bg-black group-hover:text-white">
+          <Icon className="h-7 w-7" strokeWidth={2} />
         </div>
-        <div className="col-start-2 row-start-1 justify-self-end self-start md:hidden">
-          <ActivePill />
-        </div>
-        <div className="col-span-2 row-start-2 min-w-0 self-end space-y-0.5 md:col-span-1 md:col-start-2 md:row-start-1 md:self-center">
-          <p className="font-body text-2xl font-semibold tabular-nums leading-none tracking-tight text-foreground sm:text-3xl md:text-[1.35rem] md:leading-tight lg:text-2xl lg:leading-none xl:text-3xl">
-            {value}
-          </p>
-          <p className="min-w-0 break-words font-mono text-[7px] uppercase leading-snug tracking-[0.18em] text-muted-foreground sm:text-[8px] sm:tracking-[0.22em] md:text-[6.5px] md:leading-tight md:tracking-[0.2em] lg:text-[7px] lg:tracking-[0.24em]">
-            {label}
-          </p>
-        </div>
-        <div className="col-start-3 row-start-1 hidden self-center md:flex">
-          <ActivePill />
-        </div>
+        <div className="h-2 w-2 rounded-full bg-black/10 group-hover:bg-black transition-colors" />
       </div>
-    </TrainerPanelCard>
+      
+      <div className="space-y-1 pt-12">
+        <p className="font-sans text-6xl font-black tracking-tighter text-black tabular-nums leading-none lg:text-7xl">
+          {value}
+        </p>
+        <p className="font-mono text-[9px] font-black uppercase tracking-[0.3em] text-black/20">
+          {label}
+        </p>
+      </div>
+    </div>
   </motion.div>
 );
 
@@ -419,306 +414,201 @@ const TrainerDashboard = () => {
   };
 
   return (
-    <div className="w-full min-w-0 max-w-full space-y-8 overflow-x-hidden pb-12 pt-4 sm:space-y-10 sm:pt-6">
-      <div className="flex min-w-0 max-w-full flex-col gap-4 rounded-[28px] border border-border bg-card p-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6 md:p-8">
-        <div className="min-w-0 space-y-1">
-          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[1.4px] text-primary">
-            <Activity className="h-3 w-3 shrink-0" />
-            Dashboard
-          </div>
-          <h1 className="text-4xl font-bold leading-[0.92] tracking-tight text-white sm:text-5xl md:text-[4rem]">
-            Monitor de <span className="text-primary">performance</span>
+    <div className="space-y-24">
+      <header className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
+        <div className="space-y-4">
+          <p className="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-black/20">Coach Workspace</p>
+          <h1 className="font-sans text-5xl font-black tracking-tighter text-black sm:text-6xl lg:text-8xl">
+            Performance.
           </h1>
         </div>
-        
-        <div className="flex w-full min-w-0 flex-col gap-3 sm:w-auto sm:shrink-0 sm:flex-row sm:gap-4">
+        <div className="flex shrink-0 items-center gap-4">
           <button
             type="button"
             onClick={() => navigate("/trainer/treinos")}
-            className="btn-action flex h-12 min-w-0 flex-1 items-center justify-center gap-2 px-4 sm:min-w-0 sm:flex-initial sm:px-6"
+            className="h-16 rounded-full bg-black px-10 text-sm font-black uppercase tracking-widest text-white transition-all active:scale-95 shadow-xl"
           >
-            <Activity className="h-4 w-4 shrink-0" />
-            <span className="truncate">Novo treino</span>
+            Novo protocolo
           </button>
-          <NavLink
-            to="/trainer/atletas"
-            className="flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium text-foreground transition-colors hover:border-primary/15 hover:text-primary sm:min-w-0 sm:flex-initial sm:px-6"
-          >
-            <Users className="h-4 w-4 shrink-0" />
-            <span className="truncate">Ver atletas</span>
+          <NavLink to="/trainer/atletas">
+            <button className="h-16 rounded-full border border-black/5 bg-[#f3f3f3] px-10 text-sm font-black uppercase tracking-widest text-black/40 transition-all hover:bg-black hover:text-white">
+              Atletas
+            </button>
           </NavLink>
         </div>
+      </header>
+
+      {/* ── STATS GRID ── */}
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+        <StatCard label="Atletas Ativos" value={stats.students} icon={Users} />
+        <StatCard label="Comunidades" value={stats.groups} icon={Layers} />
+        <StatCard label="Protocolos" value={stats.workouts} icon={Dumbbell} />
       </div>
 
       {pendingLinkCount > 0 && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="group">
-          <TrainerPanelCard accent flush>
-            <NavLink
-              to="/trainer/atletas"
-              className="flex items-center justify-between gap-4 p-6 transition-colors hover:bg-primary/[0.04] md:p-8"
-            >
-              <div className="flex items-center gap-6">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary">
-                  <Inbox className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <div className="mb-1 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">Ação requerida</div>
-                  <h3 className="font-body text-xl font-normal leading-snug tracking-tight text-foreground md:text-2xl">
-                    {pendingLinkCount === 1 ? "Nova solicitação de acesso" : `${pendingLinkCount} solicitações pendentes`}
-                  </h3>
-                </div>
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <NavLink
+            to="/trainer/atletas"
+            className="flex items-center justify-between rounded-[3rem] bg-black p-10 text-white shadow-2xl transition-all active:scale-[0.98]"
+          >
+            <div className="flex items-center gap-10">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-black">
+                <Inbox className="h-7 w-7" />
               </div>
-              <Activity className="h-6 w-6 shrink-0 text-primary transition-transform group-hover:translate-x-1" />
-            </NavLink>
-          </TrainerPanelCard>
+              <div className="space-y-2">
+                <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Ação requerida</p>
+                <h3 className="font-sans text-3xl font-black tracking-tight">
+                  {pendingLinkCount === 1 ? "Nova solicitação" : `${pendingLinkCount} solicitações de vínculo`}
+                </h3>
+              </div>
+            </div>
+            <ChevronRight className="h-10 w-10 text-white/40" strokeWidth={3} />
+          </NavLink>
         </motion.div>
       )}
 
-      <div className="grid min-w-0 max-w-full grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3 md:gap-3 lg:gap-4">
-        <StatCard label="Atletas Ativos" value={stats.students} icon={Users} />
-        <StatCard label="Grupos Operacionais" value={stats.groups} icon={Layers} />
-        <StatCard label="Treinos criados" value={stats.workouts} icon={Dumbbell} accent />
-      </div>
-
-      {exerciseFeedback.length > 0 && (
-        <TrainerPanelCard
-          eyebrow="Feedback"
-          title="Notas e adaptações dos atletas"
-          subtitle="Substituições de exercício e observações deixadas durante os treinos."
-        >
-          <ul className="max-h-[min(420px,50vh)] space-y-4 overflow-y-auto overflow-x-hidden pr-1 custom-scrollbar sm:max-h-[min(480px,45vh)]">
-            {exerciseFeedback.map((item) => (
-              <li key={item.id} className="min-w-0 max-w-full rounded-xl border border-border bg-background p-4 md:p-5">
-                <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-2">
-                  <div className="flex min-w-0 items-center gap-2">
-                    <MessageSquare className="h-4 w-4 shrink-0 text-primary" />
-                    <span className="min-w-0 break-words font-body text-sm font-medium text-foreground">
-                      {item.student_name}
-                    </span>
-                  </div>
-                  <span className="shrink-0 font-mono text-[9px] uppercase tracking-widest text-foreground/35">
-                    {new Date(item.updated_at).toLocaleString("pt-BR", {
-                      day: "2-digit",
-                      month: "short",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-                </div>
-                <p className="mt-1 min-w-0 break-words font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  {item.workout_title}
-                </p>
-                <div className="mt-3 min-w-0 space-y-1 break-words text-sm text-foreground/80">
-                  <p>
-                    <span className="text-foreground/45">Exercício prescrito: </span>
-                    {item.original_name}
-                  </p>
-                  {item.substitute_name && (
-                    <p>
-                      <span className="text-foreground/45">Executado como: </span>
-                      {item.substitute_name}
-                    </p>
-                  )}
-                  {item.note && item.note.trim() && (
-                    <p className="border-l-2 border-primary/40 pl-3 font-body italic text-foreground/90">
-                      {item.note}
-                    </p>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </TrainerPanelCard>
-      )}
-
-      <div className="grid min-w-0 max-w-full grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
-        <div className="flex h-full min-h-0 w-full min-w-0 max-w-full lg:col-span-8">
-          <TrainerPanelCard
-          eyebrow="Métricas"
-          title="Fluxo de rendimento"
-            subtitle="Visão semanal de check-ins e resultados postados."
-            aside={<TrainerPanelCardMedia src={heroImage} alt="" />}
-            features={["Dados consolidados dos seus atletas", "Leitura rápida da semana"]}
-            className="h-full min-h-0 w-full max-w-full flex-1 flex-col"
-          >
-            <div className="flex items-center justify-end pb-4 lg:hidden">
-              <div className="rounded-xl border border-border/80 bg-background/70 p-3">
-                <TrendingUp className="h-6 w-6 text-foreground/45" />
-              </div>
-            </div>
-            <div className="flex min-h-[min(240px,35vh)] w-full min-w-0 max-w-full flex-1 flex-col overflow-hidden lg:min-h-0">
+      <div className="grid grid-cols-1 gap-24 lg:grid-cols-12">
+        {/* ACTIVITY CHART */}
+        <div className="lg:col-span-8 space-y-12">
+          <div className="flex items-center gap-6">
+            <h2 className="font-sans text-3xl font-black tracking-tight text-black">Fluxo de rendimento.</h2>
+            <div className="h-px flex-1 bg-black/5" />
+          </div>
+          <div className="rounded-[3rem] bg-white p-10 ring-1 ring-black/5 shadow-sm">
+            <div className="h-[400px] w-full">
               {!loading && activityData.length > 0 && (
-                <div className="flex min-h-0 flex-1 flex-col">
-                  <PremiumActivityChart data={activityData} title="" />
-                </div>
+                <PremiumActivityChart data={activityData} title="" />
               )}
             </div>
-          </TrainerPanelCard>
+          </div>
         </div>
 
-        <div className="flex h-full min-h-0 w-full min-w-0 max-w-full lg:col-span-4">
-          <TrainerPanelCard
-            className="flex h-full min-h-0 w-full flex-1 flex-col"
-            eyebrow="Hoje"
-            title="Check-ins hoje"
-            subtitle="Protocolos do dia e progresso por atleta."
-          >
-          <div className="flex min-h-0 min-w-0 max-w-full flex-1 flex-col space-y-6">
-          <div className="min-h-0 min-w-0 max-w-full flex-1 space-y-4 overflow-y-auto overflow-x-hidden pr-1 custom-scrollbar sm:pr-2">
-            {dailyProgress.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center text-center opacity-20 space-y-4">
-                <BarChart3 className="w-10 h-10" />
-                <p className="text-sm text-muted-foreground leading-relaxed">Nenhum protocolo ativo para hoje.</p>
-              </div>
-            ) : (
-              dailyProgress.map((p) => (
-                <div key={p.workout_id} className="rounded-2xl border border-border/80 bg-background/60 p-5 space-y-3 transition-all group hover:border-primary/15">
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-1 min-w-0">
-                      <h4 className="font-body text-base font-normal tracking-tight text-foreground truncate">{p.title}</h4>
-                      <p className="font-mono text-[8px] uppercase tracking-widest text-muted-foreground">{p.group_name || "Individual"}</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="font-body text-xl text-primary font-semibold tabular-nums">{p.completed_students}/{p.total_students}</span>
-                    </div>
-                  </div>
-                  <div className="h-1 w-full max-w-full overflow-hidden rounded-full bg-primary/10">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{
-                        width: `${
-                          p.total_students > 0
-                            ? (p.completed_students / p.total_students) * 100
-                            : 0
-                        }%`,
-                      }}
-                      className="h-full max-w-full bg-primary"
-                    />
-                  </div>
+        {/* DAILY PROGRESS */}
+        <div className="lg:col-span-4 space-y-12">
+          <div className="flex items-center gap-6">
+            <h2 className="font-sans text-3xl font-black tracking-tight text-black">Check-ins.</h2>
+            <div className="h-px flex-1 bg-black/5" />
+          </div>
+          <div className="rounded-[3rem] bg-white p-10 ring-1 ring-black/5 shadow-sm">
+            <div className="space-y-10">
+              {dailyProgress.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 text-center text-black/10">
+                  <BarChart3 className="mb-6 h-12 w-12" />
+                  <p className="font-mono text-[10px] font-black uppercase tracking-widest">Sem atividade hoje</p>
                 </div>
-              ))
-            )}
+              ) : (
+                dailyProgress.slice(0, 5).map((p) => (
+                  <div key={p.workout_id} className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="min-w-0">
+                        <p className="truncate font-sans text-lg font-black text-black">{p.title.toLowerCase()}</p>
+                        <p className="font-mono text-[9px] font-black uppercase tracking-widest text-black/30">{p.group_name || "Individual"}</p>
+                      </div>
+                      <span className="font-sans text-sm font-black text-black">{p.completed_students}/{p.total_students}</span>
+                    </div>
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-[#f3f3f3]">
+                      <div
+                        className="h-full bg-black transition-all duration-1000"
+                        style={{ width: `${p.total_students > 0 ? (p.completed_students / p.total_students) * 100 : 0}%` }}
+                      />
+                    </div>
+                  </div>
+                ))
+              )}
+              <NavLink to="/trainer/treinos" className="block pt-6">
+                <button className="w-full h-14 rounded-full border border-black/5 bg-[#f3f3f3] text-[10px] font-black uppercase tracking-widest text-black/40 transition-all hover:bg-black hover:text-white">
+                  Ver programação completa
+                </button>
+              </NavLink>
+            </div>
           </div>
-
-          <NavLink
-            to="/trainer/treinos"
-            className="w-full rounded-full border border-border bg-transparent py-3.5 text-center text-sm font-medium text-foreground/75 transition-colors hover:border-primary/20 hover:bg-primary/5 hover:text-primary"
-          >
-            Ver todos os protocolos
-          </NavLink>
-          </div>
-          </TrainerPanelCard>
         </div>
       </div>
 
-      <div className="min-w-0 max-w-full space-y-6 sm:space-y-8">
-        <div className="flex min-w-0 max-w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <div className="min-w-0 space-y-1">
-            <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-              Status
-            </div>
-            <h2 className="font-body text-2xl font-normal tracking-tight text-foreground sm:text-3xl md:text-4xl">
-              Status dos protocolos
-            </h2>
-          </div>
-          <div className="flex w-fit max-w-full shrink-0 items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-3 py-2 sm:gap-3 sm:px-4 sm:py-2">
-            <div className="h-2 w-2 shrink-0 rounded-full bg-primary shadow-[0_0_8px_rgba(90,26,169,0.28)]" />
-            <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-primary/70">
-              Atualização ao vivo
-            </span>
+      {/* PROTOCOL STATUS */}
+      <div className="space-y-16">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="font-sans text-4xl font-black tracking-tighter text-black">Status dos protocolos.</h2>
+          <div className="flex items-center gap-3 rounded-full bg-[#f3f3f3] px-6 py-3 text-[10px] font-black uppercase tracking-widest text-black ring-1 ring-black/5">
+            <span className="h-2 w-2 rounded-full bg-black animate-pulse shadow-[0_0_10px_rgba(0,0,0,0.4)]" />
+            Live Update
           </div>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-80 animate-pulse rounded-2xl border border-border/80 bg-background/70" />
+              <div key={i} className="h-96 animate-pulse rounded-[3rem] bg-[#f3f3f3]" />
             ))}
           </div>
         ) : dailyProgress.length === 0 ? (
-          <TrainerPanelCard title="Sem protocolo hoje" subtitle="Assim que houver treinos agendados para a data atual, eles aparecem aqui.">
-            <div className="flex flex-col items-center justify-center gap-6 py-10 text-center md:py-16">
-              <Activity className="h-16 w-16 text-foreground/15" />
-              <div className="space-y-2">
-                <p className="font-body text-2xl font-normal tracking-tight text-foreground/50">Nenhum protocolo ativo hoje</p>
-                <p className="text-sm text-muted-foreground italic">Aguardando dados de performance.</p>
-              </div>
-            </div>
-          </TrainerPanelCard>
+          <div className="flex flex-col items-center justify-center py-40 text-center rounded-[3rem] bg-[#f3f3f3] ring-1 ring-black/5">
+            <Activity className="mb-8 h-20 w-20 text-black/10" />
+            <p className="text-xl font-black text-black/20 uppercase tracking-tighter">Nenhum protocolo ativo</p>
+          </div>
         ) : (
-          <div className="grid min-w-0 max-w-full grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
             {dailyProgress.map((dp, i) => {
               const perc = dp.total_students === 0 ? 0 : Math.round((dp.completed_students / dp.total_students) * 100);
-              const isComplete = perc === 100 && dp.total_students > 0;
-
               return (
                 <motion.div
                   key={dp.workout_id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="relative group h-full flex flex-col"
+                  className="flex flex-col rounded-[3rem] bg-white p-10 ring-1 ring-black/5 transition-all hover:ring-black/10 shadow-sm"
                 >
-                  <TrainerPanelCard
-                    compact
-                    accent={isComplete}
-                    className={`h-full transition-all duration-500 ${isComplete ? "shadow-[0_10px_30px_rgba(90,26,169,0.09)]" : ""}`}
-                  >
-                    <div className="flex flex-col h-full">
-                    <div className="flex justify-between items-start mb-8 gap-4">
-                      <div className="space-y-3 min-w-0 flex-1">
-                        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
-                          <div className={`w-1.5 h-1.5 rounded-full ${isComplete ? "bg-primary shadow-[0_0_8px_rgba(90,26,169,0.6)]" : "bg-foreground/20"}`} />
-                          {dp.group_name || "Individual"}
-                        </div>
-                        <h4 className="font-body text-xl md:text-2xl font-normal tracking-tight text-foreground leading-snug truncate">{dp.title}</h4>
-                      </div>
-                      <div className="text-right">
-                        <div className={`font-body text-4xl tracking-tight leading-none font-semibold tabular-nums ${isComplete ? "text-primary" : "text-foreground/80"}`}>{perc}%</div>
-                        <div className="mt-2 text-xs text-muted-foreground">{dp.completed_students}/{dp.total_students} atletas</div>
-                      </div>
+                  <div className="mb-12 flex items-start justify-between">
+                    <div className="min-w-0 space-y-2">
+                      <p className="font-mono text-[9px] font-black uppercase tracking-widest text-black/30">
+                        {dp.group_name || "Individual"}
+                      </p>
+                      <h4 className="truncate font-sans text-3xl font-black tracking-tighter text-black">{dp.title.toLowerCase()}</h4>
                     </div>
-
-                    <div className="mb-8 h-1.5 w-full overflow-hidden rounded-full bg-primary/10">
-                      <div
-                        className={`h-full transition-all duration-1000 ease-out ${isComplete ? "bg-primary" : "bg-foreground/25"}`}
-                        style={{ width: `${perc}%` }}
-                      />
-                    </div>
-
-                    <div className="space-y-2 flex-1 overflow-y-auto pr-1 custom-scrollbar max-h-48">
-                      {dp.students.map((st) => (
-                        <div key={st.id} className={`flex min-w-0 max-w-full items-center justify-between gap-2 border px-4 py-3 font-mono text-[9px] uppercase tracking-wider transition-colors sm:px-5 ${st.completed ? "border-primary/20 bg-primary/10 font-bold text-foreground" : "border-border/80 bg-background/55 text-foreground/35"}`}>
-                          <span className="min-w-0 truncate">{st.name}</span>
-                          {st.completed ? (
-                            <Activity className="w-3.5 h-3.5 text-primary" />
-                          ) : (
-                            <div className="w-3.5 h-3.5 rounded-full border border-foreground/10" />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    
-                    <div className="mt-8 flex min-w-0 max-w-full flex-col gap-2 border-t border-border/80 pt-6 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
-                        <span className="min-w-0 break-all text-xs text-muted-foreground sm:break-normal">
-                        ID: {dp.workout_id.substring(0, 8).toUpperCase()}…
-                      </span>
-                      <NavLink
-                        to="/trainer/treinos"
-                        className="shrink-0 text-xs font-medium text-primary transition-colors hover:text-foreground"
-                      >
-                        Ver detalhes
-                      </NavLink>
+                    <div className="text-right">
+                      <p className="font-sans text-5xl font-black text-black">{perc}%</p>
                     </div>
                   </div>
-                  </TrainerPanelCard>
+
+                  <div className="mb-12 h-3 w-full overflow-hidden rounded-full bg-[#f3f3f3]">
+                    <div
+                      className="h-full bg-black transition-all duration-1000"
+                      style={{ width: `${perc}%` }}
+                    />
+                  </div>
+
+                  <div className="max-h-64 flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar">
+                    {dp.students.map((st) => (
+                      <div
+                        key={st.id}
+                        className={cn(
+                          "flex items-center justify-between rounded-2xl p-5 text-[10px] font-black uppercase tracking-widest transition-all",
+                          st.completed 
+                            ? "bg-black text-white shadow-lg" 
+                            : "bg-[#f3f3f3] text-black/20"
+                        )}
+                      >
+                        <span className="truncate">{st.name.toLowerCase()}</span>
+                        {st.completed && <Check className="h-4 w-4" strokeWidth={4} />}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-12 border-t border-black/5 pt-10">
+                    <NavLink
+                      to="/trainer/treinos"
+                      className="flex items-center justify-center text-[10px] font-black uppercase tracking-[0.2em] text-black hover:opacity-60 transition-opacity"
+                    >
+                      Detalhes do protocolo
+                      <ChevronRight className="ml-2 h-4 w-4" strokeWidth={4} />
+                    </NavLink>
+                  </div>
                 </motion.div>
               );
             })}
           </div>
         )}
       </div>
-
     </div>
   );
 };

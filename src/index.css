@@ -6,61 +6,26 @@
 
 @layer base {
   :root {
-    --background: 0 0% 7%; /* #121212 */
-    --foreground: 0 0% 100%;
+    --background: 0 0% 100%; /* Pure White */
+    --foreground: 0 0% 0%;
 
-    --card: 0 0% 9%; /* #181818 */
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
 
-    --popover: 0 0% 12%; /* #1f1f1f */
-    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
 
-    --primary: 141 73% 48%; /* #1ed760 Spotify Green */
-    --primary-foreground: 0 0% 7%;
+    --muted: 0 0% 95%; /* #f3f3f3 */
+    --muted-foreground: 0 0% 40%; /* Lighter gray for subtext */
 
-    --energy: 35 100% 58%;
-    --energy-foreground: 0 0% 7%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 70%; /* #b3b3b3 Silver */
+    --border: 0 0% 92%; /* Very subtle borders per tela-a.png */
+    --radius: 3rem;   /* Ultra-rounded geometry */
 
-    --secondary: 0 0% 12%; /* #1f1f1f */
-    --secondary-foreground: 0 0% 92%;
-
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 355 83% 70%; /* #f3727f Negative Red */
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 0 0% 30%; /* #4d4d4d */
-    --input: 0 0% 30%;
-    --ring: 141 73% 48%;
-
-    --success: 141 73% 48%;
-    --success-foreground: 0 0% 7%;
-    --warning: 34 100% 58%; /* #ffa42b Warning Orange */
-    --warning-foreground: 0 0% 7%;
-
-    --radius: 500px; /* Pill radius as standard */
-
-    --sidebar-background: 0 0% 7%;
-    --sidebar-foreground: 0 0% 70%;
-    --sidebar-primary: 141 73% 48%;
-    --sidebar-primary-foreground: 0 0% 7%;
-    --sidebar-accent: 0 0% 15%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 141 73% 48%;
-
-    --surface-0: 0 0% 7%; /* #121212 */
-    --surface-1: 0 0% 9%; /* #181818 */
-    --surface-2: 0 0% 12%; /* #1f1f1f */
-    --surface-3: 0 0% 15%;
-    --text-soft: 0 0% 70%;
-    --shadow-heavy: rgba(0,0,0,0.5) 0px 8px 24px;
-    --shadow-medium: rgba(0,0,0,0.3) 0px 8px 8px;
-    --shadow-inset: inset 0 1px 0 rgba(18,18,18,1), inset 0 0 0 1px rgba(124,124,124,1);
+    --shadow-soft: 0 10px 40px -15px rgba(0, 0, 0, 0.05);
+    --shadow-zen: 0 20px 60px -20px rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -71,31 +36,18 @@
 
   html, body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
     max-width: 100vw;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image:
-      radial-gradient(circle at top left, rgba(30, 215, 96, 0.12), transparent 24%),
-      radial-gradient(circle at top right, rgba(255, 255, 255, 0.05), transparent 18%),
-      linear-gradient(180deg, #121212 0%, #0f0f0f 100%);
-    background-attachment: fixed;
+    background: #ffffff;
   }
 
   body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: -1;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 36px 36px;
-    opacity: 0.24;
+    display: none;
   }
 
   /* Selection */

@@ -585,419 +585,414 @@ export function TrainerWorkoutBuilderDialog({
     setPendingExerciseIdx(null);
     setSavingExercise(false);
   };
+  const renderSmart = () => (
+    <div className="space-y-10">
+      <div className="flex items-center justify-between">
+        <div className="space-y-1">
+          <h3 className="font-sans text-2xl font-black tracking-tighter text-black">Texto Livre.</h3>
+          <p className="font-sans text-sm font-medium text-black/40">O FitBlock processa seu texto e converte em blocos estruturados.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => void convertSmartToForm()}
+          disabled={!smartText.trim() || isConverting}
+          className="h-12 flex items-center gap-2 rounded-full border border-black/5 bg-[#f3f3f3] px-6 text-[10px] font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-white disabled:opacity-30"
+        >
+          {isConverting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" /> Processando...
+            </>
+          ) : (
+            <>
+              <Sparkles className="h-4 w-4" /> Converter Treino
+            </>
+          )}
+        </button>
+      </div>
+      
+      <div className="overflow-hidden rounded-[2rem] border border-black/5 bg-[#f3f3f3] shadow-inner focus-within:ring-2 focus-within:ring-black/5 transition-all">
+        <SmartWorkoutEditor
+          initialValue={smartText}
+          onChange={(text, parsed) => {
+            setSmartText(text);
+            setParsedWorkout(parsed);
+          }}
+        />
+      </div>
 
-  const showAudienceToggle = !fixedScope;
+      <div className="flex items-center gap-3 font-mono text-[9px] font-black uppercase tracking-widest text-black/20">
+        <Sparkles className="h-4 w-4" />
+        <span>Use o parser para converter rascunhos rápidos em prescrições técnicas</span>
+      </div>
+    </div>
+  );
 
   const renderForm = () => (
-          <div className="space-y-8 p-6 md:p-8">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
-              <div className="space-y-2">
-                <Label htmlFor="workout-title" className="font-body text-xs font-medium text-muted-foreground">
-                  Nome do treino
-                </Label>
-                <Input
-                  id="workout-title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Ex.: Upper — empurrar"
-                  className="h-12 rounded-2xl border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
-                />
-              </div>
+    <div className="space-y-12">
+      <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
+        <div className="space-y-3">
+          <Label htmlFor="workout-title" className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">
+            Título do Protocolo
+          </Label>
+          <Input
+            id="workout-title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Ex: Upper Body A"
+            className="h-14 rounded-2xl border-black/5 bg-[#f3f3f3] px-6 font-bold text-black focus:bg-white focus:ring-0"
+          />
+        </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="workout-date" className="font-body text-xs font-medium text-muted-foreground">
-                  Data
-                </Label>
-                <Input
-                  id="workout-date"
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="h-12 rounded-2xl border-border bg-background text-sm text-foreground focus-visible:border-primary focus-visible:ring-primary/20"
-                />
-              </div>
-            </div>
+        <div className="space-y-3">
+          <Label htmlFor="workout-date" className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">
+            Data de Execução
+          </Label>
+          <Input
+            id="workout-date"
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="h-14 rounded-2xl border-black/5 bg-[#f3f3f3] px-6 font-bold text-black focus:bg-white focus:ring-0"
+          />
+        </div>
+      </div>
 
-            {showAudienceToggle ? (
-              <div className="space-y-5 rounded-[24px] border border-border bg-card p-5 md:p-6">
-                <div className="space-y-3">
-                  <Label className="font-body text-xs font-medium text-muted-foreground">Destino</Label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setIsGroup(false)}
-                      className={cn(
-                        "h-11 rounded-full border px-4 text-sm font-medium transition-colors",
-                        !isGroup
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary",
-                      )}
-                    >
-                      Atleta
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsGroup(true)}
-                      className={cn(
-                        "h-11 rounded-full border px-4 text-sm font-medium transition-colors",
-                        isGroup
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary",
-                      )}
-                    >
-                      Grupo
-                    </button>
-                  </div>
-                </div>
-
-                {isGroup ? (
-                  <div className="space-y-2">
-                    <Label className="font-body text-xs font-medium text-muted-foreground">Grupo</Label>
-                    <select
-                      value={selectedGroupId}
-                      onChange={(e) => setSelectedGroupId(e.target.value)}
-                      className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:border-primary focus:outline-none"
-                    >
-                      <option value="">
-                        Selecionar grupo…
-                      </option>
-                      {groups.map((g) => (
-                        <option key={g.id} value={g.id}>
-                          {g.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <Label className="font-body text-xs font-medium text-muted-foreground">Atleta</Label>
-                    <StudentCombobox
-                      students={students}
-                      value={selectedStudentId}
-                      onChange={setSelectedStudentId}
-                      placeholder="Procurar atleta…"
-                    />
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center gap-4 rounded-[24px] border border-border bg-card p-4 md:p-5">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-border bg-background text-primary">
-                  {fixedScope?.kind === "student" ? <Users className="h-5 w-5" /> : <Layers className="h-5 w-5" />}
-                </div>
-                <div className="min-w-0">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">Destino fixo</p>
-                  <p className="truncate text-xl font-medium tracking-[-0.02em] text-foreground md:text-2xl">
-                    {fixedScope?.kind === "student"
-                      ? students.find((s) => s.id === fixedScope.studentId)?.name || "Atleta"
-                      : groups.find((g) => g.id === fixedScope?.groupId)?.name || "Grupo"}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            <div className="space-y-6 border-t border-border pt-8">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="space-y-1">
-                  <h4 className="text-2xl font-medium tracking-[-0.03em] text-foreground md:text-[2rem]">Exercícios e blocos</h4>
-                  <p className="font-body text-sm text-muted-foreground">Monte a sessão na ordem em que o atleta deve executar.</p>
-                </div>
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                  <button
-                    type="button"
-                    onClick={addExercise}
-                    className="flex h-11 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium text-foreground transition-colors hover:border-primary/30 hover:text-primary"
-                  >
-                    <Plus className="h-3.5 w-3.5" /> Exercício
-                  </button>
-                  <button
-                    type="button"
-                    onClick={addBiSet}
-                    className="flex h-11 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium text-foreground transition-colors hover:border-primary/30 hover:text-primary"
-                  >
-                    <Link2 className="h-3.5 w-3.5" /> Bi-set
-                  </button>
-                  <button
-                    type="button"
-                    onClick={addMetcon}
-                    className="flex h-11 items-center justify-center gap-2 rounded-full border border-primary bg-primary px-4 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-                  >
-                    <Layers className="h-3.5 w-3.5" /> Bloco livre
-                  </button>
-                </div>
-              </div>
-
-              <div className={cn("relative space-y-6", isPage && "pl-2 sm:pl-0")}>
-                {builderMode === "smart" ? (
-                  <div className="space-y-4">
-                    <div className="flex justify-end">
-                      <button
-                        type="button"
-                        onClick={() => void convertSmartToForm()}
-                        disabled={!smartText.trim() || isConverting}
-                        className="flex h-11 items-center gap-2 rounded-full border border-border bg-background px-5 text-sm font-medium text-foreground transition-colors hover:border-primary/35 hover:text-primary disabled:opacity-30"
-                      >
-                        {isConverting ? (
-                          <>
-                            <Sparkles className="h-4 w-4 animate-pulse" /> A processar…
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="h-4 w-4" /> Aplicar ao formulário
-                          </>
-                        )}
-                      </button>
-                    </div>
-                    <SmartWorkoutEditor
-                      initialValue={smartText}
-                      onChange={(text, parsed) => {
-                        setSmartText(text);
-                        setParsedWorkout(parsed);
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    {workoutItems.map((item, idx) => (
-                      <div key={idx} className="relative group/node">
-                        {idx > 0 && item.type === "exercise" && item.superset_group_id && (
-                          <div className="absolute -top-6 left-8 w-px h-6 bg-primary/40 z-10" />
-                        )}
-                        <div
-                          className={cn(
-                            "absolute top-1/2 flex -translate-y-1/2 flex-col gap-1 opacity-0 transition-opacity group-hover/node:opacity-40",
-                            isPage ? "left-0 sm:-left-12" : "-left-12",
-                          )}
-                        >
-                          <button type="button" onClick={() => moveItem(idx, "up")} disabled={idx === 0} className="text-muted-foreground hover:text-primary disabled:hidden">
-                            <ArrowUp className="w-4 h-4" />
-                          </button>
-                          <button type="button" onClick={() => moveItem(idx, "down")} disabled={idx === workoutItems.length - 1} className="text-muted-foreground hover:text-primary disabled:hidden">
-                            <ArrowDown className="w-4 h-4" />
-                          </button>
-                        </div>
-                        {item.type === "exercise" ? (
-                          <TrainerWorkoutExerciseRow
-                            ex={{
-                              exercise_id: item.exercise_id!,
-                              parsed_name: item.parsed_name,
-                              sets: item.sets!,
-                              reps: item.reps!,
-                              reps_scheme: item.reps_scheme,
-                              suggested_load: item.suggested_load!,
-                              load_type: item.load_type,
-                              load_scheme: item.load_scheme,
-                              notes: item.notes!,
-                              video_url: item.video_url || "",
-                            }}
-                            idx={idx}
-                            onChange={(field, value) => updateItemField(idx, field, value)}
-                            onRemove={() => removeItem(idx)}
-                            canBiSet={idx > 0 && workoutItems[idx - 1]?.type === "exercise"}
-                            isBiSet={!!item.superset_group_id}
-                            onToggleBiSet={() => toggleBiSet(idx)}
-                            exercises={exercises}
-                            onNewExercise={() => {
-                              setPendingExerciseIdx(idx);
-                              setShowNewExercise(true);
-                            }}
-                            autoFocus={focusNewItemIdx === idx}
-                          />
-                        ) : (
-                          <div className="group/block relative space-y-6 overflow-hidden rounded-[24px] border border-border bg-card p-5 md:p-6">
-                            <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
-                              <div className="flex min-w-0 items-center gap-3">
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
-                                  <Layers className="h-5 w-5" />
-                                </div>
-                                <div className="min-w-0">
-                                  <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">Bloco livre</p>
-                                  <p className="truncate text-lg font-medium tracking-[-0.02em] text-foreground">
-                                    {item.block_category || "Escolha o tipo"}
-                                  </p>
-                                </div>
-                              </div>
-                              <button
-                                type="button"
-                                onClick={() => removeItem(idx)}
-                                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:border-destructive/35 hover:text-destructive"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </button>
-                            </div>
-
-                            <div className="space-y-4">
-                              <div className="space-y-2">
-                                <Label className="font-body text-xs font-medium text-muted-foreground">Tipo de bloco</Label>
-                                <div className="flex flex-wrap gap-2">
-                                  {TRAINER_BLOCK_CATEGORIES.map((t, catIdx) => (
-                                    <button
-                                      key={t}
-                                      type="button"
-                                      autoFocus={focusNewItemIdx === idx && catIdx === 0}
-                                      onClick={() => {
-                                        updateItemField(idx, "block_category", t);
-                                        setFocusNewItemIdx(null);
-                                      }}
-                                      className={cn(
-                                        "rounded-full border px-3 py-2 text-sm font-medium transition-colors",
-                                        item.block_category === t
-                                          ? "border-primary bg-primary text-primary-foreground"
-                                          : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary",
-                                      )}
-                                    >
-                                      {t}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-
-                              {item.block_category && (
-                                <div className="space-y-6 border-t border-border pt-4">
-                                  <div className="space-y-2">
-                                    <Label className="font-body text-xs font-medium text-muted-foreground">Título (opcional)</Label>
-                                    <Input
-                                      value={item.metcon_title || ""}
-                                      onChange={(e) => updateItemField(idx, "metcon_title", e.target.value)}
-                                      placeholder="Nome curto do bloco"
-                                      className="h-11 rounded-2xl border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-primary"
-                                    />
-                                  </div>
-
-                                  {item.block_category === "LPO" ? (
-                                    <div className="space-y-4">
-                                      <div className="flex items-center gap-2 rounded-2xl border border-primary/20 bg-primary/10 px-3 py-2.5">
-                                        <span className="font-body text-xs font-medium text-primary">Bloco de cargas (LPO)</span>
-                                      </div>
-                                      <LpoBlockForm
-                                        exercises={item.lpo_exercises || [createEmptyLpo()]}
-                                        onChange={(lpoExs) => {
-                                          updateItemField(idx, "lpo_exercises", lpoExs);
-                                          updateItemField(idx, "metcon_type", "CARGA");
-                                          updateItemField(idx, "metcon_description", serializeLpoExercises(lpoExs));
-                                        }}
-                                      />
-                                    </div>
-                                  ) : (
-                                    <div className="space-y-6">
-                                      <div className="space-y-2">
-                                        <Label className="font-body text-xs font-medium text-muted-foreground">Formato / métrica</Label>
-                                        <div className="flex flex-wrap gap-2">
-                                          {TRAINER_BLOCK_DYNAMICS.map((t) => (
-                                            <button
-                                              key={t}
-                                              type="button"
-                                              onClick={() => updateItemField(idx, "metcon_type", t)}
-                                              className={cn(
-                                                "rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
-                                                item.metcon_type === t
-                                                  ? "border-primary bg-primary text-primary-foreground"
-                                                  : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary",
-                                              )}
-                                            >
-                                              {t}
-                                            </button>
-                                          ))}
-                                        </div>
-                                      </div>
-
-                                      <div className="space-y-2">
-                                        <Label className="font-body text-xs font-medium text-muted-foreground">Instruções</Label>
-                                        <Textarea
-                                          value={item.metcon_description || ""}
-                                          onChange={(e) => updateItemField(idx, "metcon_description", e.target.value)}
-                                          placeholder="Descreva rounds, tempos, repetições…"
-                                          className="min-h-[100px] rounded-[20px] border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-primary"
-                                        />
-                                      </div>
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-            <div className="flex flex-col items-stretch justify-between gap-4 border-t border-border pt-8 sm:flex-row sm:items-center">
-              <p className="font-body text-xs text-muted-foreground">Revise o nome, a data e a lista antes de guardar.</p>
+      {showAudienceToggle ? (
+        <div className="space-y-6 rounded-[2rem] border border-black/5 bg-[#f3f3f3]/30 p-8">
+          <div className="space-y-4">
+            <Label className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">Destinatário</Label>
+            <div className="flex h-12 w-fit rounded-full bg-[#f3f3f3] p-1 shadow-inner">
               <button
                 type="button"
-                onClick={createWorkout}
-                disabled={creating}
-                className="group flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50 sm:w-auto"
+                onClick={() => setIsGroup(false)}
+                className={cn(
+                  "flex items-center justify-center rounded-full px-6 text-[10px] font-black uppercase tracking-widest transition-all",
+                  !isGroup ? "bg-black text-white shadow-lg" : "text-black/30 hover:text-black"
+                )}
               >
-                {creating ? "A guardar…" : "Guardar treino"}
-                {!creating && <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />}
+                Atleta
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsGroup(true)}
+                className={cn(
+                  "flex items-center justify-center rounded-full px-6 text-[10px] font-black uppercase tracking-widest transition-all",
+                  isGroup ? "bg-black text-white shadow-lg" : "text-black/30 hover:text-black"
+                )}
+              >
+                Grupo
               </button>
             </div>
           </div>
+
+          {isGroup ? (
+            <div className="space-y-3">
+              <select
+                value={selectedGroupId}
+                onChange={(e) => setSelectedGroupId(e.target.value)}
+                className="h-14 w-full rounded-2xl border border-black/5 bg-[#f3f3f3] px-6 font-bold text-black focus:bg-white focus:outline-none"
+              >
+                <option value="">Selecionar grupo...</option>
+                {groups.map((g) => (
+                  <option key={g.id} value={g.id}>{g.name}</option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <StudentCombobox
+                students={students}
+                value={selectedStudentId}
+                onChange={setSelectedStudentId}
+                placeholder="Pesquisar atleta..."
+              />
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="flex items-center gap-6 rounded-[2rem] border border-black/5 bg-[#f3f3f3]/30 p-8">
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-black text-white shadow-lg">
+            {fixedScope?.kind === "student" ? <Users className="h-7 w-7" /> : <Layers className="h-7 w-7" />}
+          </div>
+          <div className="min-w-0">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">Atribuído a</p>
+            <p className="truncate font-sans text-2xl font-black tracking-tighter text-black">
+              {fixedScope?.kind === "student"
+                ? students.find((s) => s.id === fixedScope.studentId)?.name || "Atleta"
+                : groups.find((g) => g.id === fixedScope?.groupId)?.name || "Grupo"}
+            </p>
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-10 pt-10 border-t border-black/5">
+        <header className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <div className="space-y-1">
+            <h4 className="font-sans text-3xl font-black tracking-tighter text-black">Estrutura.</h4>
+            <p className="font-sans text-sm font-medium text-black/40">Defina a ordem e os detalhes de cada bloco.</p>
+          </div>
+          
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={addExercise}
+              className="h-12 flex items-center justify-center gap-2 rounded-full bg-[#f3f3f3] px-6 text-[10px] font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-white"
+            >
+              <Plus className="h-4 w-4" strokeWidth={3} /> Exercício
+            </button>
+            <button
+              type="button"
+              onClick={addBiSet}
+              className="h-12 flex items-center justify-center gap-2 rounded-full bg-[#f3f3f3] px-6 text-[10px] font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-white"
+            >
+              <Link2 className="h-4 w-4" strokeWidth={3} /> Bi-set
+            </button>
+            <button
+              type="button"
+              onClick={addMetcon}
+              className="h-12 flex items-center justify-center gap-2 rounded-full bg-black px-6 text-[10px] font-black uppercase tracking-widest text-white shadow-xl transition-all active:scale-95"
+            >
+              <Layers className="h-4 w-4" strokeWidth={3} /> Bloco Livre
+            </button>
+          </div>
+        </header>
+
+        <div className="space-y-6">
+          {workoutItems.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 rounded-[2rem] border border-dashed border-black/10 bg-[#f3f3f3]/10">
+              <p className="font-mono text-[10px] font-black uppercase tracking-widest text-black/20">Nenhum bloco adicionado</p>
+            </div>
+          ) : (
+            <div className="space-y-8">
+              {workoutItems.map((item, idx) => (
+                <div key={idx} className="relative group/node">
+                  {idx > 0 && item.type === "exercise" && item.superset_group_id && (
+                    <div className="absolute -top-8 left-10 w-1 h-8 bg-black/10 z-0" />
+                  )}
+                  
+                  <div className="relative z-10">
+                    {item.type === "exercise" ? (
+                      <TrainerWorkoutExerciseRow
+                        ex={{
+                          exercise_id: item.exercise_id!,
+                          parsed_name: item.parsed_name,
+                          sets: item.sets!,
+                          reps: item.reps!,
+                          reps_scheme: item.reps_scheme,
+                          suggested_load: item.suggested_load!,
+                          load_type: item.load_type,
+                          load_scheme: item.load_scheme,
+                          notes: item.notes!,
+                          video_url: item.video_url || "",
+                        }}
+                        idx={idx}
+                        onChange={(field, value) => updateItemField(idx, field, value)}
+                        onRemove={() => removeItem(idx)}
+                        canBiSet={idx > 0 && workoutItems[idx - 1]?.type === "exercise"}
+                        isBiSet={!!item.superset_group_id}
+                        onToggleBiSet={() => toggleBiSet(idx)}
+                        exercises={exercises}
+                        onNewExercise={() => {
+                          setPendingExerciseIdx(idx);
+                          setShowNewExercise(true);
+                        }}
+                        autoFocus={focusNewItemIdx === idx}
+                      />
+                    ) : (
+                      <div className="rounded-[2.5rem] border border-black/5 bg-[#f3f3f3]/20 p-8 transition-all hover:bg-white hover:shadow-xl hover:ring-1 hover:ring-black/5 group/block">
+                        <div className="flex items-center justify-between gap-6 mb-8">
+                          <div className="flex items-center gap-4">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-black text-white shadow-lg">
+                              <Layers className="h-6 w-6" />
+                            </div>
+                            <div>
+                              <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-black/40">Bloco Livre</p>
+                              <h5 className="font-sans text-xl font-black tracking-tighter text-black">
+                                {item.block_category || "Configurar Tipo"}
+                              </h5>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeItem(idx)}
+                            className="h-10 w-10 flex items-center justify-center rounded-full bg-[#f3f3f3] text-black transition-all hover:bg-red-500 hover:text-white"
+                          >
+                            <Trash2 className="h-4 w-4" strokeWidth={3} />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-10">
+                          <div className="space-y-4">
+                            <Label className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">Tipo de Trabalho</Label>
+                            <div className="flex flex-wrap gap-2">
+                              {TRAINER_BLOCK_CATEGORIES.map((t) => (
+                                <button
+                                  key={t}
+                                  type="button"
+                                  onClick={() => updateItemField(idx, "block_category", t)}
+                                  className={cn(
+                                    "rounded-full px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-all",
+                                    item.block_category === t ? "bg-black text-white shadow-md" : "bg-[#f3f3f3] text-black/40 hover:text-black"
+                                  )}
+                                >
+                                  {t}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {item.block_category && (
+                            <div className="space-y-10 pt-10 border-t border-black/5">
+                              <div className="space-y-3">
+                                <Label className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">Título (opcional)</Label>
+                                <Input
+                                  value={item.metcon_title || ""}
+                                  onChange={(e) => updateItemField(idx, "metcon_title", e.target.value)}
+                                  placeholder="Ex: AMRAP Final"
+                                  className="h-12 rounded-xl border-black/5 bg-[#f3f3f3] px-6 font-bold text-black focus:bg-white"
+                                />
+                              </div>
+
+                              {item.block_category === "LPO" ? (
+                                <div className="space-y-6">
+                                  <div className="flex items-center gap-3 font-mono text-[10px] font-black uppercase tracking-widest text-black/40">
+                                    <ArrowDown className="h-4 w-4" />
+                                    Especificação de Cargas
+                                  </div>
+                                  <LpoBlockForm
+                                    exercises={item.lpo_exercises || [createEmptyLpo()]}
+                                    onChange={(lpoExs) => {
+                                      updateItemField(idx, "lpo_exercises", lpoExs);
+                                      updateItemField(idx, "metcon_type", "CARGA");
+                                      updateItemField(idx, "metcon_description", serializeLpoExercises(lpoExs));
+                                    }}
+                                  />
+                                </div>
+                              ) : (
+                                <div className="space-y-8">
+                                  <div className="space-y-4">
+                                    <Label className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">Métrica de Resultado</Label>
+                                    <div className="flex flex-wrap gap-2">
+                                      {TRAINER_BLOCK_DYNAMICS.map((t) => (
+                                        <button
+                                          key={t}
+                                          type="button"
+                                          onClick={() => updateItemField(idx, "metcon_type", t)}
+                                          className={cn(
+                                            "rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all",
+                                            item.metcon_type === t ? "bg-black text-white" : "bg-[#f3f3f3] text-black/40 hover:text-black"
+                                          )}
+                                        >
+                                          {t}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  <div className="space-y-3">
+                                    <Label className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">Instruções do Protocolo</Label>
+                                    <Textarea
+                                      value={item.metcon_description || ""}
+                                      onChange={(e) => updateItemField(idx, "metcon_description", e.target.value)}
+                                      placeholder="Descreva a execução detalhada..."
+                                      className="min-h-[140px] rounded-[1.5rem] border-black/5 bg-[#f3f3f3] p-6 font-medium text-black focus:bg-white"
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
+
+  const showAudienceToggle = !fixedScope;
 
   if (isPage) {
     return (
-      <>
-        <div className="relative -mx-6 flex min-h-[calc(100dvh-11.5rem)] flex-col sm:min-h-[calc(100dvh-9rem)] md:-mx-16">
-          <header className="sticky top-0 z-20 shrink-0 border-b border-border bg-background/95 px-2 pb-5 pt-1 backdrop-blur-md supports-[backdrop-filter]:bg-background/90 sm:px-4 md:px-0">
-            <div className="mx-auto w-full max-w-4xl space-y-4">
-              {onPageBack ? (
-                <button
-                  type="button"
-                  onClick={onPageBack}
-                  className="group inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-primary/30 hover:text-primary"
-                >
-                  <ArrowLeft className="h-4 w-4 shrink-0" />
-                  <span className="font-mono text-[11px] uppercase tracking-[0.2em]">Voltar</span>
-                </button>
-              ) : null}
-              <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0 space-y-1.5">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-primary">Agendar treino</p>
-                  <h1 className="text-3xl font-medium tracking-[-0.04em] text-foreground md:text-4xl">Novo treino</h1>
-                  <p className="font-body text-sm text-muted-foreground">
-                    Defina o nome, a data e os exercícios. O atleta vê isto como a sessão do dia.
-                  </p>
-                </div>
-                <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:flex-row sm:rounded-full sm:border sm:border-border sm:bg-card sm:p-1">
-                  <div className="grid grid-cols-2 gap-2 sm:contents sm:gap-0">
-                    <button
-                      type="button"
-                      onClick={() => setBuilderMode("form")}
-                      className={cn(
-                        "rounded-full px-4 py-3 text-sm font-medium transition-colors sm:py-2",
-                        builderMode === "form"
-                          ? "bg-primary text-primary-foreground"
-                          : "border border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary sm:border-0 sm:bg-transparent",
-                      )}
-                    >
-                      Formulário
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setBuilderMode("smart")}
-                      className={cn(
-                        "rounded-full px-4 py-3 text-sm font-medium transition-colors sm:py-2",
-                        builderMode === "smart"
-                          ? "bg-primary text-primary-foreground"
-                          : "border border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary sm:border-0 sm:bg-transparent",
-                      )}
-                    >
-                      Texto livre
-                    </button>
-                  </div>
-                </div>
-              </div>
+      <div className="space-y-12 pb-32 pt-8 px-safe">
+        <header className="flex flex-col gap-10">
+          {onPageBack && (
+            <button
+              type="button"
+              onClick={onPageBack}
+              className="group h-12 w-fit flex items-center gap-2 rounded-full border border-black/5 bg-[#f3f3f3] px-6 text-[10px] font-black uppercase tracking-widest text-black/40 transition-all hover:bg-black hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" strokeWidth={3} />
+              Voltar
+            </button>
+          )}
+
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+            <div className="space-y-2">
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">Criador de Protocolo</p>
+              <h1 className="font-sans text-4xl font-black tracking-tighter text-black sm:text-5xl lg:text-7xl">
+                Novo Treino.
+              </h1>
             </div>
-          </header>
-          <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pb-8">
-            <div className="mx-auto w-full max-w-4xl pt-2">{renderForm()}</div>
+
+            <div className="flex h-14 rounded-full bg-[#f3f3f3] p-1.5 shadow-inner">
+              <button
+                type="button"
+                onClick={() => setBuilderMode("form")}
+                className={cn(
+                  "flex flex-1 items-center justify-center rounded-full px-8 text-[10px] font-black uppercase tracking-widest transition-all",
+                  builderMode === "form" ? "bg-black text-white shadow-lg" : "text-black/30 hover:text-black"
+                )}
+              >
+                Formulário
+              </button>
+              <button
+                type="button"
+                onClick={() => setBuilderMode("smart")}
+                className={cn(
+                  "flex flex-1 items-center justify-center rounded-full px-8 text-[10px] font-black uppercase tracking-widest transition-all",
+                  builderMode === "smart" ? "bg-black text-white shadow-lg" : "text-black/30 hover:text-black"
+                )}
+              >
+                <Sparkles className="mr-2 h-3.5 w-3.5" /> Smart
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <div className="rounded-[2.5rem] border border-black/5 bg-white p-10 shadow-sm transition-all">
+          {builderMode === "form" ? renderForm() : renderSmart()}
+        </div>
+
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-black/5 bg-white/90 p-6 backdrop-blur-xl md:p-8">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-6">
+            <div className="hidden min-w-0 flex-1 md:block">
+              <p className="truncate font-sans text-lg font-black tracking-tight text-black">
+                {title || "Treino sem título"}
+              </p>
+              <p className="font-mono text-[9px] font-black uppercase tracking-widest text-black/20">
+                {workoutItems.length} Blocos configurados
+              </p>
+            </div>
+            <button
+              onClick={createWorkout}
+              disabled={creating || (builderMode === "form" && workoutItems.length === 0)}
+              className="h-16 w-full md:w-auto min-w-[240px] rounded-full bg-black text-sm font-black uppercase tracking-widest text-white shadow-2xl transition-all active:scale-95 disabled:opacity-30 flex items-center justify-center gap-3"
+            >
+              {creating ? (
+                <Loader2 className="h-6 w-6 animate-spin text-white" />
+              ) : (
+                "Finalizar Protocolo"
+              )}
+            </button>
           </div>
         </div>
+
         <NewExerciseDialog
           open={showNewExercise}
           onOpenChange={(o) => {
@@ -1009,7 +1004,7 @@ export function TrainerWorkoutBuilderDialog({
           onSave={handleNewExercise}
           saving={savingExercise}
         />
-      </>
+      </div>
     );
   }
 
@@ -1017,48 +1012,43 @@ export function TrainerWorkoutBuilderDialog({
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
         {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
-        <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto rounded-[28px] border border-border bg-card p-0">
-          <DialogHeader className="border-b border-border p-6 md:p-8">
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto rounded-[2.5rem] border border-black/5 bg-white p-0 shadow-2xl">
+          <header className="border-b border-black/5 p-10">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-              <div className="min-w-0 space-y-1.5">
-                <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-primary">Agendar treino</p>
-                <DialogTitle className="text-3xl font-medium tracking-[-0.04em] text-foreground md:text-4xl">
-                  Novo treino
+              <div className="min-w-0 space-y-1">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">Criador de Protocolo</p>
+                <DialogTitle className="font-sans text-4xl font-black tracking-tighter text-black">
+                  Novo Treino.
                 </DialogTitle>
-                <p className="font-body text-sm text-muted-foreground">
-                  Defina o nome, a data e os exercícios. O atleta vê isto como a sessão do dia.
-                </p>
               </div>
-              <div className="flex shrink-0 rounded-full border border-border bg-background p-1">
+              <div className="flex h-12 rounded-full bg-[#f3f3f3] p-1 shadow-inner">
                 <button
                   type="button"
                   onClick={() => setBuilderMode("form")}
                   className={cn(
-                    "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                    builderMode === "form"
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-primary",
+                    "flex items-center justify-center rounded-full px-5 text-[9px] font-black uppercase tracking-widest transition-all",
+                    builderMode === "form" ? "bg-black text-white shadow-lg" : "text-black/30 hover:text-black"
                   )}
                 >
-                  Formulário
+                  Form
                 </button>
                 <button
                   type="button"
                   onClick={() => setBuilderMode("smart")}
                   className={cn(
-                    "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                    builderMode === "smart"
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-primary",
+                    "flex items-center justify-center rounded-full px-5 text-[9px] font-black uppercase tracking-widest transition-all",
+                    builderMode === "smart" ? "bg-black text-white shadow-lg" : "text-black/30 hover:text-black"
                   )}
                 >
-                  Texto livre
+                  Smart
                 </button>
               </div>
             </div>
-          </DialogHeader>
+          </header>
 
-          {renderForm()}
+          <div className="p-10">
+            {builderMode === "form" ? renderForm() : renderSmart()}
+          </div>
         </DialogContent>
       </Dialog>
 
@@ -1076,3 +1066,5 @@ export function TrainerWorkoutBuilderDialog({
     </>
   );
 }
+
+export default TrainerWorkoutBuilderDialog;

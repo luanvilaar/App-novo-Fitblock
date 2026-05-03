@@ -115,77 +115,84 @@ const TrainerExerciseLibrary = () => {
   };
 
   return (
-    <div className="space-y-8 pb-12 pt-6">
-      <div className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6 sm:flex-row sm:items-end sm:justify-between">
+    <div className="space-y-16 pb-32 pt-8 px-safe">
+      <header className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-2">
-          <p className="font-mono text-[9px] uppercase tracking-[0.24em] text-primary">Catálogo global</p>
-          <h1 className="font-display text-5xl font-normal tracking-[-0.06em] text-foreground md:text-[4rem]">Biblioteca de movimentos</h1>
-          <p className="max-w-xl font-body text-sm text-muted-foreground">
-            Cadastre nomes canónicos e vídeos. O texto para treino (parser e conversão) tenta alinhar frases como “back squat costas” ao movimento
-            “back squat” desta lista.
-          </p>
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">Catálogo Global</p>
+          <h1 className="font-sans text-4xl font-black tracking-tighter text-black sm:text-5xl lg:text-7xl">
+            Movimentos.
+          </h1>
         </div>
+        
         <button
           type="button"
           onClick={openCreate}
-          className="inline-flex h-12 w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-6 font-mono text-[10px] uppercase tracking-[0.16em] text-primary transition-colors hover:bg-primary hover:text-white sm:w-auto"
+          className="h-14 rounded-full bg-black px-8 text-sm font-black uppercase tracking-widest text-white shadow-xl transition-all active:scale-95 flex items-center justify-center gap-3"
         >
-          <Plus className="h-4 w-4" />
-          Novo movimento
+          <Plus className="h-4 w-4" strokeWidth={3} />
+          Novo Movimento
         </button>
+      </header>
+
+      <div className="rounded-[2.5rem] border border-black/5 bg-white p-10 shadow-sm">
+        <p className="max-w-2xl font-sans text-lg font-medium text-black/60 leading-relaxed">
+          Cadastre nomes canônicos e vídeos técnicos. O motor de inteligência do FitBlock utiliza esta base para processar as prescrições em texto livre.
+        </p>
       </div>
 
-      <div className="relative max-w-md">
-        <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
+      <div className="relative group max-w-2xl">
+        <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-black/20" />
         <input
           type="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Pesquisar por nome ou categoria…"
-          className="h-12 w-full rounded-lg border border-border bg-card pl-12 pr-4 text-sm text-foreground placeholder:text-muted-foreground/65 focus:border-primary focus:outline-none"
+          placeholder="Pesquisar movimentos..."
+          className="h-14 w-full rounded-full border-black/5 bg-[#f3f3f3] pl-14 pr-8 text-sm font-bold text-black focus:border-black/10 focus:ring-0 outline-none"
         />
       </div>
 
       {loading ? (
-        <div className="flex min-h-[40vh] items-center justify-center rounded-2xl border border-border/80 bg-card text-foreground/40">
-          <Dumbbell className="h-10 w-10 animate-pulse" />
+        <div className="flex min-h-[40vh] items-center justify-center rounded-[2.5rem] bg-[#f3f3f3] ring-1 ring-black/5">
+          <Dumbbell className="h-12 w-12 animate-pulse text-black/10" />
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-border bg-card">
-          <div className="divide-y divide-border/80">
+        <div className="overflow-hidden rounded-[2.5rem] border border-black/5 bg-white shadow-sm">
+          <div className="divide-y divide-black/5">
             {filtered.length === 0 ? (
-              <div className="px-6 py-16 text-center font-body text-sm text-muted-foreground">
-                {rows.length === 0
-                  ? "Ainda não há movimentos. Adicione o primeiro com o botão acima."
-                  : "Nenhum resultado para esta pesquisa."}
+              <div className="px-10 py-32 text-center">
+                <p className="font-mono text-[10px] font-black uppercase tracking-widest text-black/20">
+                  {rows.length === 0
+                    ? "Biblioteca vazia"
+                    : "Nenhum resultado"}
+                </p>
               </div>
             ) : (
               filtered.map((r) => (
                 <div
                   key={r.id}
-                  className="flex flex-col gap-4 p-5 transition-colors hover:bg-primary/5 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
+                  className="flex flex-col gap-8 p-10 transition-all hover:bg-[#f3f3f3]/30 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <p className="font-display text-2xl font-normal tracking-[-0.04em] text-foreground">{r.name}</p>
-                      <span className="rounded-md border border-primary/10 bg-primary/5 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-primary/70">
+                  <div className="min-w-0 flex-1 space-y-4">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <h3 className="font-sans text-3xl font-black tracking-tighter text-black">{r.name.toLowerCase()}</h3>
+                      <span className="rounded-full bg-black/5 px-4 py-1 font-mono text-[9px] font-black uppercase tracking-widest text-black/40">
                         {r.category}
                       </span>
                     </div>
                     {r.video_url ? (
-                      <div className="mt-3 max-w-md">
+                      <div className="max-w-md overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5">
                         <VideoPreview url={r.video_url} />
                       </div>
                     ) : (
-                      <p className="mt-1 text-xs text-foreground/30">Sem vídeo</p>
+                      <p className="font-mono text-[9px] font-black uppercase tracking-widest text-black/20">Sem vídeo cadastrado</p>
                     )}
                   </div>
                   <button
                     type="button"
                     onClick={() => openEdit(r)}
-                    className="inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-lg border border-border bg-background px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/80 transition-colors hover:border-primary/50 hover:text-primary sm:self-center"
+                    className="h-12 flex items-center justify-center gap-2 rounded-full bg-[#f3f3f3] px-6 text-[10px] font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-white"
                   >
-                    <Pencil className="h-3.5 w-3.5" />
+                    <Pencil className="h-4 w-4" strokeWidth={3} />
                     Editar
                   </button>
                 </div>
@@ -195,10 +202,10 @@ const TrainerExerciseLibrary = () => {
         </div>
       )}
 
-      <p className="font-body text-xs text-muted-foreground/80">
-        <BookMarked className="mb-0.5 mr-1 inline h-3.5 w-3.5 text-primary" />
-        O catálogo é partilhado entre treinadores. Nomes consistentes melhoram o match automático a partir do texto livre.
-      </p>
+      <div className="flex items-center gap-3 font-mono text-[9px] font-black uppercase tracking-widest text-black/20">
+        <BookMarked className="h-4 w-4" />
+        <span>Base de dados sincronizada globalmente entre treinadores</span>
+      </div>
 
       <NewExerciseDialog
         open={dialogOpen}

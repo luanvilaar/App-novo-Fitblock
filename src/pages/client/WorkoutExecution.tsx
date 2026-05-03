@@ -730,9 +730,8 @@ const WorkoutExecution = () => {
 
   if (!workout) {
     return (
-      <div className="flex min-h-[40vh] items-center justify-center bg-[#121212]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-3 font-body text-sm text-muted-foreground">A carregar o treino…</span>
+      <div className="flex min-h-screen items-center justify-center bg-white">
+        <Loader2 className="h-9 w-9 animate-spin text-black" />
       </div>
     );
   }
@@ -745,46 +744,40 @@ const WorkoutExecution = () => {
   const showSmartWorkoutFallback = descriptionLooksSmart && exercises.length === 0;
 
   return (
-    <div className="space-y-6 pb-32">
+    <div className="min-h-screen bg-white text-black pb-32">
       
-      {/* Cabeçalho — mesmo ritmo que TrainerPanelCard (eyebrow primary, título display) */}
-      <div className="fixed left-0 top-0 z-50 flex h-[4.5rem] w-full items-center border-b border-white/[0.08] bg-[#121212]/95 px-4 backdrop-blur-xl">
-        <div className="mx-auto flex w-full max-w-lg items-center justify-between gap-4 md:max-w-4xl">
-          <div className="flex min-w-0 items-center gap-3">
+      {/* Cabeçalho App Style */}
+      <div className="fixed left-0 top-0 z-50 flex h-20 w-full items-center border-b border-black/5 bg-white/90 px-6 backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-4">
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/70 transition-colors hover:border-white/20 hover:text-white"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#efefef] text-black transition-transform active:scale-95"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
-            <div className="min-w-0 space-y-0.5">
-              <p className="font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-primary">Em execução</p>
-              <h1 className="truncate font-display text-lg font-bold uppercase leading-tight tracking-tight text-white md:text-xl">
+            <div className="min-w-0">
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">Sessão</p>
+              <h1 className="truncate font-sans text-lg font-bold text-black">
                 {workout.title || "Treino"}
               </h1>
             </div>
           </div>
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-3">
             <AnimatePresence>
               {saving && (
                 <motion.div
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 10 }}
-                  className="flex items-center gap-2 rounded-xl border border-primary/25 bg-primary/10 px-3 py-1.5"
+                  className="flex items-center gap-2 rounded-full bg-black/5 px-4 py-1.5"
                 >
-                  <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
-                  <span className="font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-primary">A guardar…</span>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-black" />
+                  <span className="font-mono text-[9px] font-bold uppercase tracking-[1.4px]">Saving</span>
                 </motion.div>
               )}
             </AnimatePresence>
-            <div
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-primary/80"
-              title="Treino em curso"
-            >
-              <Target className="h-5 w-5" />
-            </div>
           </div>
         </div>
       </div>
@@ -1071,8 +1064,8 @@ const WorkoutExecution = () => {
         })()}
       </AnimatePresence>
 
-      {/* CTA — mesmo padrão do “Começar treino” no início (contorno + energy no hover) */}
-      <div className="pointer-events-none fixed bottom-[calc(64px+1.5rem)] left-0 right-0 z-[80] mx-auto max-w-lg px-4 pb-safe md:max-w-4xl">
+      {/* CTA — Solid Black Pill */}
+      <div className="pointer-events-none fixed bottom-24 left-0 right-0 z-[80] mx-auto max-w-lg px-6 pb-safe">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1082,17 +1075,14 @@ const WorkoutExecution = () => {
             type="button"
             onClick={completeWorkout}
             disabled={completing}
-            className="group flex h-14 w-full items-center justify-center gap-3 rounded-2xl border border-white/15 bg-white/[0.04] font-display text-xs font-bold uppercase tracking-[0.14em] text-white shadow-2xl transition-all hover:border-energy/50 hover:bg-energy/10 disabled:opacity-50 md:text-sm"
+            className="flex h-16 w-full items-center justify-center gap-3 rounded-full bg-black font-sans text-sm font-bold uppercase tracking-wider text-white shadow-xl transition-all active:scale-[0.98] disabled:opacity-20"
           >
             {completing ? (
-              <Loader2 className="h-6 w-6 animate-spin text-energy" />
+              <Loader2 className="h-6 w-6 animate-spin text-white" />
             ) : (
               <>
                 <span>Concluir treino</span>
-                <ArrowRight
-                  className="h-5 w-5 text-energy transition-transform group-hover:translate-x-1"
-                  strokeWidth={2.5}
-                />
+                <Check className="h-5 w-5 text-white" strokeWidth={3} />
               </>
             )}
           </button>

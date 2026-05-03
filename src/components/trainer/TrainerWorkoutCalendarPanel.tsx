@@ -3,20 +3,9 @@ import { format, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  Dumbbell,
-  Layers,
-  Pencil,
-  Trash2,
-  Users,
-} from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Copy, Dumbbell, Layers, Trash2, Users } from "lucide-react";
 import type { TrainerWeekWorkout } from "@/hooks/useTrainerWeekWorkouts";
 import type { TrainerWorkoutPlannerLocationState } from "@/lib/trainer-workout-nav";
-import { TrainerPanelCard } from "@/components/trainer/TrainerPanelCard";
 import { cn } from "@/lib/utils";
 
 export function TrainerWorkoutCalendarPanel({
@@ -50,7 +39,7 @@ export function TrainerWorkoutCalendarPanel({
 }) {
   const navigate = useNavigate();
 
-  const getWorkoutsForDay = (day: Date) => workouts.filter((w) => isSameDay(new Date(w.date + "T12:00:00"), day));
+  const getWorkoutsForDay = (day: Date) => workouts.filter((w) => isSameDay(new Date(`${w.date}T12:00:00`), day));
 
   const goToWorkout = (workoutId: string) => {
     const state: TrainerWorkoutPlannerLocationState = { fromTrainerPlanner: plannerReturnPath };
@@ -58,212 +47,233 @@ export function TrainerWorkoutCalendarPanel({
   };
 
   const weekRangeTitle = `${format(weekStart, "dd MMM", { locale: ptBR })} — ${format(weekEnd, "dd MMM yyyy", { locale: ptBR })}`;
+  const weekRangeCompact = `${format(weekStart, "dd MMM", { locale: ptBR })} - ${format(weekEnd, "dd MMM yyyy", { locale: ptBR })}`;
+
+  const workoutsOfSelectedDay = getWorkoutsForDay(selectedDate);
 
   return (
-    <div className="space-y-8">
-      <TrainerPanelCard
-        compact
-        eyebrow={cycleLabel}
-        title={weekRangeTitle}
-        subtitle="Escolha um dia da semana para filtrar a lista em baixo."
-      >
-        <div className="mt-2 flex items-center justify-between gap-4 border-b border-border pb-6">
-          <button
-            type="button"
-            onClick={() => setWeekOffset((p) => p - 1)}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-foreground/55 transition-colors hover:border-primary/20 hover:text-foreground"
-            aria-label="Semana anterior"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <p className="text-center font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Navegar semana</p>
-          <button
-            type="button"
-            onClick={() => setWeekOffset((p) => p + 1)}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-foreground/55 transition-colors hover:border-primary/20 hover:text-foreground"
-            aria-label="Semana seguinte"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
+    <div className="space-y-10">
+      <section className="relative w-full min-w-0 max-w-full overflow-hidden rounded-[2.5rem] border border-black/5 bg-white shadow-sm ring-1 ring-black/5 transition-all duration-300">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col p-8 md:p-10">
+          <header className="mb-6 space-y-2">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">
+              {cycleLabel.replace(/\s+/g, " · ").toUpperCase()}
+            </p>
+            <h3 className="break-words font-sans text-3xl font-bold tracking-tight text-black sm:text-4xl">
+              {weekRangeTitle.toLowerCase()}
+            </h3>
+            <p className="break-words font-sans text-base font-medium text-black/40">
+              Escolha um dia da semana para filtrar a lista em baixo.
+            </p>
+          </header>
 
-        <div className="grid grid-cols-7 gap-2 pt-2 sm:gap-3">
-          {weekDays.map((day) => {
-            const dayWorkouts = getWorkoutsForDay(day);
-            const isSelected = isSameDay(day, selectedDate);
-            const isToday = isSameDay(day, new Date());
-            const allCompleted = dayWorkouts.length > 0 && dayWorkouts.every((w) => completedWorkoutIds.has(w.id));
-
-            return (
-              <div
-                key={day.toISOString()}
-                role="button"
-                tabIndex={0}
-                onClick={() => setSelectedDate(day)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setSelectedDate(day);
-                  }
-                }}
-                className={cn(
-                  "relative flex h-[7.5rem] flex-col rounded-lg border p-2.5 transition-all duration-200 sm:h-32 sm:p-3",
-                  isSelected
-                    ? "border-primary/30 bg-primary/5"
-                    : isToday
-                      ? "border-dashed border-primary/20 bg-background"
-                      : "border-border bg-card hover:border-primary/15",
-                )}
+          <div className="flex min-h-0 flex-1 flex-col">
+            <div className="mt-2 flex items-center justify-between gap-4 border-b border-black/10 pb-6">
+              <button
+                type="button"
+                onClick={() => setWeekOffset((previous) => previous - 1)}
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/60 transition-all duration-200 hover:border-black/25 hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                aria-label="Semana anterior"
               >
-                <div className="mb-1.5 flex items-center justify-between">
-                  <span
-                    className={cn(
-                      "font-mono text-[8px] font-bold uppercase tracking-wider sm:text-[9px]",
-                      isSelected ? "text-primary" : "text-foreground/35",
-                    )}
-                  >
-                    {format(day, "EEE", { locale: ptBR }).replace(".", "")}
-                  </span>
-                  {allCompleted && (
-                    <Check className={cn("h-3.5 w-3.5", isSelected ? "text-primary" : "text-primary/75")} strokeWidth={2.5} />
-                  )}
-                </div>
+                <ChevronLeft className="h-5 w-5" />
+              </button>
 
-                <span
-                  className={cn(
-                    "font-display text-xl font-normal leading-none tracking-[-0.04em] sm:text-2xl",
-                    isSelected ? "text-foreground" : "text-foreground/85",
-                  )}
-                >
-                  {format(day, "dd")}
-                </span>
+              <div className="text-center">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35">Navegar semana</p>
+                <p className="mt-1 text-xs font-medium text-black/60">{weekRangeCompact.toLowerCase()}</p>
+              </div>
 
-                <div className="mt-auto flex max-h-[2.5rem] flex-col gap-0.5 overflow-hidden">
-                  {dayWorkouts.slice(0, 2).map((w) => {
-                    const isCompleted = completedWorkoutIds.has(w.id);
-                    return (
-                      <div
-                        key={w.id}
-                        role="button"
-                        tabIndex={0}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          goToWorkout(w.id);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.stopPropagation();
-                            goToWorkout(w.id);
-                          }
-                        }}
+              <button
+                type="button"
+                onClick={() => setWeekOffset((previous) => previous + 1)}
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black/60 transition-all duration-200 hover:border-black/25 hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                aria-label="Semana seguinte"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="overflow-x-auto pt-3">
+              <div className="grid min-w-[48rem] grid-cols-7 gap-2 sm:gap-3">
+                {weekDays.map((day) => {
+                  const dayWorkouts = getWorkoutsForDay(day);
+                  const isSelected = isSameDay(day, selectedDate);
+                  const isToday = isSameDay(day, new Date());
+                  const hasWorkouts = dayWorkouts.length > 0;
+                  const isCompleted = hasWorkouts && dayWorkouts.every((workout) => completedWorkoutIds.has(workout.id));
+                  const dayLabel = format(day, "EEEE", { locale: ptBR }).replace("-feira", "");
+
+                  return (
+                    <motion.button
+                      key={day.toISOString()}
+                      type="button"
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.985 }}
+                      transition={{ duration: 0.16 }}
+                      onClick={() => setSelectedDate(day)}
+                      className={cn(
+                        "relative flex h-[7.6rem] min-w-0 flex-col rounded-2xl border p-2.5 text-left transition-all duration-200 sm:h-32 sm:p-3",
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/80",
+                        isSelected && "border-black bg-black text-white shadow-[0_10px_26px_rgba(0,0,0,0.22)]",
+                        !isSelected && isToday && "border-black/35 bg-white",
+                        !isSelected && !isToday && hasWorkouts && "border-black/15 bg-white hover:border-black/30",
+                        !isSelected && !isToday && !hasWorkouts && "border-black/10 bg-[#f5f5f5] text-black/80 hover:bg-white",
+                      )}
+                      aria-label={`${dayLabel}, ${format(day, "dd/MM")} com ${dayWorkouts.length} treino${dayWorkouts.length === 1 ? "" : "s"}`}
+                    >
+                      <div className="mb-1.5 flex items-center justify-between">
+                        <span
+                          className={cn(
+                            "font-mono text-[8px] font-bold uppercase tracking-wider sm:text-[9px]",
+                            isSelected ? "text-white/70" : "text-black/45",
+                          )}
+                        >
+                          {dayLabel}
+                        </span>
+                        {isToday ? (
+                          <span
+                            className={cn(
+                              "rounded-full px-1.5 py-0.5 font-mono text-[7px] font-bold uppercase tracking-[0.16em]",
+                              isSelected ? "bg-white/15 text-white" : "bg-black text-white",
+                            )}
+                          >
+                            Hoje
+                          </span>
+                        ) : null}
+                      </div>
+
+                      <span
                         className={cn(
-                          "truncate rounded-md border px-1.5 py-0.5 font-mono text-[6px] uppercase tracking-wide sm:text-[7px]",
-                          isCompleted
-                            ? "border-primary/20 bg-primary/10 text-primary"
-                            : "border-border bg-background text-foreground/45 hover:border-primary/20 hover:text-foreground/70",
+                          "font-display text-xl leading-none tracking-[-0.04em] sm:text-2xl",
+                          isSelected ? "text-white" : "text-black/90",
                         )}
                       >
-                        {isCompleted && "✓ "}
-                        {w.title}
-                      </div>
-                    );
-                  })}
-                  {dayWorkouts.length > 2 && (
-                    <span className="font-mono text-[6px] uppercase tracking-widest text-foreground/25 sm:text-[7px]">
-                      +{dayWorkouts.length - 2}
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </TrainerPanelCard>
+                        {format(day, "dd")}
+                      </span>
 
-      <TrainerPanelCard compact eyebrow="Treinos do dia" title={format(selectedDate, "dd 'de' MMMM", { locale: ptBR })}>
-        <div className="mt-2 grid grid-cols-1 gap-4">
-          {loading ? (
-            <>
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="h-24 animate-pulse rounded-xl border border-border bg-background" />
-              ))}
-            </>
-          ) : getWorkoutsForDay(selectedDate).length === 0 ? (
-            <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border bg-background px-6 py-14 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-border bg-card">
-                <Dumbbell className="h-7 w-7 text-foreground/25" />
-              </div>
-              <div className="space-y-1">
-                <p className="font-body text-base font-medium text-foreground/80">Nenhum treino nesta data</p>
-                <p className="font-body text-sm text-muted-foreground">Use &quot;Novo treino&quot; para agendar a primeira sessão.</p>
+                      <div className="mt-auto flex max-h-[2.5rem] flex-col gap-0.5 overflow-hidden">
+                        {hasWorkouts ? (
+                          <span
+                            className={cn(
+                              "inline-flex items-center justify-center gap-1 truncate rounded-full border px-2 py-1 font-mono text-[7px] uppercase tracking-[0.14em] sm:text-[8px]",
+                              isSelected
+                                ? "border-white/30 bg-white/10 text-white"
+                                : "border-black/15 bg-black text-white",
+                            )}
+                          >
+                            {isCompleted ? <Check className="h-3 w-3" /> : null}
+                            {dayWorkouts.length} {dayWorkouts.length === 1 ? "sessão" : "sessões"}
+                          </span>
+                        ) : (
+                          <span
+                            className={cn(
+                              "inline-flex justify-center truncate rounded-full border px-2 py-1 font-mono text-[7px] uppercase tracking-[0.14em] sm:text-[8px]",
+                              isSelected ? "border-white/25 bg-white/5 text-white/75" : "border-black/10 bg-white text-black/35",
+                            )}
+                          >
+                            Sem treino
+                          </span>
+                        )}
+                      </div>
+                    </motion.button>
+                  );
+                })}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-5">
+        <div className="flex items-center gap-4">
+          <h4 className="font-sans text-2xl font-bold tracking-tight text-black">Treinos do dia</h4>
+          <div className="h-px flex-1 bg-black/10" />
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-black/40">
+            {format(selectedDate, "dd 'de' MMMM", { locale: ptBR })}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {loading ? (
+            <>
+              {[1, 2, 3, 4].map((index) => (
+                <div key={index} className="h-32 animate-pulse rounded-[2rem] bg-[#f3f3f3]" />
+              ))}
+            </>
+          ) : workoutsOfSelectedDay.length === 0 ? (
+            <div className="col-span-full rounded-[2rem] border border-black/5 bg-[#f5f5f5] px-6 py-16 text-center">
+              <Dumbbell className="mx-auto mb-5 h-12 w-12 text-black/15" />
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-black/35">
+                Nenhum treino agendado
+              </p>
+            </div>
           ) : (
-            getWorkoutsForDay(selectedDate).map((w, i) => (
-              <motion.div
-                key={w.id}
-                initial={{ opacity: 0, y: 8 }}
+            workoutsOfSelectedDay.map((workout, index) => (
+              <motion.article
+                key={workout.id}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: Math.min(i * 0.04, 0.2) }}
-                className="group relative cursor-pointer overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/15"
-                onClick={() => goToWorkout(w.id)}
+                transition={{ duration: 0.2, delay: index * 0.04 }}
+                onClick={() => goToWorkout(workout.id)}
+                className="group flex cursor-pointer flex-col justify-between rounded-[2rem] border border-black/5 bg-white p-6 shadow-[0_8px_22px_rgba(0,0,0,0.08)] transition-all duration-200 hover:border-black/20 hover:shadow-[0_12px_30px_rgba(0,0,0,0.11)]"
               >
-                <div className="relative flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-                  <div className="flex min-w-0 flex-1 items-start gap-4">
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-border bg-background transition-colors group-hover:border-primary/30 group-hover:bg-primary/5">
-                      <Dumbbell className="h-6 w-6 text-primary" />
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0 flex-1 space-y-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h5 className="truncate font-sans text-2xl font-bold tracking-tight text-black">
+                        {workout.title.toLowerCase()}
+                      </h5>
+                      <span
+                        className={cn(
+                          "rounded-full px-3 py-1 font-mono text-[8px] font-bold uppercase tracking-[0.14em]",
+                          completedWorkoutIds.has(workout.id) ? "bg-black text-white" : "bg-black/5 text-black/50",
+                        )}
+                      >
+                        {workout.category}
+                      </span>
                     </div>
-                    <div className="min-w-0 space-y-2">
-                      <h4 className="font-display text-lg font-normal leading-tight tracking-[-0.04em] text-foreground sm:text-xl">
-                        {w.title}
-                      </h4>
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-body text-xs text-muted-foreground">
-                        <span className="font-medium text-primary">{w.category}</span>
-                        <span className="text-white/20">·</span>
-                        <span>
-                          {w.description?.includes("-") ? "Prescrição inteligente" : `${w.workout_exercises?.length ?? 0} exercícios`}
-                        </span>
-                        <span className="text-white/20">·</span>
-                        <span className="inline-flex items-center gap-1.5">
-                          {w.is_group ? <Layers className="h-3 w-3 text-energy" /> : <Users className="h-3 w-3 text-energy" />}
-                          {w.is_group ? "Grupo" : "Individual"}
-                        </span>
-                      </div>
-                    </div>
+                    <p className="text-sm text-black/45">
+                      {workout.description?.includes("-")
+                        ? "Protocolo inteligente"
+                        : `${workout.workout_exercises?.length ?? 0} movimentos prescritos`}
+                    </p>
                   </div>
 
-                  <div className="flex shrink-0 gap-2" onClick={(e) => e.stopPropagation()}>
+                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-black/10 bg-[#f5f5f5] text-black/45 transition-colors duration-200 group-hover:bg-black group-hover:text-white">
+                    <Dumbbell className="h-5 w-5" />
+                  </span>
+                </div>
+
+                <div className="mt-5 flex items-center justify-between border-t border-black/10 pt-4">
+                  <div className="inline-flex items-center gap-1.5 rounded-full border border-black/10 px-3 py-1 font-mono text-[8px] font-bold uppercase tracking-[0.14em] text-black/45">
+                    {workout.is_group ? <Layers className="h-3.5 w-3.5" /> : <Users className="h-3.5 w-3.5" />}
+                    {workout.is_group ? "Grupo" : "Individual"}
+                  </div>
+
+                  <div className="flex items-center gap-2" onClick={(event) => event.stopPropagation()}>
                     <button
                       type="button"
-                      onClick={() => goToWorkout(w.id)}
-                      className="flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-background text-foreground/50 transition-colors hover:border-primary/20 hover:text-foreground"
-                      title="Editar treino"
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onOpenCopyWorkout(w)}
-                      className="flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-background text-foreground/50 transition-colors hover:border-primary/35 hover:text-primary"
-                      title="Copiar treino (outro atleta ou grupo)"
+                      onClick={() => onOpenCopyWorkout(workout)}
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-[#f5f5f5] text-black/40 transition-all duration-200 hover:border-black hover:bg-black hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                      title="Copiar"
                     >
                       <Copy className="h-4 w-4" />
                     </button>
                     <button
                       type="button"
-                      onClick={() => onDeleteWorkout(w.id)}
-                      className="flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-background text-foreground/35 transition-colors hover:border-destructive/50 hover:bg-destructive/10 hover:text-destructive"
+                      onClick={() => onDeleteWorkout(workout.id)}
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-[#f5f5f5] text-black/40 transition-all duration-200 hover:border-red-500 hover:bg-red-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                       title="Remover"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
-              </motion.div>
+              </motion.article>
             ))
           )}
         </div>
-      </TrainerPanelCard>
+      </section>
     </div>
   );
 }

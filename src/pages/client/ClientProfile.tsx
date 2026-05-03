@@ -48,14 +48,9 @@ const ClientProfile = () => {
       .update({ gender: gender || null, birth_date: birthDate || null })
       .eq("user_id", user.id);
     if (error) {
-      const msg = error.message || "";
-      if (msg.includes("column") || msg.includes("does not exist")) {
-        toast.error("A migração de ranking ainda não foi aplicada no banco de dados.");
-      } else {
-        toast.error("Erro ao salvar dados de ranking");
-      }
+      toast.error("Erro ao salvar dados.");
     } else {
-      toast.success("Dados de ranking atualizados!");
+      toast.success("Perfil atualizado!");
     }
     setSavingDemo(false);
   };
@@ -63,57 +58,23 @@ const ClientProfile = () => {
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
-
-    const allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-    const ext = file.name.split('.').pop()?.toLowerCase();
-    if (!ext || !allowedExts.includes(ext)) {
-      toast.error("Apenas JPG, PNG, WebP e GIF são permitidos");
-      return;
-    }
-    if (!file.type.startsWith("image/") || file.type === "image/svg+xml") {
-      toast.error("Selecione uma imagem válida (SVG não permitido)");
-      return;
-    }
-    if (file.size > 2 * 1024 * 1024) {
-      toast.error("Imagem deve ter no máximo 2MB");
-      return;
-    }
-
     setUploading(true);
     try {
       const ext = file.name.split(".").pop();
       const filePath = `${user.id}/avatar.${ext}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, file, { upsert: true });
-      if (uploadError) throw uploadError;
-
-      const { data: urlData } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(filePath);
-
+      await supabase.storage.from("avatars").upload(filePath, file, { upsert: true });
+      const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(filePath);
       const publicUrl = `${urlData.publicUrl}?t=${Date.now()}`;
-
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ avatar_url: publicUrl })
-        .eq("user_id", user.id);
-      if (updateError) throw updateError;
-
+      await supabase.from("profiles").update({ avatar_url: publicUrl }).eq("user_id", user.id);
       setAvatarUrl(publicUrl);
       toast.success("Foto atualizada!");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Erro ao enviar foto");
+      toast.error("Erro no upload.");
     }
     setUploading(false);
   };
 
   const handleChangePassword = async () => {
-    if (newPassword.length < 6) {
-      toast.error("A senha deve ter no mínimo 6 caracteres");
-      return;
-    }
     if (newPassword !== confirmPassword) {
       toast.error("As senhas não coincidem");
       return;
@@ -121,9 +82,9 @@ const ClientProfile = () => {
     setChangingPassword(true);
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     if (error) {
-      toast.error(error.message || "Erro ao atualizar senha");
+      toast.error(error.message);
     } else {
-      toast.success("Senha atualizada com sucesso!");
+      toast.success("Senha atualizada!");
       setNewPassword("");
       setConfirmPassword("");
     }
@@ -131,178 +92,162 @@ const ClientProfile = () => {
   };
 
   return (
-    <div className="space-y-10 pb-24">
+    <div className="min-h-screen bg-white text-black space-y-8 pb-32">
       
-      {/* Header Section */}
-      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="space-y-2 border-b border-border pb-6">
-        <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.24em] text-primary">
-          <Activity className="w-3 h-3" /> USER_PROFILE
-        </div>
-        <h1 className="font-display text-3xl font-normal tracking-[-0.05em] text-foreground">
-          Configurações de perfil
-        </h1>
-        <p className="font-mono text-[8px] uppercase tracking-[0.16em] text-muted-foreground">
-          Gerenciamento de perfil e credenciais
+      {/* Header */}
+      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="space-y-1">
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">
+          Conta
         </p>
+        <h1 className="font-sans text-3xl font-bold tracking-tight text-black">
+          Perfil
+        </h1>
       </motion.div>
 
+      {/* Profile Card */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-xl border border-border bg-card p-8"
+        className="rounded-3xl bg-[#f3f3f3] p-8 text-center"
       >
-        <div className="relative w-24 h-24 mx-auto mb-6">
+        <div className="relative w-28 h-28 mx-auto mb-6">
           {avatarUrl ? (
             <img
               src={avatarUrl}
               alt="Avatar"
-              className="h-24 w-24 rounded-xl border border-primary/20 object-cover"
+              className="h-28 w-28 rounded-full border-4 border-white object-cover shadow-xl"
             />
           ) : (
-            <div className="flex h-24 w-24 items-center justify-center rounded-xl border border-border bg-background">
-              <User className="w-10 h-10 text-muted-foreground" />
+            <div className="flex h-28 w-28 items-center justify-center rounded-full bg-black text-white">
+              <User className="w-10 h-10" />
             </div>
           )}
-          <label className="absolute -bottom-2 -right-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg bg-primary transition-colors hover:opacity-90">
+          <label className="absolute bottom-0 right-0 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-black text-white shadow-lg transition-transform hover:scale-110">
             {uploading ? (
-              <Loader2 className="w-4 h-4 text-primary-foreground animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <Camera className="w-4 h-4 text-primary-foreground" />
+              <Camera className="w-4 h-4" />
             )}
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleAvatarUpload}
-              disabled={uploading}
-            />
+            <input type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} disabled={uploading} />
           </label>
         </div>
-        <div className="text-center space-y-2">
-          <p className="font-display text-xl font-normal tracking-[-0.04em] text-foreground">{profileName || user?.email}</p>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">{user?.email}</p>
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-foreground">
-            <Shield className="w-3 h-3 text-primary" />
+        <div className="space-y-1">
+          <h2 className="font-sans text-xl font-bold">{profileName || user?.email}</h2>
+          <p className="font-mono text-[10px] uppercase font-bold opacity-30">{user?.email}</p>
+          <div className="inline-flex mt-4 items-center gap-2 rounded-full bg-black/5 px-4 py-1.5 font-mono text-[9px] font-bold uppercase tracking-wider text-black/60">
+            <Shield className="w-3 h-3" />
             {roles.join(", ")}
           </div>
         </div>
       </motion.div>
 
+      {/* Ranking Form */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="space-y-5 rounded-xl border border-border bg-card p-6"
+        className="space-y-6 rounded-3xl bg-white p-8 ring-1 ring-black/5 shadow-sm"
       >
-        <div className="flex items-center gap-3 pb-4 border-b border-border">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background">
-            <Trophy className="w-4 h-4 text-primary" />
-          </div>
-          <div className="space-y-0.5">
-            <h2 className="font-display text-lg font-normal tracking-[-0.03em] text-foreground">Dados de ranking</h2>
-            <p className="font-mono text-[7px] uppercase tracking-[0.16em] text-muted-foreground">COMPETITIVE_DATA</p>
-          </div>
+        <div className="flex items-center gap-3">
+          <Trophy className="w-5 h-5 opacity-40" />
+          <h2 className="font-sans text-lg font-bold">Informações</h2>
         </div>
 
-        <div className="space-y-2">
-          <Label className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">Gênero</Label>
-          <Select value={gender} onValueChange={(v) => setGender(v as "" | "male" | "female")}>
-            <SelectTrigger className="h-12 rounded-lg border-border bg-background font-mono text-xs uppercase tracking-[0.16em] focus:ring-0">
-              <SelectValue placeholder="SELECIONE SEU GÊNERO" />
-            </SelectTrigger>
-            <SelectContent className="border-border bg-background font-mono text-xs">
-              <SelectItem value="male">MASCULINO</SelectItem>
-              <SelectItem value="female">FEMININO</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label className="font-mono text-[9px] font-bold uppercase tracking-wider opacity-40">Gênero</Label>
+            <Select value={gender} onValueChange={(v) => setGender(v as "" | "male" | "female")}>
+              <SelectTrigger className="h-12 rounded-full border-black/5 bg-[#f3f3f3] font-sans text-sm font-bold focus:ring-0">
+                <SelectValue placeholder="Selecione" />
+              </SelectTrigger>
+              <SelectContent className="border-black/5 bg-white font-sans">
+                <SelectItem value="male">Masculino</SelectItem>
+                <SelectItem value="female">Feminino</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-        <div className="space-y-2">
-          <Label className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">Data de Nascimento</Label>
-          <Input
-            type="date"
-            value={birthDate}
-            onChange={(e) => setBirthDate(e.target.value)}
-            max={new Date().toISOString().split("T")[0]}
-            className="h-12 rounded-lg border-border bg-background font-mono text-xs focus:border-primary"
-          />
+          <div className="space-y-2">
+            <Label className="font-mono text-[9px] font-bold uppercase tracking-wider opacity-40">Nascimento</Label>
+            <Input
+              type="date"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+              className="h-12 rounded-full border-black/5 bg-[#f3f3f3] font-sans text-sm font-bold"
+            />
+          </div>
         </div>
 
         <button
           onClick={handleSaveDemographics}
           disabled={savingDemo}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-foreground font-mono text-[10px] uppercase tracking-[0.16em] text-background transition-all duration-300 hover:bg-primary hover:text-primary-foreground"
+          className="h-14 w-full rounded-full bg-black font-sans text-sm font-bold text-white transition-all active:scale-[0.98]"
         >
-          {savingDemo ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trophy className="w-4 h-4" />}
-          Salvar dados de ranking
+          {savingDemo ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar alterações"}
         </button>
       </motion.div>
 
+      {/* Security Form */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="space-y-5 rounded-xl border border-border bg-card p-6"
+        className="space-y-6 rounded-3xl bg-white p-8 ring-1 ring-black/5 shadow-sm"
       >
-        <div className="flex items-center gap-3 pb-4 border-b border-border">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background">
-            <Lock className="w-4 h-4 text-primary" />
-          </div>
-          <div className="space-y-0.5">
-            <h2 className="font-display text-lg font-normal tracking-[-0.03em] text-foreground">Segurança</h2>
-            <p className="font-mono text-[7px] uppercase tracking-[0.16em] text-muted-foreground">CREDENTIALS_MANAGEMENT</p>
-          </div>
+        <div className="flex items-center gap-3">
+          <Lock className="w-5 h-5 opacity-40" />
+          <h2 className="font-sans text-lg font-bold">Segurança</h2>
         </div>
 
-        <div className="space-y-2">
-          <Label className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">Nova Senha</Label>
-          <div className="relative">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label className="font-mono text-[9px] font-bold uppercase tracking-wider opacity-40">Nova Senha</Label>
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="h-12 rounded-full border-black/5 bg-[#f3f3f3] pr-12 font-sans text-sm font-bold"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((p) => !p)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100"
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="font-mono text-[9px] font-bold uppercase tracking-wider opacity-40">Confirmar Senha</Label>
             <Input
               type={showPassword ? "text" : "password"}
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="MÍNIMO 6 CARACTERES"
-              className="h-12 rounded-lg border-border bg-background pr-10 font-mono text-xs uppercase tracking-[0.16em] focus:border-primary"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="h-12 rounded-full border-black/5 bg-[#f3f3f3] font-sans text-sm font-bold"
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword((p) => !p)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-            >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
           </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">Confirmar Senha</Label>
-          <Input
-            type={showPassword ? "text" : "password"}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="REPITA A SENHA"
-            className="h-12 rounded-lg border-border bg-background font-mono text-xs uppercase tracking-[0.16em] focus:border-primary"
-          />
         </div>
 
         <button
           onClick={handleChangePassword}
           disabled={changingPassword || !newPassword || !confirmPassword}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-foreground font-mono text-[10px] uppercase tracking-[0.16em] text-background transition-all duration-300 hover:bg-primary hover:text-primary-foreground disabled:opacity-50"
+          className="h-14 w-full rounded-full bg-black font-sans text-sm font-bold text-white transition-all active:scale-[0.98] disabled:opacity-20"
         >
-          {changingPassword ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
-          Salvar nova senha
+          {changingPassword ? <Loader2 className="w-4 h-4 animate-spin" /> : "Atualizar senha"}
         </button>
       </motion.div>
 
+      {/* Logout */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <button onClick={signOut} className="flex h-14 w-full items-center justify-center gap-3 rounded-lg border border-border font-mono text-[10px] uppercase tracking-[0.16em] transition-all duration-300 hover:border-destructive hover:bg-destructive hover:text-destructive-foreground">
+        <button onClick={signOut} className="flex h-16 w-full items-center justify-center gap-3 rounded-full bg-[#f3f3f3] font-sans text-sm font-bold text-red-500 transition-all active:scale-[0.98]">
           <LogOut className="w-4 h-4" />
-          Encerrar Sessão
+          Sair da conta
         </button>
       </motion.div>
     </div>

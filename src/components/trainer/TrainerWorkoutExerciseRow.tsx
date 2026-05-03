@@ -74,27 +74,29 @@ export const TrainerWorkoutExerciseRow = ({
   return (
     <div
       className={cn(
-        "space-y-5 rounded-[24px] border bg-card p-5 transition-colors md:p-6",
-        isBiSet ? "border-primary/30 bg-primary/5" : "border-border hover:border-primary/20",
+        "relative space-y-8 rounded-[2.5rem] border p-8 transition-all",
+        isBiSet 
+          ? "border-black bg-black/5 shadow-inner" 
+          : "border-black/5 bg-white shadow-sm hover:shadow-xl hover:ring-1 hover:ring-black/5"
       )}
     >
-      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-        <div className="min-w-0 flex-1 space-y-3">
-          <div className="flex flex-wrap items-center gap-2 text-[11px] text-muted-foreground">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 font-mono uppercase tracking-[0.18em]">
-              <Activity className="h-3.5 w-3.5 text-primary" />
-              Exercício {idx + 1}
+      <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+        <div className="min-w-0 flex-1 space-y-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-2 rounded-full border border-black/5 bg-black px-4 py-1.5 font-mono text-[9px] font-black uppercase tracking-widest text-white">
+              <Activity className="h-3.5 w-3.5" strokeWidth={3} />
+              Bloco {idx + 1}
             </span>
-            {isBiSet ? (
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 font-mono uppercase tracking-[0.18em] text-primary">
-                <Link2 className="h-3.5 w-3.5" />
-                Bi-set ativo
+            {isBiSet && (
+              <span className="inline-flex items-center gap-2 rounded-full bg-[#f3f3f3] px-4 py-1.5 font-mono text-[9px] font-black uppercase tracking-widest text-black">
+                <Link2 className="h-3.5 w-3.5" strokeWidth={3} />
+                Bi-set Ativo
               </span>
-            ) : null}
+            )}
           </div>
 
-          <div className="space-y-2">
-            <p className="text-xs font-medium text-muted-foreground">Movimento</p>
+          <div className="space-y-3">
+            <Label className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">Movimento</Label>
             <ExerciseCombobox
               exercises={exercises}
               value={ex.exercise_id}
@@ -106,61 +108,61 @@ export const TrainerWorkoutExerciseRow = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 md:pt-6">
-          {canBiSet ? (
+        <div className="flex items-center gap-2 md:pt-10">
+          {canBiSet && (
             <button
               type="button"
               onClick={onToggleBiSet}
               className={cn(
-                "inline-flex h-10 items-center justify-center rounded-xl border px-3 text-sm transition-colors",
+                "h-12 w-12 flex items-center justify-center rounded-full border transition-all active:scale-90",
                 isBiSet
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-background text-muted-foreground hover:border-primary/35 hover:text-primary",
+                  ? "border-black bg-black text-white shadow-lg"
+                  : "border-black/5 bg-[#f3f3f3] text-black/40 hover:text-black hover:border-black/10"
               )}
               title="Vincular Bi-set"
             >
-              <Link2 className="h-4 w-4" />
+              <Link2 className="h-4 w-4" strokeWidth={3} />
             </button>
-          ) : null}
+          )}
           <button
             type="button"
             onClick={onRemove}
-            className="inline-flex h-10 items-center justify-center rounded-xl border border-border bg-background px-3 text-sm text-muted-foreground transition-colors hover:border-destructive/35 hover:text-destructive"
+            className="h-12 w-12 flex items-center justify-center rounded-full border border-black/5 bg-[#f3f3f3] text-black/40 transition-all hover:bg-red-500 hover:text-white hover:border-red-500 active:scale-90"
             title="Remover exercício"
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-4 w-4" strokeWidth={3} />
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 border-t border-border pt-5 md:grid-cols-[110px_1fr_1fr]">
-        <div className="space-y-2">
-          <label className="text-xs font-medium text-muted-foreground">Séries</label>
+      <div className="grid grid-cols-1 gap-8 border-t border-black/5 pt-8 md:grid-cols-[140px_1fr_1fr]">
+        <div className="space-y-3">
+          <Label className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">Séries</Label>
           <Input
             type="number"
             value={ex.sets}
             onChange={(e) => handleSetCountChange(e.target.value)}
-            className="h-11 rounded-xl border-border bg-background text-center text-sm"
+            className="h-14 rounded-2xl border-black/5 bg-[#f3f3f3] text-center font-black text-lg focus:bg-white focus:ring-0"
           />
         </div>
-        <div className="space-y-2">
-          <label className="text-xs font-medium text-muted-foreground">Repetições base</label>
+        <div className="space-y-3">
+          <Label className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">Reps Padrão</Label>
           <Input
             value={ex.reps}
             onChange={(e) => onChange("reps", e.target.value)}
-            className="h-11 rounded-xl border-border bg-background text-center text-sm"
+            className="h-14 rounded-2xl border-black/5 bg-[#f3f3f3] text-center font-black text-lg focus:bg-white focus:ring-0"
           />
         </div>
-        <div className="space-y-2">
+        <div className="space-y-3">
           <div className="flex items-center justify-between gap-3">
-            <label className="text-xs font-medium text-muted-foreground">Carga</label>
-            <div className="inline-flex rounded-full border border-border bg-background p-1">
+            <Label className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">Carga</Label>
+            <div className="flex h-8 rounded-full bg-[#f3f3f3] p-1 shadow-inner">
               <button
                 type="button"
                 onClick={() => onChange("load_type", "kg")}
                 className={cn(
-                  "rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors",
-                  loadType === "kg" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+                  "rounded-full px-3 text-[8px] font-black uppercase tracking-widest transition-all",
+                  loadType === "kg" ? "bg-black text-white shadow-md" : "text-black/30 hover:text-black"
                 )}
               >
                 KG
@@ -169,8 +171,8 @@ export const TrainerWorkoutExerciseRow = ({
                 type="button"
                 onClick={() => onChange("load_type", "percent")}
                 className={cn(
-                  "rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors",
-                  loadType === "percent" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+                  "rounded-full px-3 text-[8px] font-black uppercase tracking-widest transition-all",
+                  loadType === "percent" ? "bg-black text-white shadow-md" : "text-black/30 hover:text-black"
                 )}
               >
                 %
@@ -180,49 +182,49 @@ export const TrainerWorkoutExerciseRow = ({
           <Input
             value={ex.suggested_load}
             onChange={(e) => onChange("suggested_load", e.target.value)}
-            placeholder={loadType === "percent" ? "60%" : "20 kg"}
-            className="h-11 rounded-xl border-border bg-background text-center text-sm"
+            placeholder={loadType === "percent" ? "60%" : "20kg"}
+            className="h-14 rounded-2xl border-black/5 bg-[#f3f3f3] text-center font-black text-lg focus:bg-white focus:ring-0"
           />
         </div>
       </div>
 
-      <div className="space-y-3 rounded-[20px] border border-border bg-background p-4">
-        <div className="grid grid-cols-[56px_1fr_1fr] gap-3 border-b border-border pb-2 text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground">
+      <div className="space-y-4 rounded-[2rem] border border-black/5 bg-[#f3f3f3]/20 p-6">
+        <div className="grid grid-cols-[80px_1fr_1fr] gap-4 border-b border-black/5 pb-4 font-mono text-[9px] font-black uppercase tracking-widest text-black/30">
           <span className="text-center">Série</span>
-          <span className="text-center">Reps</span>
-          <span className="text-center">Carga</span>
+          <span className="text-center">Repetições</span>
+          <span className="text-center">Peso / %</span>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {repsBySet.map((rep, setIdx) => (
-            <div key={`${idx}-set-row-${setIdx}`} className="grid grid-cols-[56px_1fr_1fr] gap-3">
-              <div className="flex items-center justify-center rounded-xl border border-border bg-card text-xs font-medium text-foreground">
+            <div key={`${idx}-set-row-${setIdx}`} className="grid grid-cols-[80px_1fr_1fr] gap-4">
+              <div className="flex items-center justify-center rounded-xl bg-black text-[10px] font-black text-white shadow-md">
                 {setIdx + 1}
               </div>
               <Input
                 value={rep}
                 onChange={(e) => updateSetRep(setIdx, e.target.value)}
                 placeholder={ex.reps || "10"}
-                className="h-10 rounded-xl border-border bg-card text-center text-sm"
+                className="h-12 rounded-xl border-black/5 bg-white text-center font-bold focus:ring-2 focus:ring-black/5"
               />
               <Input
                 value={loadBySet[setIdx]}
                 onChange={(e) => updateSetLoad(setIdx, e.target.value)}
                 placeholder={ex.suggested_load || (loadType === "percent" ? "%" : "kg")}
-                className="h-10 rounded-xl border-border bg-card text-center text-sm"
+                className="h-12 rounded-xl border-black/5 bg-white text-center font-bold focus:ring-2 focus:ring-black/5"
               />
             </div>
           ))}
         </div>
       </div>
 
-      <div className="space-y-2">
-        <label className="text-xs font-medium text-muted-foreground">Observações</label>
+      <div className="space-y-3">
+        <Label className="font-mono text-[10px] font-black uppercase tracking-widest text-black/40">Notas Técnicas</Label>
         <Textarea
           value={ex.notes || ""}
           onChange={(e) => onChange("notes", e.target.value)}
-          placeholder="Pontos técnicos, pausa, cadência, observações para o atleta."
+          placeholder="Ex: Focar na extensão total do quadril..."
           rows={3}
-          className="min-h-[92px] rounded-[20px] border-border bg-background text-sm"
+          className="min-h-[120px] rounded-[1.5rem] border-black/5 bg-[#f3f3f3] p-6 font-medium text-black focus:bg-white focus:ring-0 transition-all"
         />
       </div>
     </div>

@@ -295,269 +295,176 @@ const Index = () => {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
-      <div className="absolute inset-0">
-        <img
-          src={heroImage}
-          alt=""
-          className="h-full w-full object-cover opacity-[0.22] saturate-0"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,18,18,0.6),rgba(18,18,18,0.96)_48%,rgba(18,18,18,1)_100%)]" />
+    <div className="relative min-h-screen w-full bg-white text-black selection:bg-black selection:text-white">
+      {/* Background/Ambient elements - very subtle */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-[10%] -top-[10%] h-[40%] w-[40%] rounded-full bg-[#f3f3f3] blur-3xl opacity-50" />
+        <div className="absolute -right-[5%] bottom-[5%] h-[30%] w-[30%] rounded-full bg-[#efefef] blur-3xl opacity-30" />
       </div>
 
-      <div className="relative z-10 min-h-screen px-safe pt-safe pb-safe">
-        <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center py-8">
-          <div className="split-layout w-full items-stretch gap-4 lg:gap-6">
-            <motion.section
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="card-terminal flex flex-col justify-between overflow-hidden rounded-[32px] p-6 sm:p-8 lg:p-10"
-            >
-              <div className="space-y-8">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <img src={logo} alt="FitBlock Training" className="h-14 w-auto object-contain" />
-                    <div className="space-y-1">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
-                        FitBlock Training
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        Mobile app experience para treino, coach e execução.
-                      </p>
-                    </div>
+      <main className="relative flex min-h-screen w-full flex-col items-center justify-center px-6 py-12">
+        <div className="w-full max-w-sm space-y-12">
+          {/* Logo/Brand */}
+          <header className="space-y-4 text-center">
+            <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-black shadow-lg">
+              <span className="font-sans text-3xl font-bold text-white tracking-tighter">FB</span>
+            </div>
+            <div className="space-y-1">
+              <h1 className="font-sans text-4xl font-bold tracking-tight text-black">
+                FitBlock
+              </h1>
+              <p className="text-sm font-medium text-[#4b4b4b]">
+                Performance. Sem atalhos.
+              </p>
+            </div>
+          </header>
+
+          <div className="space-y-8">
+            <div className="space-y-2">
+              <h2 className="font-sans text-2xl font-bold tracking-tight text-black">
+                {copy.title}
+              </h2>
+              <p className="text-sm text-[#4b4b4b]">
+                {copy.description}
+              </p>
+            </div>
+
+            {/* Mode Toggle - Uber Style Chips */}
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+              {accessModes.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => resetFieldsForMode(item.id)}
+                  className={cn(
+                    "h-10 shrink-0 rounded-full px-5 text-sm font-bold transition-all",
+                    mode === item.id
+                      ? "bg-black text-white shadow-md"
+                      : "bg-[#efefef] text-black hover:bg-[#e2e2e2]",
+                  )}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            <AnimatePresence mode="wait">
+              <motion.form
+                key={mode}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                onSubmit={handleSubmit}
+                className="space-y-5"
+              >
+                {errorMessage && (
+                  <div className="rounded-xl bg-destructive/10 px-4 py-3 text-sm font-bold text-destructive">
+                    {errorMessage}
                   </div>
-                  <span className="inline-flex h-11 items-center rounded-full border border-primary/25 bg-primary/10 px-4 font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
-                    v mobile
-                  </span>
-                </div>
+                )}
 
-                <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-text-soft">
-                    <Sparkles className="h-3.5 w-3.5 text-primary" />
-                    acesso rápido para coach e atleta
-                  </div>
-                  <h1 className="max-w-xl font-display text-4xl leading-[0.94] text-foreground sm:text-5xl lg:text-6xl">
-                    O treino começa no celular e continua no resultado.
-                  </h1>
-                  <p className="max-w-xl text-sm leading-relaxed text-text-soft sm:text-base">
-                    Uma experiência compacta, escura e orientada à ação para prescrição,
-                    execução e evolução diária no FitBlock.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  {heroStats.map((item) => (
-                    <div key={item.label} className="app-surface-soft rounded-[24px] p-4">
-                      <p className="font-display text-2xl text-foreground">{item.value}</p>
-                      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                        {item.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-8 space-y-4">
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="app-surface-soft rounded-[24px] p-4">
-                    <Smartphone className="h-5 w-5 text-primary" />
-                    <p className="mt-3 text-sm text-foreground">Navegação pensada para uma mão.</p>
-                  </div>
-                  <div className="app-surface-soft rounded-[24px] p-4">
-                    <Dumbbell className="h-5 w-5 text-primary" />
-                    <p className="mt-3 text-sm text-foreground">Treino do dia, progresso e histórico sem ruído.</p>
-                  </div>
-                  <div className="app-surface-soft rounded-[24px] p-4">
-                    <ShieldCheck className="h-5 w-5 text-primary" />
-                    <p className="mt-3 text-sm text-foreground">Acesso seguro com fluxo de recuperação integrado.</p>
-                  </div>
-                </div>
-
-                <ul className="space-y-3">
-                  {featureBullets.map((bullet) => (
-                    <li key={bullet} className="flex items-center gap-3 text-sm text-text-soft">
-                      <span className="h-2.5 w-2.5 rounded-full bg-primary" />
-                      {bullet}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.section>
-
-            <motion.section
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut", delay: 0.08 }}
-              className="card-premium flex flex-col justify-between rounded-[32px] p-5 sm:p-7 lg:p-8"
-            >
-              <div>
-                <div className="mb-6 flex items-center justify-between gap-3">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
-                    {copy.eyebrow}
-                  </p>
-                  <Link
-                    to="/politicas"
-                    className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-primary"
-                  >
-                    Privacidade
-                  </Link>
-                </div>
-
-                <div className="mb-6 space-y-2">
-                  <h2 className="font-display text-3xl leading-[0.96] text-foreground sm:text-4xl">
-                    {copy.title}
-                  </h2>
-                  <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-                    {copy.description}
-                  </p>
-                </div>
-
-                <div className="mb-6 grid grid-cols-3 gap-2 rounded-full border border-border bg-secondary p-1">
-                  {accessModes.map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => resetFieldsForMode(item.id)}
-                      className={cn(
-                        "h-11 rounded-full px-2 text-[10px] font-bold uppercase tracking-[1.4px] transition-all",
-                        mode === item.id
-                          ? "bg-primary text-primary-foreground shadow-medium"
-                          : "text-muted-foreground hover:text-foreground",
-                      )}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-
-                <AnimatePresence mode="wait">
-                  <motion.form
-                    key={mode}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    transition={{ duration: 0.18 }}
-                    onSubmit={handleSubmit}
-                    className="space-y-4"
-                  >
-                    {errorMessage && (
-                      <div className="rounded-[24px] border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                        {errorMessage}
-                      </div>
-                    )}
-
-                    {mode === "signup" && (
-                      <div className="space-y-2">
-                        <Label htmlFor="signup-name" className="text-[10px] font-bold uppercase tracking-[1.4px] text-muted-foreground">
-                          Nome completo
-                        </Label>
-                        <Input
-                          id="signup-name"
-                          value={name}
-                          onChange={(event) => setName(event.target.value)}
-                          placeholder="Seu nome"
-                          disabled={loading}
-                        />
-                      </div>
-                    )}
-
-                    {mode === "signup" && boxes.length > 1 && (
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-[1.4px] text-muted-foreground">
-                          Unidade
-                        </Label>
-                        <Select value={selectedBoxId} onValueChange={setSelectedBoxId}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione a sua unidade" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {boxes.map((box) => (
-                              <SelectItem key={box.id} value={box.id}>
-                                {box.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )}
-
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="text-[10px] font-bold uppercase tracking-[1.4px] text-muted-foreground">
-                        Email
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        placeholder="voce@fitblock.com"
-                        disabled={loading}
-                      />
-                    </div>
-
-                    {mode !== "forgot" && (
-                      <div className="space-y-2">
-                        <Label htmlFor="password" className="text-[10px] font-bold uppercase tracking-[1.4px] text-muted-foreground">
-                          Senha
-                        </Label>
-                        <Input
-                          id="password"
-                          type="password"
-                          value={password}
-                          onChange={(event) => setPassword(event.target.value)}
-                          placeholder="••••••••"
-                          disabled={loading}
-                        />
-                      </div>
-                    )}
-
-                    <Button
-                      type="submit"
-                      variant="primary-pill"
-                      size="xl"
-                      className="mt-2 w-full"
+                {mode === "signup" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-name" className="text-[12px] font-bold uppercase tracking-[1.4px] text-black/40">
+                      Nome completo
+                    </Label>
+                    <Input
+                      id="signup-name"
+                      className="h-14 rounded-xl border-black/5 bg-[#f3f3f3] px-5 focus:border-black focus:bg-white focus:ring-0"
+                      value={name}
+                      onChange={(event) => setName(event.target.value)}
+                      placeholder="Ex: João Silva"
                       disabled={loading}
-                    >
-                      {loading ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          processando
-                        </>
-                      ) : (
-                        <>
-                          {copy.submit}
-                          <ArrowRight className="h-4 w-4" />
-                        </>
-                      )}
-                    </Button>
-                  </motion.form>
-                </AnimatePresence>
-              </div>
+                    />
+                  </div>
+                )}
 
-              <div className="mt-8 space-y-4 border-t border-border pt-5">
-                <div className="flex flex-wrap gap-3">
-                  <Link to="/registro-treinador" className="flex-1 min-w-[180px]">
-                    <Button variant="secondary-pill" className="w-full">
-                      Cadastro de treinador
-                    </Button>
-                  </Link>
-                  <Link to="/politicas" className="flex-1 min-w-[150px]">
-                    <Button variant="ghost-pill" className="w-full">
-                      Termos e privacidade
-                    </Button>
-                  </Link>
+                {mode === "signup" && boxes.length > 1 && (
+                  <div className="space-y-2">
+                    <Label className="text-[12px] font-bold uppercase tracking-[1.4px] text-black/40">
+                      Unidade
+                    </Label>
+                    <Select value={selectedBoxId} onValueChange={setSelectedBoxId}>
+                      <SelectTrigger className="h-14 rounded-xl border-black/5 bg-[#f3f3f3] px-5 focus:ring-0">
+                        <SelectValue placeholder="Selecione sua unidade" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {boxes.map((box) => (
+                          <SelectItem key={box.id} value={box.id}>
+                            {box.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-[12px] font-bold uppercase tracking-[1.4px] text-black/40">
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    className="h-14 rounded-xl border-black/5 bg-[#f3f3f3] px-5 focus:border-black focus:bg-white focus:ring-0"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    placeholder="nome@exemplo.com"
+                    disabled={loading}
+                  />
                 </div>
 
-                <p className="text-xs leading-relaxed text-muted-foreground">
-                  Ao continuar, você acessa uma experiência focada em treino,
-                  progresso e comunicação com seu coach, com uso principal em celular.
-                </p>
+                {mode !== "forgot" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="password" className="text-[12px] font-bold uppercase tracking-[1.4px] text-black/40">
+                      Senha
+                    </Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      className="h-14 rounded-xl border-black/5 bg-[#f3f3f3] px-5 focus:border-black focus:bg-white focus:ring-0"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                      placeholder="••••••••"
+                      disabled={loading}
+                    />
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  variant="primary-pill"
+                  className="h-16 w-full text-lg shadow-xl"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Loader2 className="h-6 w-6 animate-spin" />
+                  ) : (
+                    <>
+                      {copy.submit}
+                      <ArrowRight className="h-5 w-5" />
+                    </>
+                  )}
+                </Button>
+              </motion.form>
+            </AnimatePresence>
+
+            <footer className="space-y-6 pt-6 text-center">
+              <div className="flex flex-col gap-3">
+                <Link to="/registro-treinador">
+                  <Button variant="outline" className="h-12 w-full rounded-full border-black/10 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white">
+                    Acesso para Treinadores
+                  </Button>
+                </Link>
               </div>
-            </motion.section>
+              <p className="text-[11px] leading-relaxed text-[#afafaf]">
+                Ao continuar, você aceita nossos <Link to="/politicas" className="font-bold text-black underline">Termos</Link> e <Link to="/politicas" className="font-bold text-black underline">Privacidade</Link>.
+              </p>
+            </footer>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

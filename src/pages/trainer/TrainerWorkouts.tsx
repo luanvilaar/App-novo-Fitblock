@@ -66,62 +66,59 @@ const TrainerWorkouts = () => {
   );
 
   return (
-    <div className="space-y-10 pb-12 pt-6">
-      <div className="flex flex-col items-start justify-between gap-6 rounded-[28px] border border-border bg-card p-6 md:flex-row md:items-center">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 text-primary font-mono text-[11px] uppercase tracking-[0.22em]">
-            <Dumbbell className="w-3 h-3" />
-            Treinos
-          </div>
-          <h1 className="text-5xl font-medium leading-[0.92] tracking-[-0.06em] text-foreground md:text-[4.25rem]">
-            Treinos por <span className="text-primary">contexto</span>
+    <div className="space-y-16 pb-32 pt-8 px-safe">
+      <header className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-2">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">Programação</p>
+          <h1 className="font-sans text-4xl font-black tracking-tighter text-black sm:text-5xl lg:text-7xl">
+            Protocolos.
           </h1>
         </div>
         
-        <div className="flex flex-wrap gap-3">
+        <div className="flex shrink-0 items-center gap-3">
           <button
             onClick={() => navigate("/trainer/atletas")}
-            className="flex h-11 items-center gap-2 rounded-full border border-border bg-background px-6 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+            className="h-12 rounded-full border border-black/5 bg-[#f3f3f3] px-6 text-[10px] font-black uppercase tracking-widest text-black/40 transition-all hover:bg-black hover:text-white"
           >
-            <Users className="w-4 h-4" /> Atletas
+            Atletas
           </button>
           <button
             onClick={() => navigate("/trainer/grupos")}
-            className="flex h-11 items-center gap-2 rounded-full border border-border bg-background px-6 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+            className="h-12 rounded-full border border-black/5 bg-[#f3f3f3] px-6 text-[10px] font-black uppercase tracking-widest text-black/40 transition-all hover:bg-black hover:text-white"
           >
-            <Layers className="w-4 h-4" /> Grupos
+            Grupos
           </button>
         </div>
-      </div>
+      </header>
 
       {/* ── SEARCH CONTROL ── */}
       <div className="relative group max-w-2xl">
-        <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
+        <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-black/20" />
         <input
           type="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar atletas ou grupos..."
-          className="h-14 w-full rounded-full border border-border bg-card pl-14 pr-6 text-sm text-foreground placeholder:text-muted-foreground/65 transition-all focus:border-primary focus:bg-secondary focus:outline-none"
+          className="h-14 w-full rounded-full border-black/5 bg-[#f3f3f3] pl-14 pr-8 text-sm font-bold text-black focus:border-black/10 focus:ring-0 outline-none"
         />
       </div>
 
       {/* ── ROUTING GRID ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
         
         {/* ATHLETE LISTING */}
-        <section className="space-y-6">
+        <section className="space-y-8">
           <div className="flex items-center gap-4 px-2">
-             <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Atletas individuais</div>
-             <div className="h-px flex-1 bg-border" />
+             <div className="font-sans text-xl font-black tracking-tight text-black">Atletas Individuais</div>
+             <div className="h-px flex-1 bg-black/5" />
           </div>
 
-          <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
             {loading ? (
-              [1, 2, 3, 4].map((i) => <div key={i} className="h-24 animate-pulse rounded-2xl border border-border/80 bg-background/70" />)
+              [1, 2, 3, 4].map((i) => <div key={i} className="h-24 animate-pulse rounded-[2rem] bg-[#f3f3f3]" />)
             ) : filteredStudents.length === 0 ? (
-              <div className="rounded-xl border border-border bg-background p-16 text-center text-xs font-medium uppercase tracking-widest text-foreground/25">
-                Nenhum atleta identificado
+              <div className="rounded-[2rem] border border-black/5 bg-white p-16 text-center shadow-sm">
+                <p className="font-mono text-[10px] font-black uppercase tracking-widest text-black/20">Nenhum atleta identificado</p>
               </div>
             ) : (
               filteredStudents.map((s, i) => (
@@ -130,17 +127,17 @@ const TrainerWorkouts = () => {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: Math.min(i * 0.02, 0.3) }}
-                  className="group flex items-center justify-between gap-4 rounded-[24px] border border-border bg-card p-6 transition-colors hover:border-primary/30"
+                  className="group flex items-center justify-between gap-6 rounded-[2rem] border border-black/5 bg-white p-8 transition-all hover:ring-1 hover:ring-black/10 shadow-sm"
                 >
                   <div className="min-w-0">
-                     <span className="block truncate text-2xl font-medium tracking-[-0.04em] text-foreground transition-colors group-hover:text-primary">{s.name}</span>
-                     <span className="text-xs text-muted-foreground">Abrir calendário individual</span>
+                     <span className="block truncate font-sans text-2xl font-black tracking-tight text-black transition-colors group-hover:text-black/70">{s.name.toLowerCase()}</span>
+                     <span className="font-mono text-[9px] font-black uppercase tracking-widest text-black/30">Calendário individual</span>
                   </div>
                   <button
                     onClick={() => navigate(`/trainer/atletas/${s.id}/treinos`)}
-                    className="flex h-10 shrink-0 items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
+                    className="flex h-12 shrink-0 items-center gap-2 rounded-full bg-black text-white px-6 text-[10px] font-black uppercase tracking-widest shadow-lg transition-all active:scale-95"
                   >
-                    <Calendar className="w-3.5 h-3.5" /> Calendário
+                    <Calendar className="w-4 h-4" strokeWidth={3} /> Agenda
                   </button>
                 </motion.div>
               ))
@@ -149,18 +146,18 @@ const TrainerWorkouts = () => {
         </section>
 
         {/* GROUP LISTING */}
-        <section className="space-y-6">
+        <section className="space-y-8">
           <div className="flex items-center gap-4 px-2">
-             <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Grupos</div>
-             <div className="h-px flex-1 bg-border" />
+             <div className="font-sans text-xl font-black tracking-tight text-black">Comunidades</div>
+             <div className="h-px flex-1 bg-black/5" />
           </div>
 
-          <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
             {loading ? (
-              [1, 2, 3, 4].map((i) => <div key={i} className="h-24 animate-pulse rounded-2xl border border-border/80 bg-background/70" />)
+              [1, 2, 3, 4].map((i) => <div key={i} className="h-24 animate-pulse rounded-[2rem] bg-[#f3f3f3]" />)
             ) : filteredGroups.length === 0 ? (
-              <div className="rounded-xl border border-border bg-background p-16 text-center text-xs font-medium uppercase tracking-widest text-foreground/25">
-                Nenhum grupo operacional detectado
+              <div className="rounded-[2rem] border border-black/5 bg-white p-16 text-center shadow-sm">
+                <p className="font-mono text-[10px] font-black uppercase tracking-widest text-black/20">Nenhuma comunidade ativa</p>
               </div>
             ) : (
               filteredGroups.map((g, i) => (
@@ -169,17 +166,17 @@ const TrainerWorkouts = () => {
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: Math.min(i * 0.02, 0.3) }}
-                  className="group flex items-center justify-between gap-4 rounded-[24px] border border-border bg-card p-6 transition-colors hover:border-primary/30"
+                  className="group flex items-center justify-between gap-6 rounded-[2rem] border border-black/5 bg-white p-8 transition-all hover:ring-1 hover:ring-black/10 shadow-sm"
                 >
                   <div className="min-w-0">
-                     <span className="block truncate text-2xl font-medium tracking-[-0.04em] text-foreground transition-colors group-hover:text-primary">{g.name}</span>
-                     <span className="text-xs text-muted-foreground">Abrir calendário do grupo</span>
+                     <span className="block truncate font-sans text-2xl font-black tracking-tight text-black transition-colors group-hover:text-black/70">{g.name.toLowerCase()}</span>
+                     <span className="font-mono text-[9px] font-black uppercase tracking-widest text-black/30">Calendário coletivo</span>
                   </div>
                   <button
                     onClick={() => navigate(`/trainer/grupos/${g.id}/treinos`)}
-                    className="flex h-10 shrink-0 items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
+                    className="flex h-12 shrink-0 items-center gap-2 rounded-full bg-black text-white px-6 text-[10px] font-black uppercase tracking-widest shadow-lg transition-all active:scale-95"
                   >
-                    <Calendar className="w-3.5 h-3.5" /> Calendário
+                    <Calendar className="w-4 h-4" strokeWidth={3} /> Agenda
                   </button>
                 </motion.div>
               ))

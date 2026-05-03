@@ -49,44 +49,44 @@ const ExecutionGridPremium = ({
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {isPercent && percentPlan.length > 0 && (
-        <div className="space-y-4 rounded-2xl border border-primary/20 bg-primary/[0.04] p-5 md:p-6">
+        <div className="space-y-5 rounded-2xl bg-black p-6 text-white shadow-xl">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/30 bg-primary/10">
-              <Percent className="h-5 w-5 text-primary" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10">
+              <Percent className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className="font-display text-sm font-bold uppercase tracking-tight text-white">Intensidade (%)</p>
-              <p className="font-body text-[11px] text-white/45">
-                {hasReferenceMax ? "Meta por série com base na tua referência." : "Define a referência (1RM) para ver kg sugeridos."}
+              <p className="font-sans text-sm font-bold uppercase tracking-tight">Intensidade (%)</p>
+              <p className="font-sans text-[11px] opacity-40">
+                {hasReferenceMax ? "Meta calculada por série." : "Defina 1RM para ver kg sugeridos."}
               </p>
             </div>
           </div>
-          <div className="space-y-4 pt-1">
+          <div className="space-y-5 pt-1">
             {percentPlan.map((row) => {
               const barW =
                 row.percent != null ? Math.min(100, (row.percent / maxPercentAmongSets) * 100) : 0;
               return (
                 <div
                   key={`ladder-${exerciseId}-${row.setIndex}`}
-                  className="group flex min-w-0 items-center gap-3"
+                  className="group flex min-w-0 items-center gap-4"
                 >
-                  <span className="w-8 shrink-0 text-center font-mono text-xs font-bold text-white/25 transition-colors group-hover:text-primary">
+                  <span className="w-6 shrink-0 text-center font-mono text-[10px] font-bold opacity-30">
                     {String(row.setIndex + 1).padStart(2, "0")}
                   </span>
                   <div className="min-w-0 flex-1 space-y-2">
-                    <div className="h-1.5 overflow-hidden rounded-full border border-white/[0.06] bg-white/[0.04]">
+                    <div className="h-1 overflow-hidden rounded-full bg-white/10">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${barW}%` }}
-                        transition={{ duration: 0.5, delay: row.setIndex * 0.05 }}
-                        className="h-full rounded-full bg-primary shadow-[0_0_12px_rgba(65,31,128,0.35)]"
+                        transition={{ duration: 0.6, delay: row.setIndex * 0.05 }}
+                        className="h-full rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.4)]"
                       />
                     </div>
-                    <div className="flex items-baseline justify-between gap-2 font-mono text-[9px] font-bold uppercase tracking-[0.16em]">
-                      <span className="text-white/35">{row.percent != null ? `${row.percent}%` : "—"}</span>
-                      <span className="tabular-nums text-primary">
+                    <div className="flex items-baseline justify-between gap-2 font-mono text-[9px] font-bold uppercase tracking-wider">
+                      <span className="opacity-30">{row.percent != null ? `${row.percent}%` : "—"}</span>
+                      <span className="text-white">
                         {row.targetKg != null ? `~${row.targetKg} kg` : "—"}
                       </span>
                     </div>
@@ -98,23 +98,23 @@ const ExecutionGridPremium = ({
         </div>
       )}
 
-      <div className="overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.02]">
-        <div className="grid grid-cols-12 gap-2 border-b border-white/[0.06] bg-white/[0.03] px-3 py-3 md:px-4 md:py-3.5">
-          <div className="col-span-2 text-center font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-white/40">
+      <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
+        <div className="grid grid-cols-12 gap-2 border-b border-black/5 bg-[#fcfcfc] px-4 py-3">
+          <div className="col-span-2 text-center font-mono text-[9px] font-bold uppercase tracking-[1.4px] text-black/40">
             Série
           </div>
-          <div className="col-span-3 text-center font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-white/40">
+          <div className="col-span-3 text-center font-mono text-[9px] font-bold uppercase tracking-[1.4px] text-black/40">
             Reps
           </div>
-          <div className="col-span-4 text-center font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-white/40">
-            Carga (kg)
+          <div className="col-span-4 text-center font-mono text-[9px] font-bold uppercase tracking-[1.4px] text-black/40">
+            Carga
           </div>
-          <div className="col-span-3 text-center font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-white/40">
+          <div className="col-span-3 text-center font-mono text-[9px] font-bold uppercase tracking-[1.4px] text-black/40">
             Ok
           </div>
         </div>
 
-        <div className="divide-y divide-white/[0.06]">
+        <div className="divide-y divide-black/5">
           {sets.map((set, idx) => {
             const planRow = percentPlan[idx];
             const targetPlaceholder =
@@ -130,15 +130,15 @@ const ExecutionGridPremium = ({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.04 }}
                 className={cn(
-                  "grid grid-cols-12 items-center gap-2 px-3 py-3 transition-colors duration-300 md:px-4 md:py-4",
-                  set.is_completed ? "bg-primary/[0.07]" : "bg-transparent",
+                  "grid grid-cols-12 items-center gap-2 px-4 py-4 transition-all",
+                  set.is_completed ? "bg-[#fcfcfc]" : "bg-white",
                 )}
               >
                 <div className="col-span-2 text-center">
                   <span
                     className={cn(
-                      "font-display text-2xl font-bold transition-colors duration-300",
-                      set.is_completed ? "text-primary" : "text-white/25",
+                      "font-sans text-2xl font-bold transition-all",
+                      set.is_completed ? "text-black" : "text-black/10",
                     )}
                   >
                     {idx + 1}
@@ -153,27 +153,24 @@ const ExecutionGridPremium = ({
                     onChange={(e) =>
                       onUpdateSet(idx, "reps_done", e.target.value ? Number(e.target.value) : null)
                     }
-                    className="h-11 rounded-lg border-white/10 bg-black/50 text-center font-display text-lg font-bold text-white focus:border-primary md:h-12 md:text-xl"
+                    className="h-12 rounded-full border-black/5 bg-[#f3f3f3] text-center font-sans text-lg font-bold text-black focus:border-black/10"
                     inputMode="numeric"
                   />
                 </div>
 
                 <div className="col-span-4 min-w-0">
-                  <div className="group/input relative">
+                  <div className="relative">
                     <Input
                       type="number"
-                      placeholder={kgPlaceholder || (isPercent ? "—" : "—")}
+                      placeholder={kgPlaceholder || "—"}
                       value={set.load_used ?? ""}
                       onChange={(e) =>
                         onUpdateSet(idx, "load_used", e.target.value ? Number(e.target.value) : null)
                       }
-                      className={cn(
-                        "h-11 rounded-lg border-white/10 bg-black/50 pr-8 text-center font-display text-lg font-bold transition-colors focus:border-primary md:h-12 md:text-xl",
-                        set.is_completed ? "text-white" : "text-white",
-                      )}
+                      className="h-12 rounded-full border-black/5 bg-[#f3f3f3] pr-6 text-center font-sans text-lg font-bold text-black focus:border-black/10"
                       inputMode="decimal"
                     />
-                    <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 font-mono text-[8px] font-bold uppercase tracking-widest text-white/30">
+                    <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[7px] font-bold uppercase opacity-30">
                       kg
                     </span>
                   </div>
@@ -184,16 +181,16 @@ const ExecutionGridPremium = ({
                     type="button"
                     onClick={() => onToggleComplete(idx)}
                     className={cn(
-                      "flex h-11 w-11 items-center justify-center rounded-xl border-2 transition-all active:scale-95 md:h-12 md:w-12",
+                      "flex h-12 w-12 items-center justify-center rounded-full transition-all active:scale-90",
                       set.is_completed
-                        ? "border-primary bg-primary text-primary-foreground shadow-[0_0_20px_rgba(65,31,128,0.35)]"
-                        : "border-white/12 bg-black/40 text-white/15 hover:border-primary/40 hover:text-primary/70",
+                        ? "bg-black text-white shadow-lg"
+                        : "bg-[#f3f3f3] text-black/10 hover:text-black/40",
                     )}
                   >
                     <Check
                       className={cn(
-                        "h-6 w-6 transition-all duration-300 md:h-7 md:w-7",
-                        set.is_completed ? "scale-100 opacity-100" : "scale-90 opacity-25",
+                        "h-6 w-6 transition-transform",
+                        set.is_completed ? "scale-110" : "scale-100",
                       )}
                       strokeWidth={3}
                     />

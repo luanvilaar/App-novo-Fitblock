@@ -1,246 +1,295 @@
-# Design System Inspired by Spotify
+# Design System Inspired by Uber
 
 ## 1. Visual Theme & Atmosphere
 
-Spotify's web interface is a dark, immersive music player that wraps listeners in a near-black cocoon (`#121212`, `#181818`, `#1f1f1f`) where album art and content become the primary source of color. The design philosophy is "content-first darkness" — the UI recedes into shadow so that music, podcasts, and playlists can glow. Every surface is a shade of charcoal, creating a theater-like environment where the only true color comes from the iconic Spotify Green (`#1ed760`) and the album artwork itself.
+Uber's design language is a masterclass in confident minimalism -- a black-and-white universe where every pixel serves a purpose and nothing decorates without earning its place. The entire experience is built on a stark duality: jet black (`#000000`) and pure white (`#ffffff`), with virtually no mid-tone grays diluting the message. This isn't the sterile minimalism of a startup that hasn't finished designing -- it's the deliberate restraint of a brand so established it can afford to whisper.
 
-The typography uses SpotifyMixUI and SpotifyMixUITitle — proprietary fonts from the CircularSp family (Circular by Lineto, customized for Spotify) with an extensive fallback stack that includes Arabic, Hebrew, Cyrillic, Greek, Devanagari, and CJK fonts, reflecting Spotify's global reach. The type system is compact and functional: 700 (bold) for emphasis and navigation, 600 (semibold) for secondary emphasis, and 400 (regular) for body. Buttons use uppercase with positive letter-spacing (1.4px–2px) for a systematic, label-like quality.
+The signature typeface, UberMove, is a proprietary geometric sans-serif with a distinctly square, engineered quality. Headlines in UberMove Bold at 52px carry the weight of a billboard -- authoritative, direct, unapologetic. The companion face UberMoveText handles body copy and buttons with a slightly softer, more readable character at medium weight (500). Together, they create a typographic system that feels like a transit map: clear, efficient, built for scanning at speed.
 
-What distinguishes Spotify is its pill-and-circle geometry. Primary buttons use 500px–9999px radius (full pill), circular play buttons use 50% radius, and search inputs are 500px pills. Combined with heavy shadows (`rgba(0,0,0,0.5) 0px 8px 24px`) on elevated elements and a unique inset border-shadow combo (`rgb(18,18,18) 0px 1px 0px, rgb(124,124,124) 0px 0px 0px 1px inset`), the result is an interface that feels like a premium audio device — tactile, rounded, and built for touch.
+What makes Uber's design truly distinctive is its use of full-bleed photography and illustration paired with pill-shaped interactive elements (999px border-radius). Navigation chips, CTA buttons, and category selectors all share this capsule shape, creating a tactile, thumb-friendly interface language that's unmistakably Uber. The illustrations -- warm, slightly stylized scenes of drivers, riders, and cityscapes -- inject humanity into what could otherwise be a cold, monochrome system. The site alternates between white content sections and a full-black footer, with card-based layouts using the gentlest possible shadows (rgba(0,0,0,0.12-0.16)) to create subtle lift without breaking the flat aesthetic.
 
 **Key Characteristics:**
-- Near-black immersive dark theme (`#121212`–`#1f1f1f`) — UI disappears behind content
-- Spotify Green (`#1ed760`) as singular brand accent — never decorative, always functional
-- SpotifyMixUI/CircularSp font family with global script support
-- Pill buttons (500px–9999px) and circular controls (50%) — rounded, touch-optimized
-- Uppercase button labels with wide letter-spacing (1.4px–2px)
-- Heavy shadows on elevated elements (`rgba(0,0,0,0.5) 0px 8px 24px`)
-- Semantic colors: negative red (`#f3727f`), warning orange (`#ffa42b`), announcement blue (`#539df5`)
-- Album art as the primary color source — the UI is achromatic by design
+- Pure black-and-white foundation with virtually no mid-tone grays in the UI chrome
+- UberMove (headlines) + UberMoveText (body/UI) -- proprietary geometric sans-serif family
+- Pill-shaped everything: buttons, chips, nav items all use 999px border-radius
+- Warm, human illustrations contrasting the stark monochrome interface
+- Card-based layout with whisper-soft shadows (0.12-0.16 opacity)
+- 8px spacing grid with compact, information-dense layouts
+- Bold photography integrated as full-bleed hero backgrounds
+- Black footer anchoring the page with a dark, high-contrast environment
 
 ## 2. Color Palette & Roles
 
-### Primary Brand
-- **Spotify Green** (`#1ed760`): Primary brand accent — play buttons, active states, CTAs
-- **Near Black** (`#121212`): Deepest background surface
-- **Dark Surface** (`#181818`): Cards, containers, elevated surfaces
-- **Mid Dark** (`#1f1f1f`): Button backgrounds, interactive surfaces
+### Primary
+- **Uber Black** (`#000000`): The defining brand color -- used for primary buttons, headlines, navigation text, and the footer. Not "near-black" or "off-black," but true, uncompromising black.
+- **Pure White** (`#ffffff`): The primary surface color and inverse text. Used for page backgrounds, card surfaces, and text on black elements.
 
-### Text
-- **White** (`#ffffff`): `--text-base`, primary text
-- **Silver** (`#b3b3b3`): Secondary text, muted labels, inactive nav
-- **Near White** (`#cbcbcb`): Slightly brighter secondary text
-- **Light** (`#fdfdfd`): Near-pure white for maximum emphasis
+### Interactive & Button States
+- **Hover Gray** (`#e2e2e2`): White button hover state -- a clean, cool light gray that provides clear feedback without warmth.
+- **Hover Light** (`#f3f3f3`): Subtle hover for elevated white buttons -- barely-there gray for gentle interaction feedback.
+- **Chip Gray** (`#efefef`): Background for secondary/filter buttons and navigation chips -- a neutral, ultra-light gray.
 
-### Semantic
-- **Negative Red** (`#f3727f`): `--text-negative`, error states
-- **Warning Orange** (`#ffa42b`): `--text-warning`, warning states
-- **Announcement Blue** (`#539df5`): `--text-announcement`, info states
+### Text & Content
+- **Body Gray** (`#4b4b4b`): Secondary text and footer links -- a true mid-gray with no warm or cool bias.
+- **Muted Gray** (`#afafaf`): Tertiary text, de-emphasized footer links, and placeholder content.
 
-### Surface & Border
-- **Dark Card** (`#252525`): Elevated card surface
-- **Mid Card** (`#272727`): Alternate card surface
-- **Border Gray** (`#4d4d4d`): Button borders on dark
-- **Light Border** (`#7c7c7c`): Outlined button borders, muted links
-- **Separator** (`#b3b3b3`): Divider lines
-- **Light Surface** (`#eeeeee`): Light-mode buttons (rare)
-- **Spotify Green Border** (`#1db954`): Green accent border variant
+### Borders & Separation
+- **Border Black** (`#000000`): Thin 1px borders for structural containment -- used sparingly on dividers and form containers.
 
-### Shadows
-- **Heavy** (`rgba(0,0,0,0.5) 0px 8px 24px`): Dialogs, menus, elevated panels
-- **Medium** (`rgba(0,0,0,0.3) 0px 8px 8px`): Cards, dropdowns
-- **Inset Border** (`rgb(18,18,18) 0px 1px 0px, rgb(124,124,124) 0px 0px 0px 1px inset`): Input border-shadow combo
+### Shadows & Depth
+- **Shadow Light** (`rgba(0, 0, 0, 0.12)`): Standard card elevation -- a featherweight lift for content cards.
+- **Shadow Medium** (`rgba(0, 0, 0, 0.16)`): Slightly stronger elevation for floating action buttons and overlays.
+- **Button Press** (`rgba(0, 0, 0, 0.08)`): Inset shadow for active/pressed states on secondary buttons.
+
+### Link States
+- **Default Link Blue** (`#0000ee`): Standard browser blue for text links with underline -- used in body content.
+- **Link White** (`#ffffff`): Links on dark surfaces -- used in footer and dark sections.
+- **Link Black** (`#000000`): Links on light surfaces with underline decoration.
+
+### Gradient System
+- Uber's design is **entirely gradient-free**. The black/white duality and flat color blocks create all visual hierarchy. No gradients appear anywhere in the system -- every surface is a solid color, every transition is a hard edge or a shadow.
 
 ## 3. Typography Rules
 
-### Font Families
-- **Title**: `SpotifyMixUITitle`, fallbacks: `CircularSp-Arab, CircularSp-Hebr, CircularSp-Cyrl, CircularSp-Grek, CircularSp-Deva, Helvetica Neue, helvetica, arial, Hiragino Sans, Hiragino Kaku Gothic ProN, Meiryo, MS Gothic`
-- **UI / Body**: `SpotifyMixUI`, same fallback stack
+### Font Family
+- **Headline / Display**: `UberMove`, with fallbacks: `UberMoveText, system-ui, Helvetica Neue, Helvetica, Arial, sans-serif`
+- **Body / UI**: `UberMoveText`, with fallbacks: `system-ui, Helvetica Neue, Helvetica, Arial, sans-serif`
+
+*Note: UberMove and UberMoveText are proprietary typefaces. For external implementations, use `system-ui` or Inter as the closest available substitute. The geometric, square-proportioned character of UberMove can be approximated with Inter or DM Sans.*
 
 ### Hierarchy
 
-| Role | Font | Size | Weight | Line Height | Letter Spacing | Notes |
-|------|------|------|--------|-------------|----------------|-------|
-| Section Title | SpotifyMixUITitle | 24px (1.50rem) | 700 | normal | normal | Bold title weight |
-| Feature Heading | SpotifyMixUI | 18px (1.13rem) | 600 | 1.30 (tight) | normal | Semibold section heads |
-| Body Bold | SpotifyMixUI | 16px (1.00rem) | 700 | normal | normal | Emphasized text |
-| Body | SpotifyMixUI | 16px (1.00rem) | 400 | normal | normal | Standard body |
-| Button Uppercase | SpotifyMixUI | 14px (0.88rem) | 600–700 | 1.00 (tight) | 1.4px–2px | `text-transform: uppercase` |
-| Button | SpotifyMixUI | 14px (0.88rem) | 700 | normal | 0.14px | Standard button |
-| Nav Link Bold | SpotifyMixUI | 14px (0.88rem) | 700 | normal | normal | Navigation |
-| Nav Link | SpotifyMixUI | 14px (0.88rem) | 400 | normal | normal | Inactive nav |
-| Caption Bold | SpotifyMixUI | 14px (0.88rem) | 700 | 1.50–1.54 | normal | Bold metadata |
-| Caption | SpotifyMixUI | 14px (0.88rem) | 400 | normal | normal | Metadata |
-| Small Bold | SpotifyMixUI | 12px (0.75rem) | 700 | 1.50 | normal | Tags, counts |
-| Small | SpotifyMixUI | 12px (0.75rem) | 400 | normal | normal | Fine print |
-| Badge | SpotifyMixUI | 10.5px (0.66rem) | 600 | 1.33 | normal | `text-transform: capitalize` |
-| Micro | SpotifyMixUI | 10px (0.63rem) | 400 | normal | normal | Smallest text |
+| Role | Font | Size | Weight | Line Height | Notes |
+|------|------|------|--------|-------------|-------|
+| Display / Hero | UberMove | 52px (3.25rem) | 700 | 1.23 (tight) | Maximum impact, billboard presence |
+| Section Heading | UberMove | 36px (2.25rem) | 700 | 1.22 (tight) | Major section anchors |
+| Card Title | UberMove | 32px (2rem) | 700 | 1.25 (tight) | Card and feature headings |
+| Sub-heading | UberMove | 24px (1.5rem) | 700 | 1.33 | Secondary section headers |
+| Small Heading | UberMove | 20px (1.25rem) | 700 | 1.40 | Compact headings, list titles |
+| Nav / UI Large | UberMoveText | 18px (1.13rem) | 500 | 1.33 | Navigation links, prominent UI text |
+| Body / Button | UberMoveText | 16px (1rem) | 400-500 | 1.25-1.50 | Standard body text, button labels |
+| Caption | UberMoveText | 14px (0.88rem) | 400-500 | 1.14-1.43 | Metadata, descriptions, small links |
+| Micro | UberMoveText | 12px (0.75rem) | 400 | 1.67 (relaxed) | Fine print, legal text |
 
 ### Principles
-- **Bold/regular binary**: Most text is either 700 (bold) or 400 (regular), with 600 used sparingly. This creates a clear visual hierarchy through weight contrast rather than size variation.
-- **Uppercase buttons as system**: Button labels use uppercase + wide letter-spacing (1.4px–2px), creating a systematic "label" voice distinct from content text.
-- **Compact sizing**: The range is 10px–24px — narrower than most systems. Spotify's type is compact and functional, designed for scanning playlists, not reading articles.
-- **Global script support**: The extensive fallback stack (Arabic, Hebrew, Cyrillic, Greek, Devanagari, CJK) reflects Spotify's 180+ market reach.
+- **Bold headlines, medium body**: UberMove headings are exclusively weight 700 (bold) -- every headline hits with billboard force. UberMoveText body and UI text uses 400-500, creating a clear visual hierarchy through weight contrast.
+- **Tight heading line-heights**: All headlines use line-heights between 1.22-1.40 -- compact and punchy, designed for scanning rather than reading.
+- **Functional typography**: There is no decorative type treatment anywhere. No letter-spacing, no text-transform, no ornamental sizing. Every text element serves a direct communication purpose.
+- **Two fonts, strict roles**: UberMove is exclusively for headings. UberMoveText is exclusively for body, buttons, links, and UI. The boundary is never crossed.
 
 ## 4. Component Stylings
 
 ### Buttons
 
-**Dark Pill**
-- Background: `#1f1f1f`
-- Text: `#ffffff` or `#b3b3b3`
-- Padding: 8px 16px
-- Radius: 9999px (full pill)
-- Use: Navigation pills, secondary actions
+**Primary Black (CTA)**
+- Background: Uber Black (`#000000`)
+- Text: Pure White (`#ffffff`)
+- Padding: 10px 12px
+- Radius: 999px (full pill)
+- Outline: none
+- Focus: inset ring `rgb(255,255,255) 0px 0px 0px 2px`
+- The primary action button -- bold, high-contrast, unmissable
 
-**Dark Large Pill**
-- Background: `#181818`
-- Text: `#ffffff`
-- Padding: 0px 43px
-- Radius: 500px
-- Use: Primary app navigation buttons
+**Secondary White**
+- Background: Pure White (`#ffffff`)
+- Text: Uber Black (`#000000`)
+- Padding: 10px 12px
+- Radius: 999px (full pill)
+- Hover: background shifts to Hover Gray (`#e2e2e2`)
+- Focus: background shifts to Hover Gray, inset ring appears
+- Used on dark surfaces or as a secondary action alongside Primary Black
 
-**Light Pill**
-- Background: `#eeeeee`
-- Text: `#181818`
-- Radius: 500px
-- Use: Light-mode CTAs (cookie consent, marketing)
+**Chip / Filter**
+- Background: Chip Gray (`#efefef`)
+- Text: Uber Black (`#000000`)
+- Padding: 14px 16px
+- Radius: 999px (full pill)
+- Active: inset shadow `rgba(0,0,0,0.08)`
+- Navigation chips, category selectors, filter toggles
 
-**Outlined Pill**
-- Background: transparent
-- Text: `#ffffff`
-- Border: `1px solid #7c7c7c`
-- Padding: 4px 16px 4px 36px (asymmetric for icon)
-- Radius: 9999px
-- Use: Follow buttons, secondary actions
-
-**Circular Play**
-- Background: `#1f1f1f`
-- Text: `#ffffff`
-- Padding: 12px
-- Radius: 50% (circle)
-- Use: Play/pause controls
+**Floating Action**
+- Background: Pure White (`#ffffff`)
+- Text: Uber Black (`#000000`)
+- Padding: 14px
+- Radius: 999px (full pill)
+- Shadow: `rgba(0,0,0,0.16) 0px 2px 8px 0px`
+- Transform: `translateY(2px)` slight offset
+- Hover: background shifts to `#f3f3f3`
+- Map controls, scroll-to-top, floating CTAs
 
 ### Cards & Containers
-- Background: `#181818` or `#1f1f1f`
-- Radius: 6px–8px
-- No visible borders on most cards
-- Hover: slight background lightening
-- Shadow: `rgba(0,0,0,0.3) 0px 8px 8px` on elevated
+- Background: Pure White (`#ffffff`) on white pages; no distinct card background differentiation
+- Border: none by default -- cards are defined by shadow, not stroke
+- Radius: 8px for standard content cards; 12px for featured/promoted cards
+- Shadow: `rgba(0,0,0,0.12) 0px 4px 16px 0px` for standard lift
+- Cards are content-dense with minimal internal padding
+- Image-led cards use full-bleed imagery with text overlay or below
 
-### Inputs
-- Search input: `#1f1f1f` background, `#ffffff` text
-- Radius: 500px (pill)
-- Padding: 12px 96px 12px 48px (icon-aware)
-- Focus: border becomes `#000000`, outline `1px solid`
+### Inputs & Forms
+- Text: Uber Black (`#000000`)
+- Background: Pure White (`#ffffff`)
+- Border: 1px solid Black (`#000000`) -- the only place visible borders appear prominently
+- Radius: 8px
+- Padding: standard comfortable spacing
+- Focus: no extracted custom focus state -- relies on standard browser focus ring
 
 ### Navigation
-- Dark sidebar with SpotifyMixUI 14px weight 700 for active, 400 for inactive
-- `#b3b3b3` muted color for inactive items, `#ffffff` for active
-- Circular icon buttons (50% radius)
-- Spotify logo top-left in green
+- Sticky top navigation with white background
+- Logo: Uber wordmark/icon at 24x24px in black
+- Links: UberMoveText at 14-18px, weight 500, in Uber Black
+- Pill-shaped nav chips with Chip Gray (`#efefef`) background for category navigation ("Ride", "Drive", "Business", "Uber Eats")
+- Menu toggle: circular button with 50% border-radius
+- Mobile: hamburger menu pattern
+
+### Image Treatment
+- Warm, hand-illustrated scenes (not photographs for feature sections)
+- Illustration style: slightly stylized people, warm color palette within illustrations, contemporary vibe
+- Hero sections use bold photography or illustration as full-width backgrounds
+- QR codes for app download CTAs
+- All imagery uses standard 8px or 12px border-radius when contained in cards
+
+### Distinctive Components
+
+**Category Pill Navigation**
+- Horizontal row of pill-shaped buttons for top-level navigation ("Ride", "Drive", "Business", "Uber Eats", "About")
+- Each pill: Chip Gray background, black text, 999px radius
+- Active state indicated by black background with white text (inversion)
+
+**Hero with Dual Action**
+- Split hero: text/CTA on left, map/illustration on right
+- Two input fields side by side for pickup/destination
+- "See prices" CTA button in black pill
+
+**Plan-Ahead Cards**
+- Cards promoting features like "Uber Reserve" and trip planning
+- Illustration-heavy with warm, human-centric imagery
+- Black CTA buttons with white text at bottom
 
 ## 5. Layout Principles
 
 ### Spacing System
 - Base unit: 8px
-- Scale: 1px, 2px, 3px, 4px, 5px, 6px, 8px, 10px, 12px, 14px, 15px, 16px, 20px
+- Scale: 4px, 6px, 8px, 10px, 12px, 14px, 16px, 18px, 20px, 24px, 32px
+- Button padding: 10px 12px (compact) or 14px 16px (comfortable)
+- Card internal padding: approximately 24-32px
+- Section vertical spacing: generous but efficient -- approximately 64-96px between major sections
 
 ### Grid & Container
-- Sidebar (fixed) + main content area
-- Grid-based album/playlist cards
-- Full-width now-playing bar at bottom
-- Responsive content area fills remaining space
+- Max container width: approximately 1136px, centered
+- Hero: split layout with text left, visual right
+- Feature sections: 2-column card grids or full-width single-column
+- Footer: multi-column link grid on black background
+- Full-width sections extending to viewport edges
 
 ### Whitespace Philosophy
-- **Dark compression**: Spotify packs content densely — playlist grids, track lists, and navigation are all tightly spaced. The dark background provides visual rest between elements without needing large gaps.
-- **Content density over breathing room**: This is an app, not a marketing site. Every pixel serves the listening experience.
+- **Efficient, not airy**: Uber's whitespace is functional -- enough to separate, never enough to feel empty. This is transit-system spacing: compact, clear, purpose-driven.
+- **Content-dense cards**: Cards pack information tightly with minimal internal spacing, relying on shadow and radius to define boundaries.
+- **Section breathing room**: Major sections get generous vertical spacing, but within sections, elements are closely grouped.
 
 ### Border Radius Scale
-- Minimal (2px): Badges, explicit tags
-- Subtle (4px): Inputs, small elements
-- Standard (6px): Album art containers, cards
-- Comfortable (8px): Sections, dialogs
-- Medium (10px–20px): Panels, overlay elements
-- Large (100px): Large pill buttons
-- Pill (500px): Primary buttons, search input
-- Full Pill (9999px): Navigation pills, search
-- Circle (50%): Play buttons, avatars, icons
+- Sharp (0px): No square corners used in interactive elements
+- Standard (8px): Content cards, input fields, listboxes
+- Comfortable (12px): Featured cards, larger containers, link cards
+- Full Pill (999px): All buttons, chips, navigation items, pills
+- Circle (50%): Avatar images, icon containers, circular controls
 
 ## 6. Depth & Elevation
 
 | Level | Treatment | Use |
 |-------|-----------|-----|
-| Base (Level 0) | `#121212` background | Deepest layer, page background |
-| Surface (Level 1) | `#181818` or `#1f1f1f` | Cards, sidebar, containers |
-| Elevated (Level 2) | `rgba(0,0,0,0.3) 0px 8px 8px` | Dropdown menus, hover cards |
-| Dialog (Level 3) | `rgba(0,0,0,0.5) 0px 8px 24px` | Modals, overlays, menus |
-| Inset (Border) | `rgb(18,18,18) 0px 1px 0px, rgb(124,124,124) 0px 0px 0px 1px inset` | Input borders |
+| Flat (Level 0) | No shadow, solid background | Page background, inline content, text sections |
+| Subtle (Level 1) | `rgba(0,0,0,0.12) 0px 4px 16px` | Standard content cards, feature blocks |
+| Medium (Level 2) | `rgba(0,0,0,0.16) 0px 4px 16px` | Elevated cards, overlay elements |
+| Floating (Level 3) | `rgba(0,0,0,0.16) 0px 2px 8px` + translateY(2px) | Floating action buttons, map controls |
+| Pressed (Level 4) | `rgba(0,0,0,0.08) inset` (999px spread) | Active/pressed button states |
+| Focus Ring | `rgb(255,255,255) 0px 0px 0px 2px inset` | Keyboard focus indicators |
 
-**Shadow Philosophy**: Spotify uses notably heavy shadows for a dark-themed app. The 0.5 opacity shadow at 24px blur creates a dramatic "floating in darkness" effect for dialogs and menus, while the 0.3 opacity at 8px blur provides a more subtle card lift. The unique inset border-shadow combination on inputs creates a recessed, tactile quality.
+**Shadow Philosophy**: Uber uses shadow purely as a structural tool, never decoratively. Shadows are always black at very low opacity (0.08-0.16), creating the bare minimum lift needed to separate content layers. The blur radii are moderate (8-16px) -- enough to feel natural but never dramatic. There are no colored shadows, no layered shadow stacks, and no ambient glow effects. Depth is communicated more through the black/white section contrast than through shadow elevation.
 
 ## 7. Do's and Don'ts
 
 ### Do
-- Use near-black backgrounds (`#121212`–`#1f1f1f`) — depth through shade variation
-- Apply Spotify Green (`#1ed760`) only for play controls, active states, and primary CTAs
-- Use pill shape (500px–9999px) for all buttons — circular (50%) for play controls
-- Apply uppercase + wide letter-spacing (1.4px–2px) on button labels
-- Keep typography compact (10px–24px range) — this is an app, not a magazine
-- Use heavy shadows (`0.3–0.5 opacity`) for elevated elements on dark backgrounds
-- Let album art provide color — the UI itself is achromatic
+- Use true black (`#000000`) and pure white (`#ffffff`) as the primary palette -- the stark contrast IS Uber
+- Use 999px border-radius for all buttons, chips, and pill-shaped navigation elements
+- Keep all headings in UberMove Bold (700) for billboard-level impact
+- Use whisper-soft shadows (0.12-0.16 opacity) for card elevation -- barely visible
+- Maintain the compact, information-dense layout style -- Uber prioritizes efficiency over airiness
+- Use warm, human-centric illustrations to soften the monochrome interface
+- Apply 8px radius for content cards and 12px for featured containers
+- Use UberMoveText at weight 500 for navigation and prominent UI text
+- Pair black primary buttons with white secondary buttons for dual-action layouts
 
 ### Don't
-- Don't use Spotify Green decoratively or on backgrounds — it's functional only
-- Don't use light backgrounds for primary surfaces — the dark immersion is core
-- Don't skip the pill/circle geometry on buttons — square buttons break the identity
-- Don't use thin/subtle shadows — on dark backgrounds, shadows need to be heavy to be visible
-- Don't add additional brand colors — green + achromatic grays is the complete palette
-- Don't use relaxed line-heights — Spotify's typography is compact and dense
-- Don't expose raw gray borders — use shadow-based or inset borders instead
+- Don't introduce color into the UI chrome -- Uber's interface is strictly black, white, and gray
+- Don't use rounded corners less than 999px on buttons -- the full-pill shape is a core identity element
+- Don't apply heavy shadows or drop shadows with high opacity -- depth is whisper-subtle
+- Don't use serif fonts anywhere -- Uber's typography is exclusively geometric sans-serif
+- Don't create airy, spacious layouts with excessive whitespace -- Uber's density is intentional
+- Don't use gradients or color overlays -- every surface is a flat, solid color
+- Don't mix UberMove into body text or UberMoveText into headlines -- the hierarchy is strict
+- Don't use decorative borders -- borders are functional (inputs, dividers) or absent entirely
+- Don't soften the black/white contrast with off-whites or near-blacks -- the duality is deliberate
 
 ## 8. Responsive Behavior
 
 ### Breakpoints
 | Name | Width | Key Changes |
 |------|-------|-------------|
-| Mobile Small | <425px | Compact mobile layout |
-| Mobile | 425–576px | Standard mobile |
-| Tablet | 576–768px | 2-column grid |
-| Tablet Large | 768–896px | Expanded layout |
-| Desktop Small | 896–1024px | Sidebar visible |
-| Desktop | 1024–1280px | Full desktop layout |
-| Large Desktop | >1280px | Expanded grid |
+| Mobile Small | 320px | Minimum layout, single column, stacked inputs, compact typography |
+| Mobile | 600px | Standard mobile, stacked layout, hamburger nav |
+| Tablet Small | 768px | Two-column grids begin, expanded card layouts |
+| Tablet | 1119px | Full tablet layout, side-by-side hero content |
+| Desktop Small | 1120px | Desktop grid activates, horizontal nav pills |
+| Desktop | 1136px | Full desktop layout, maximum container width, split hero |
+
+### Touch Targets
+- All pill buttons: minimum 44px height (10-14px vertical padding + line-height)
+- Navigation chips: generous 14px 16px padding for comfortable thumb tapping
+- Circular controls (menu, close): 50% radius ensures large, easy-to-hit targets
+- Card surfaces serve as full-area touch targets on mobile
 
 ### Collapsing Strategy
-- Sidebar: full → collapsed → hidden
-- Album grid: 5 columns → 3 → 2 → 1
-- Now-playing bar: maintained at all sizes
-- Search: pill input maintained, width adjusts
-- Navigation: sidebar → bottom bar on mobile
+- **Navigation**: Horizontal pill nav collapses to hamburger menu with circular toggle
+- **Hero**: Split layout (text + map/visual) stacks to single column -- text above, visual below
+- **Input fields**: Side-by-side pickup/destination inputs stack vertically
+- **Feature cards**: 2-column grid collapses to full-width stacked cards
+- **Headings**: 52px display scales down through 36px, 32px, 24px, 20px
+- **Footer**: Multi-column link grid collapses to accordion or stacked single column
+- **Category pills**: Horizontal scroll with overflow on smaller screens
+
+### Image Behavior
+- Illustrations scale proportionally within their containers
+- Hero imagery maintains aspect ratio, may crop on smaller screens
+- QR code sections hide on mobile (app download shifts to direct store links)
+- Card imagery maintains 8-12px border radius at all sizes
 
 ## 9. Agent Prompt Guide
 
 ### Quick Color Reference
-- Background: Near Black (`#121212`)
-- Surface: Dark Card (`#181818`)
-- Text: White (`#ffffff`)
-- Secondary text: Silver (`#b3b3b3`)
-- Accent: Spotify Green (`#1ed760`)
-- Border: `#4d4d4d`
-- Error: Negative Red (`#f3727f`)
+- Primary Button: "Uber Black (#000000)"
+- Page Background: "Pure White (#ffffff)"
+- Button Text (on black): "Pure White (#ffffff)"
+- Button Text (on white): "Uber Black (#000000)"
+- Secondary Text: "Body Gray (#4b4b4b)"
+- Tertiary Text: "Muted Gray (#afafaf)"
+- Chip Background: "Chip Gray (#efefef)"
+- Hover State: "Hover Gray (#e2e2e2)"
+- Card Shadow: "rgba(0,0,0,0.12) 0px 4px 16px"
+- Footer Background: "Uber Black (#000000)"
 
 ### Example Component Prompts
-- "Create a dark card: #181818 background, 8px radius. Title at 16px SpotifyMixUI weight 700, white text. Subtitle at 14px weight 400, #b3b3b3. Shadow rgba(0,0,0,0.3) 0px 8px 8px on hover."
-- "Design a pill button: #1f1f1f background, white text, 9999px radius, 8px 16px padding. 14px SpotifyMixUI weight 700, uppercase, letter-spacing 1.4px."
-- "Build a circular play button: Spotify Green (#1ed760) background, #000000 icon, 50% radius, 12px padding."
-- "Create search input: #1f1f1f background, white text, 500px radius, 12px 48px padding. Inset border: rgb(124,124,124) 0px 0px 0px 1px inset."
-- "Design navigation sidebar: #121212 background. Active items: 14px weight 700, white. Inactive: 14px weight 400, #b3b3b3."
+- "Create a hero section on Pure White (#ffffff) with a headline at 52px UberMove Bold (700), line-height 1.23. Use Uber Black (#000000) text. Add a subtitle in Body Gray (#4b4b4b) at 16px UberMoveText weight 400 with 1.50 line-height. Place an Uber Black (#000000) pill CTA button with Pure White text, 999px radius, padding 10px 12px."
+- "Design a category navigation bar with horizontal pill buttons. Each pill: Chip Gray (#efefef) background, Uber Black (#000000) text, 14px 16px padding, 999px border-radius. Active pill inverts to Uber Black background with Pure White text. Use UberMoveText at 14px weight 500."
+- "Build a feature card on Pure White (#ffffff) with 8px border-radius and shadow rgba(0,0,0,0.12) 0px 4px 16px. Title in UberMove at 24px weight 700, description in Body Gray (#4b4b4b) at 16px UberMoveText. Add a black pill CTA button at the bottom."
+- "Create a dark footer on Uber Black (#000000) with Pure White (#ffffff) heading text in UberMove at 20px weight 700. Footer links in Muted Gray (#afafaf) at 14px UberMoveText. Links hover to Pure White. Multi-column grid layout."
+- "Design a floating action button with Pure White (#ffffff) background, 999px radius, 14px padding, and shadow rgba(0,0,0,0.16) 0px 2px 8px. Hover shifts background to #f3f3f3. Use for scroll-to-top or map controls."
 
 ### Iteration Guide
-1. Start with #121212 — everything lives in near-black darkness
-2. Spotify Green for functional highlights only (play, active, CTA)
-3. Pill everything — 500px for large, 9999px for small, 50% for circular
-4. Uppercase + wide tracking on buttons — the systematic label voice
-5. Heavy shadows (0.3–0.5 opacity) for elevation — light shadows are invisible on dark
-6. Album art provides all the color — the UI stays achromatic
+1. Focus on ONE component at a time
+2. Reference the strict black/white palette -- "use Uber Black (#000000)" not "make it dark"
+3. Always specify 999px radius for buttons and pills -- this is non-negotiable for the Uber identity
+4. Describe the font family explicitly -- "UberMove Bold for the heading, UberMoveText Medium for the label"
+5. For shadows, use "whisper shadow (rgba(0,0,0,0.12) 0px 4px 16px)" -- never heavy drop shadows
+6. Keep layouts compact and information-dense -- Uber is efficient, not airy
+7. Illustrations should be warm and human -- describe "stylized people in warm tones" not abstract shapes
+8. Pair black CTAs with white secondaries for balanced dual-action layouts
