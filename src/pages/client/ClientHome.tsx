@@ -37,7 +37,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { aggregateWeeklyConditioningVolume } from "@/lib/weekly-volume";
 import { fetchStudentWorkoutsInRange } from "@/lib/student-workouts";
 import { cn } from "@/lib/utils";
-import heroBg from "@/assets/hero-bg.jpg";
 
 interface WorkoutWithExercises {
   id: string;
@@ -69,7 +68,7 @@ const getGreeting = () => {
 const SurfaceCard = ({ className, children }: { className?: string; children?: ReactNode }) => (
   <div
     className={cn(
-      "overflow-hidden rounded-[2rem] border border-black/6 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.12)]",
+      "overflow-hidden rounded-[2rem] border border-black/6 bg-white shadow-[0_18px_44px_-30px_rgba(0,0,0,0.42)]",
       className,
     )}
   >
@@ -441,7 +440,7 @@ const ClientHome = () => {
             <div className="space-y-6">
               <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium text-black/64">
                 <span className="rounded-full bg-[#efefef] px-3 py-1 font-mono uppercase tracking-[0.24em]">
-                  Dashboard do atleta
+                  Athlete command
                 </span>
                 <span className="rounded-full bg-black px-3 py-1 font-mono uppercase tracking-[0.24em] text-white">
                   {format(new Date(), "dd 'de' MMMM", { locale: ptBR })}
@@ -454,7 +453,7 @@ const ClientHome = () => {
                   {profileName || "Atleta"}
                 </h1>
                 <p className="max-w-2xl text-sm leading-relaxed text-black/58 sm:text-base">
-                  Sua home agora prioriza comunidade, sequência de treino e sinais reais de evolução dentro do app.
+                  Veja o treino certo, acompanhe consistência e use seus números para evoluir com mais intenção.
                 </p>
               </div>
 
@@ -480,29 +479,50 @@ const ClientHome = () => {
               </div>
             </div>
 
-            <div className="grid gap-4">
-              <div className="overflow-hidden rounded-[1.75rem] bg-[#f3f3f3]">
-                <img src={heroBg} alt="" aria-hidden="true" className="h-48 w-full object-cover grayscale" />
-              </div>
+            <div className="grid gap-3">
+              <Link
+                to={spotlightWorkout ? `/dashboard/treino/${spotlightWorkout.id}` : "/dashboard/treinadores"}
+                className="group rounded-[2rem] border border-black/8 bg-[#f3f3f3] p-5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:p-6"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-black/45">Próxima ação</p>
+                    <h2 className="mt-3 font-display text-3xl leading-none text-black">
+                      {spotlightWorkout?.title ?? "Conectar com coach"}
+                    </h2>
+                    <p className="mt-3 text-sm leading-relaxed text-black/56">
+                      {spotlightWorkout
+                        ? `${format(new Date(`${spotlightWorkout.date}T12:00:00`), "EEEE, dd MMM", { locale: ptBR })} • ${spotlightWorkout.workout_exercises.length} exercícios planejados`
+                        : "Entre em um grupo ou encontre um treinador para receber sua próxima sessão."}
+                    </p>
+                  </div>
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-black text-white transition-transform group-hover:translate-x-1">
+                    <ChevronRight className="h-5 w-5" />
+                  </div>
+                </div>
+              </Link>
+
               <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
-                <div className="rounded-[1.75rem] bg-[#f3f3f3] p-5">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Grupo principal</p>
-                  <p className="mt-3 font-display text-2xl text-black">{primaryGroup?.name ?? "Sem grupo"}</p>
+                <div className="rounded-[1.75rem] bg-[#f8f8f6] p-5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-black/42">Grupo</p>
+                  <p className="mt-3 truncate font-display text-2xl text-black">{primaryGroup?.name ?? "Sem grupo"}</p>
                   <p className="mt-2 text-sm text-black/54">
-                  {groups.length > 0 ? `${groups.length} grupo${groups.length > 1 ? "s" : ""} ativo${groups.length > 1 ? "s" : ""}` : "Sem comunidade conectada"}
+                    {groups.length > 0 ? `${groups.length} ativo${groups.length > 1 ? "s" : ""}` : "Sem comunidade"}
                   </p>
                 </div>
 
-                <div className="rounded-[1.75rem] bg-[#f3f3f3] p-5">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Aderência</p>
+                <div className="rounded-[1.75rem] bg-[#f8f8f6] p-5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-black/42">Aderência</p>
                   <p className="mt-3 font-display text-4xl text-black">{completionRate}%</p>
-                  <p className="mt-2 text-sm text-black/54">dos próximos protocolos já concluídos</p>
+                  <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-black/8">
+                    <div className="h-full rounded-full bg-black" style={{ width: `${completionRate}%` }} />
+                  </div>
                 </div>
 
-                <div className="rounded-[1.75rem] bg-[#f3f3f3] p-5">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Sequência</p>
+                <div className="rounded-[1.75rem] bg-[#f8f8f6] p-5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-black/42">Últimos 30 dias</p>
                   <p className="mt-3 font-display text-4xl text-black">{consistencySnapshot?.sessionsLast30 ?? 0}</p>
-                  <p className="mt-2 text-sm text-black/54">sessões válidas nos últimos 30 dias</p>
+                  <p className="mt-2 text-sm text-black/54">sessões válidas</p>
                 </div>
               </div>
             </div>
@@ -516,9 +536,9 @@ const ClientHome = () => {
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl">
                 <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Comunidade</p>
-                <h2 className="mt-3 font-display text-3xl text-black">Entre em um grupo para liberar o ranking</h2>
+                <h2 className="mt-3 font-display text-3xl text-black">Entre em um grupo para liberar seu placar</h2>
                 <p className="mt-3 text-sm leading-relaxed text-black/58">
-                  O dashboard social aparece quando você entra em um grupo com sessões registradas. Até lá, a home continua focada na sua rotina de treino.
+                  Rankings e pontos aparecem quando você participa de uma comunidade com sessões registradas.
                 </p>
               </div>
               <Button asChild variant="primary-pill" className="h-12 px-6">
@@ -542,7 +562,7 @@ const ClientHome = () => {
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Semana em curso</p>
-                  <h2 className="mt-2 font-display text-3xl text-black">Agenda de treino</h2>
+                  <h2 className="mt-2 font-display text-3xl text-black">Plano da semana</h2>
                 </div>
                 <div className="rounded-full border border-black/8 bg-[#efefef] px-4 py-2 text-sm text-black/62">
                   {completedThisWeek}/{thisWeekWorkouts.length} concluídos
@@ -565,7 +585,7 @@ const ClientHome = () => {
                       <div>
                         <h3 className="text-2xl font-semibold tracking-tight text-black">{spotlightWorkout.title}</h3>
                         <p className="mt-2 max-w-xl text-sm leading-relaxed text-black/58">
-                          {spotlightWorkout.description || "Abra o treino para executar séries, registrar cargas e validar a sessão no ranking."}
+                          {spotlightWorkout.description || "Abra para registrar séries, cargas e scores com precisão."}
                         </p>
                       </div>
                     </div>

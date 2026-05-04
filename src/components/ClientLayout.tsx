@@ -26,12 +26,12 @@ const ClientLayout = () => {
     )?.[1] ?? routeLabels["/dashboard"];
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#f8f8f8] text-black selection:bg-black selection:text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f6f5f1] text-black selection:bg-black selection:text-white">
       {!isImmersiveRoute ? (
-        <header className="sticky top-0 z-40 border-b border-black/5 bg-white px-safe pt-safe">
+        <header className="sticky top-0 z-40 border-b border-black/5 bg-white/90 px-safe pt-safe backdrop-blur-xl">
           <div className="mx-auto flex h-20 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
             <div className="flex min-w-0 items-center gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-black text-white shadow-[0_4px_16px_rgba(0,0,0,0.16)]">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-black text-white shadow-[0_14px_30px_-18px_rgba(0,0,0,0.55)]">
                 <Dumbbell className="h-5 w-5" />
               </div>
               <div className="min-w-0">
@@ -40,9 +40,7 @@ const ClientLayout = () => {
               </div>
             </div>
             <div className="hidden sm:block">
-              <StudentPill>
-                fitblock athlete
-              </StudentPill>
+              <StudentPill>fitblock athlete</StudentPill>
             </div>
           </div>
         </header>
@@ -52,7 +50,7 @@ const ClientLayout = () => {
         className={
           isImmersiveRoute
             ? "relative min-h-screen w-full"
-            : "relative mx-auto min-h-screen w-full max-w-6xl px-4 pb-36 pt-6 sm:px-6"
+            : "relative mx-auto min-h-screen w-full max-w-6xl px-4 pb-36 pt-5 sm:px-6 sm:pt-6"
         }
       >
         <Outlet />

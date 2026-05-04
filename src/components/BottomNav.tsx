@@ -37,8 +37,8 @@ const BottomNav = () => {
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-[100] px-safe pb-safe pt-3">
-      <div className="mx-auto flex max-w-3xl items-end gap-3">
-        <div className="flex h-[74px] flex-1 items-center justify-between gap-2 rounded-full bg-black px-3 shadow-[0_4px_16px_rgba(0,0,0,0.16)]">
+      <div className="mx-auto flex max-w-3xl items-end gap-2 sm:gap-3">
+        <div className="flex h-[74px] flex-1 items-center justify-between gap-1.5 rounded-full bg-black px-2.5 shadow-[0_18px_42px_-24px_rgba(0,0,0,0.72)] sm:gap-2 sm:px-3">
           {navItems.map((item) => {
             const isActive =
               location.pathname === item.to ||
@@ -73,7 +73,7 @@ const BottomNav = () => {
           type="button"
           onClick={handleLogout}
           aria-label="Encerrar sessão"
-          className="flex h-[74px] w-[74px] shrink-0 flex-col items-center justify-center gap-1 rounded-full bg-[#efefef] text-black/58 shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all hover:bg-[#e2e2e2] hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f8f8f8]"
+          className="flex h-[74px] w-[74px] shrink-0 flex-col items-center justify-center gap-1 rounded-full bg-white text-black/58 shadow-[0_18px_42px_-28px_rgba(0,0,0,0.68)] transition-all hover:bg-[#efefef] hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f6f5f1]"
         >
           <LogOut className="h-5 w-5 stroke-[2px]" />
           <span className="text-[9px] font-semibold uppercase tracking-[0.18em]">Sair</span>

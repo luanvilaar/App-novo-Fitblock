@@ -141,18 +141,18 @@ const ClientSessionHub = () => {
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.75fr)] lg:items-end">
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-2">
-              <StudentPill>Sessão</StudentPill>
+              <StudentPill>Modo treino</StudentPill>
               <StudentPill accent>{format(today, "EEEE, dd MMM", { locale: ptBR })}</StudentPill>
             </div>
 
             <div className="space-y-3">
               <h1 className="font-display text-4xl text-black sm:text-5xl">
                 {featuredWorkout
-                  ? `Hora de treinar, ${profileName || "atleta"}.`
-                  : `Semana aberta, ${profileName || "atleta"}.`}
+                  ? `Treino pronto, ${profileName || "atleta"}.`
+                  : `Semana livre, ${profileName || "atleta"}.`}
               </h1>
               <p className="max-w-2xl text-sm leading-relaxed text-black/58 sm:text-base">
-                Esta rota agora é o ponto de entrada operacional do atleta. Ela abre a sessão certa, mostra pendências e mantém o foco no que precisa ser executado hoje.
+                Entre direto na sessão certa, registre cargas e finalize a semana sem procurar treino em várias telas.
               </p>
             </div>
 
@@ -173,8 +173,8 @@ const ClientSessionHub = () => {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-            <div className="rounded-[1.75rem] bg-[#f3f3f3] p-5">
-              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Próxima sessão</p>
+            <div className="rounded-[1.75rem] bg-[#f8f8f6] p-5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-black/42">Próxima sessão</p>
               <p className="mt-3 font-display text-2xl text-black">{featuredWorkout?.title ?? "Sem treino"}</p>
               <p className="mt-2 text-sm text-black/54">
                 {featuredWorkout
@@ -182,15 +182,18 @@ const ClientSessionHub = () => {
                   : "Aguardando publicação do coach"}
               </p>
             </div>
-            <div className="rounded-[1.75rem] bg-[#f3f3f3] p-5">
-              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Aderência semanal</p>
+            <div className="rounded-[1.75rem] bg-[#f8f8f6] p-5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-black/42">Aderência semanal</p>
               <p className="mt-3 font-display text-4xl text-black">{adherence}%</p>
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-black/8">
+                <div className="h-full rounded-full bg-black" style={{ width: `${adherence}%` }} />
+              </div>
               <p className="mt-2 text-sm text-black/54">
                 {completedCount}/{weekWorkouts.length} concluídos
               </p>
             </div>
-            <div className="rounded-[1.75rem] bg-[#f3f3f3] p-5">
-              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Comunidade</p>
+            <div className="rounded-[1.75rem] bg-[#f8f8f6] p-5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-black/42">Comunidade</p>
               <p className="mt-3 font-display text-2xl text-black">{primaryGroup?.name ?? "Sem grupo"}</p>
               <p className="mt-2 text-sm text-black/54">
                 {groups.length} grupo{groups.length === 1 ? "" : "s"} conectado{groups.length === 1 ? "" : "s"}
@@ -204,8 +207,8 @@ const ClientSessionHub = () => {
         <StudentSurfaceCard className="p-6 sm:p-8">
           <div className="flex flex-col gap-5">
             <StudentSectionHeading
-              eyebrow="Fila operacional"
-              title="Sessões da semana"
+              eyebrow="Fila de execução"
+              title="Semana de treino"
               action={
                 <StudentPill className="text-sm tracking-[0.18em] text-black/62">
                   {pendingWorkouts.length} pendente{pendingWorkouts.length === 1 ? "" : "s"}
@@ -217,7 +220,7 @@ const ClientSessionHub = () => {
               <div className="rounded-[1.9rem] border border-dashed border-black/10 bg-[#f8f8f8] p-6 text-center">
                 <p className="font-display text-2xl text-black">Nenhuma sessão nesta semana</p>
                 <p className="mt-2 text-sm leading-relaxed text-black/54">
-                  Quando um protocolo for publicado, esta tela vira seu ponto principal de entrada para treinar.
+                  Quando um protocolo for publicado, ele aparece aqui com acesso direto para execução.
                 </p>
               </div>
             ) : (
@@ -232,7 +235,7 @@ const ClientSessionHub = () => {
                       key={workout.id}
                       to={`/dashboard/treino/${workout.id}`}
                       className={cn(
-                        "flex items-center justify-between gap-4 rounded-[1.45rem] border px-4 py-4 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+                        "flex min-h-[76px] items-center justify-between gap-4 rounded-[1.45rem] border px-4 py-4 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
                         isFeatured
                           ? "border-black bg-black text-white"
                           : isDone
@@ -295,13 +298,12 @@ const ClientSessionHub = () => {
 
       <StudentSurfaceCard className="p-6 sm:p-8">
         <StudentSectionHeading
-          eyebrow="Próximo passo"
-          title="Treinar, revisar e evoluir agora vivem em rotas separadas."
+          eyebrow="Depois da sessão"
+          title="Registre hoje. Revise depois."
           description={
             <>
-              Use <span className="text-black">Sessão</span> para abrir o treino certo,{" "}
-              <span className="text-black">Evolução</span> para analytics e{" "}
-              <span className="text-black">Histórico</span> para revisar sessões concluídas sem reentrar no modo operacional.
+              Depois de finalizar, use <span className="text-black">Histórico</span> para rever detalhes e{" "}
+              <span className="text-black">Evolução</span> para acompanhar consistência, volume e cargas.
             </>
           }
           action={

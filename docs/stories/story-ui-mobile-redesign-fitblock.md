@@ -112,11 +112,17 @@ Fica fora do escopo:
 - [x] Páginas públicas/de apoio alinhadas
 - [x] Quality gates executados
 - [x] File list atualizada
+- [x] Iteração premium white minimal do dashboard/sessão do aluno concluída
 
 ---
 
 ## Validation Results
 
+- 2026-05-04 premium white minimal pass:
+  - `npm run lint`: ✅ passou sem erros; restaram `20` warnings não bloqueantes já existentes de `react-refresh` e `react-hooks/exhaustive-deps`
+  - `npm run typecheck`: ✅ passou
+  - `npm test`: ✅ passou (`11` arquivos, `125` testes)
+  - `npm run build`: ✅ passou; restou apenas o warning não bloqueante de chunks acima de `500 kB`
 - `npm run lint`: ✅ passou sem erros; restaram `20` warnings não bloqueantes já existentes de `react-refresh` e `react-hooks/exhaustive-deps`
 - `npm run typecheck`: ✅ passou
 - `npm test`: ✅ passou (`11` arquivos, `125` testes)
@@ -133,6 +139,12 @@ Também foram corrigidas as falhas globais de tipagem/lint que bloqueavam o push
 
 ## File List
 
+- [x] 2026-05-04 premium pass: `src/components/BottomNav.tsx`
+- [x] 2026-05-04 premium pass: `src/components/ClientLayout.tsx`
+- [x] 2026-05-04 premium pass: `src/components/client/StudentPagePrimitives.tsx`
+- [x] 2026-05-04 premium pass: `src/pages/client/ClientHome.tsx`
+- [x] 2026-05-04 premium pass: `src/pages/client/ClientSessionHub.tsx`
+- [x] 2026-05-04 premium pass: `docs/stories/story-ui-mobile-redesign-fitblock.md`
 - [x] `docs/stories/story-ui-mobile-redesign-fitblock.md`
 - [x] `eslint.config.js`
 - [x] `src/components/BottomNav.tsx`
