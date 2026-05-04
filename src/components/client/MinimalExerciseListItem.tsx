@@ -12,7 +12,7 @@ interface MinimalExerciseListItemProps {
   index: number;
 }
 
-/** Alinha ao card de protocolo do dia (ClientHome / TrainerPanelCard): roxo primary, bordas suaves, sem “industrial”. */
+/** Alinha ao card de protocolo do dia com linguagem neutra: preto, branco e cinzas suaves. */
 const formatCategoryLabel = (raw: string) =>
   raw
     .trim()

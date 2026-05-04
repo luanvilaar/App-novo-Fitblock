@@ -34,14 +34,14 @@ const ExerciseCardSmart: React.FC<ExerciseCardSmartProps> = ({ exercise, trackin
               href={exercise.videoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors text-[10px] font-bold uppercase tracking-wider"
+              className="flex items-center gap-1 rounded-lg bg-[#efefef] px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-black transition-colors hover:bg-[#e2e2e2]"
             >
               <PlayCircle className="w-3.5 h-3.5" />
               Vídeo
             </a>
           )}
           {exercise.load && (
-            <span className="text-[10px] font-bold bg-energy/10 text-energy px-2 py-0.5 rounded-full uppercase tracking-wider">
+            <span className="rounded-full bg-black px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
               {exercise.load}
             </span>
           )}
@@ -70,7 +70,7 @@ const ExerciseCardSmart: React.FC<ExerciseCardSmartProps> = ({ exercise, trackin
         {exercise.distance && (
           <div className="flex flex-col">
             <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-semibold">Distância</span>
-            <span className="text-sm font-medium text-energy">{exercise.distance}</span>
+            <span className="text-sm font-medium text-black">{exercise.distance}</span>
           </div>
         )}
         {exercise.duration && (

@@ -23,6 +23,7 @@ import ClientHistory from "./pages/client/ClientHistory";
 import ClientProgress from "./pages/client/ClientProgress";
 import ClientProfile from "./pages/client/ClientProfile";
 import FindTrainers from "./pages/client/FindTrainers";
+import ClientSessionHub from "./pages/client/ClientSessionHub";
 
 // Trainer pages
 import TrainerDashboard from "./pages/trainer/TrainerDashboard";
@@ -102,7 +103,10 @@ const App = () => (
               <Route path="/dashboard" element={<ProtectedRoute><ClientLayout /></ProtectedRoute>}>
                 <Route index element={<ClientHome />} />
                 <Route path="treino/:id" element={<WorkoutExecution />} />
-                <Route path="treino" element={<ClientProgress />} />
+                <Route path="revisao/:id" element={<WorkoutExecution />} />
+                <Route path="sessao" element={<ClientSessionHub />} />
+                <Route path="evolucao" element={<ClientProgress />} />
+                <Route path="treino" element={<Navigate to="/dashboard/sessao" replace />} />
                 <Route path="historico" element={<ClientHistory />} />
                 <Route path="treinadores" element={<FindTrainers />} />
                 <Route path="perfil" element={<ClientProfile />} />

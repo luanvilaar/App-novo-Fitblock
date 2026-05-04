@@ -41,17 +41,17 @@ const SmartExerciseTracker: React.FC<SmartExerciseTrackerProps> = ({
         onClick={() => setIsOpen(prev => !prev)}
         className={`w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-left transition-all duration-200
           ${isOpen
-            ? 'bg-energy/10 border border-energy/20'
-            : 'bg-secondary/40 border border-border/30 hover:bg-secondary/60'
+            ? 'border border-black/12 bg-[#efefef]'
+            : 'border border-black/8 bg-[#f8f8f8] hover:bg-[#efefef]'
           }`}
       >
         <div className="flex items-center gap-2">
-          <Dumbbell className={`w-3.5 h-3.5 ${isOpen ? 'text-energy' : 'text-muted-foreground'}`} />
-          <span className={`text-[11px] font-semibold tracking-wide ${isOpen ? 'text-energy' : 'text-muted-foreground'}`}>
+          <Dumbbell className={`w-3.5 h-3.5 ${isOpen ? 'text-black' : 'text-muted-foreground'}`} />
+          <span className={`text-[11px] font-semibold tracking-wide ${isOpen ? 'text-black' : 'text-muted-foreground'}`}>
             Registrar Cargas
           </span>
           {filledSets > 0 && !isOpen && (
-            <span className="text-[9px] font-bold bg-energy/20 text-energy rounded-full px-1.5 py-0.5">
+            <span className="rounded-full bg-black px-1.5 py-0.5 text-[9px] font-bold text-white">
               {filledSets}/{sets}
             </span>
           )}
@@ -113,13 +113,13 @@ const SmartExerciseTracker: React.FC<SmartExerciseTrackerProps> = ({
                           placeholder="—"
                           value={set.load_used ?? ''}
                           onChange={e => onUpdate(idx, 'load_used', e.target.value ? Number(e.target.value) : null)}
-                          className="h-10 border-none bg-transparent text-center text-sm font-bold text-energy focus-visible:ring-0 px-0 placeholder:text-muted-foreground/25 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          className="h-10 border-none bg-transparent px-0 text-center text-sm font-bold text-black focus-visible:ring-0 placeholder:text-muted-foreground/25 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         />
                         {set.load_used !== null && set.load_used > 0 && (
                           <motion.span
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="absolute right-1.5 text-[8px] font-bold text-energy/40 pointer-events-none"
+                            className="pointer-events-none absolute right-1.5 text-[8px] font-bold text-black/40"
                           >
                             kg
                           </motion.span>

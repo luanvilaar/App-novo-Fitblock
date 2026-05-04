@@ -21,10 +21,8 @@ import {
   buildWeekSequence,
   normalizeWeekStartMonday,
   PERIOD_PHASES,
-  PHASE_CELL_CLASSES,
   PHASE_LABELS_COMPACT_PT,
   PHASE_LABELS_PT,
-  PHASE_LEGEND_SWATCH,
   resolvePhaseLabel,
   toISODateString,
   type PeriodPhase,
@@ -49,26 +47,32 @@ type Props = {
 
 const PHASE_I18N_HINT: Record<PeriodPhase, string> = {
   accumulation: "Fase neutra / base",
-  transmutation: "Fase verde / intensificação",
-  realization: "Fase âmbar / realização",
+  transmutation: "Fase densa / intensificação",
+  realization: "Fase de realização",
 };
 
 const PHASE_TIMELINE_SURFACE: Record<PeriodPhase, string> = {
-  accumulation: "border-white/12 bg-white/[0.045]",
-  transmutation: "border-primary/24 bg-primary/10",
-  realization: "border-[#f6c278]/20 bg-[#f6c278]/10",
+  accumulation: "border-black/8 bg-[#f3f3f3]",
+  transmutation: "border-black bg-black text-white",
+  realization: "border-black/12 bg-[#efefef]",
 };
 
 const PHASE_TIMELINE_GLOW: Record<PeriodPhase, string> = {
-  accumulation: "shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]",
-  transmutation: "shadow-[0_18px_36px_rgba(30,215,96,0.12)]",
-  realization: "shadow-[0_18px_36px_rgba(246,194,120,0.12)]",
+  accumulation: "shadow-none",
+  transmutation: "shadow-[0_4px_16px_rgba(0,0,0,0.16)]",
+  realization: "shadow-none",
 };
 
 const PHASE_TIMELINE_TEXT: Record<PeriodPhase, string> = {
-  accumulation: "text-white/78",
-  transmutation: "text-primary",
-  realization: "text-[#f6c278]",
+  accumulation: "text-black/72",
+  transmutation: "text-black",
+  realization: "text-black/72",
+};
+
+const PHASE_LEGEND_SWATCH_LOCAL: Record<PeriodPhase, string> = {
+  accumulation: "border border-black/12 bg-white",
+  transmutation: "border border-black bg-black",
+  realization: "border border-black/12 bg-[#afafaf]",
 };
 
 export function StudentPeriodizationStrip({
@@ -250,22 +254,23 @@ export function StudentPeriodizationStrip({
   return (
     <TrainerPanelCard compact eyebrow="Periodização" title="Linha do mesociclo" subtitle={subtitle}>
       <div className="flex flex-col gap-5">
-        <div className="flex items-center justify-between gap-3 rounded-[1.25rem] border border-border/80 bg-secondary/40 px-3 py-3 sm:px-4">
+        <div className="flex items-center justify-between gap-3 rounded-[1.25rem] border border-black/6 bg-[#f8f8f8] px-3 py-3 sm:px-4">
           <Button
             type="button"
             variant="icon-circle"
             size="icon"
             onClick={() => setPage((previous) => previous - 1)}
             aria-label="Semanas anteriores"
+            className="border-black/6"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
 
           <div className="min-w-0 flex-1 text-center">
-            <p className="truncate font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
+            <p className="truncate font-mono text-[10px] uppercase tracking-[0.22em] text-black/45">
               Janela semanal
             </p>
-            <p className="mt-1 truncate text-sm text-foreground">{rangeLabel}</p>
+            <p className="mt-1 truncate text-sm text-black">{rangeLabel}</p>
           </div>
 
           <Button
@@ -274,29 +279,30 @@ export function StudentPeriodizationStrip({
             size="icon"
             onClick={() => setPage((previous) => previous + 1)}
             aria-label="Semanas seguintes"
+            className="border-black/6"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
 
-        <div className="flex flex-wrap items-start justify-between gap-3 rounded-[1.25rem] border border-border/70 bg-secondary/30 px-4 py-4">
+        <div className="flex flex-wrap items-start justify-between gap-3 rounded-[1.25rem] border border-black/6 bg-[#f8f8f8] px-4 py-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
               {PERIOD_PHASES.map((phase) => (
                 <span
                   key={phase}
                   className={cn(
-                    "inline-flex max-w-full items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] text-muted-foreground",
-                    PHASE_CELL_CLASSES[phase],
+                    "inline-flex max-w-full items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] text-black/58",
+                    phase === "transmutation" ? "border-black bg-black text-white" : "border-black/8 bg-white",
                   )}
                 >
-                  <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", PHASE_LEGEND_SWATCH[phase])} aria-hidden />
+                  <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", PHASE_LEGEND_SWATCH_LOCAL[phase])} aria-hidden />
                   <span className="truncate">{resolvePhaseLabel(phase, phaseLabelOverrides)}</span>
                 </span>
               ))}
             </div>
 
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-black/45">
               {role === "coach"
                 ? "Toque nas semanas para montar uma seleção e aplicar a fase de uma vez."
                 : currentPhase
@@ -306,7 +312,7 @@ export function StudentPeriodizationStrip({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full border border-border bg-background px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <span className="rounded-full bg-white px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-black/45 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
               {phaseByWeek.size}/{weekDates.length} semanas com fase
             </span>
 
@@ -318,9 +324,9 @@ export function StudentPeriodizationStrip({
                     Editar legenda
                   </Button>
                 </DrawerTrigger>
-                <DrawerContent className="border-border bg-card">
+                <DrawerContent className="border-black/6 bg-white">
                   <DrawerHeader className="px-5 pt-5 text-left">
-                    <DrawerTitle className="font-display text-[1.5rem] font-normal tracking-[-0.04em] text-foreground">
+                    <DrawerTitle className="font-display text-[1.5rem] font-normal tracking-[-0.04em] text-black">
                       Nomes da legenda
                     </DrawerTitle>
                     <DrawerDescription>
@@ -332,8 +338,8 @@ export function StudentPeriodizationStrip({
                     {PERIOD_PHASES.map((phase) => (
                       <div key={phase} className="space-y-2">
                         <div className="flex items-center gap-2">
-                          <span className={cn("h-3 w-3 rounded-full", PHASE_LEGEND_SWATCH[phase])} aria-hidden />
-                          <Label htmlFor={`phase-label-${phase}`} className="text-xs text-muted-foreground">
+                          <span className={cn("h-3 w-3 rounded-full", PHASE_LEGEND_SWATCH_LOCAL[phase])} aria-hidden />
+                          <Label htmlFor={`phase-label-${phase}`} className="text-xs text-black/45">
                             {PHASE_I18N_HINT[phase]}
                           </Label>
                         </div>
@@ -375,11 +381,11 @@ export function StudentPeriodizationStrip({
         </div>
 
         {canEdit && selectedWeeks.length > 0 ? (
-          <div className="sticky top-3 z-20 rounded-[1.4rem] border border-primary/20 bg-card/95 p-4 shadow-[0_24px_54px_rgba(0,0,0,0.36)] backdrop-blur">
+          <div className="sticky top-3 z-20 rounded-[1.4rem] border border-black/6 bg-white p-4 shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="space-y-1">
-                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Modo de seleção</p>
-                <p className="text-sm text-foreground">{selectedWeeksLabel}</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-black/45">Modo de seleção</p>
+                <p className="text-sm text-black">{selectedWeeksLabel}</p>
               </div>
 
               <Button
@@ -399,11 +405,15 @@ export function StudentPeriodizationStrip({
                 <Button
                   key={phase}
                   type="button"
-                  variant="secondary-pill"
-                  size="sm"
-                  onClick={() => void handleBulkPhaseApply(phase)}
-                  disabled={savingBulkAction}
-                  className={cn("border-current/10", PHASE_TIMELINE_TEXT[phase])}
+                variant="secondary-pill"
+                size="sm"
+                onClick={() => void handleBulkPhaseApply(phase)}
+                disabled={savingBulkAction}
+                  className={cn(
+                    phase === "transmutation"
+                      ? "bg-black text-white hover:bg-black/90"
+                      : "bg-[#efefef] text-black hover:bg-[#e2e2e2]",
+                  )}
                 >
                   {savingBulkAction ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
                   {PHASE_LABELS_COMPACT_PT[phase]}
@@ -426,12 +436,12 @@ export function StudentPeriodizationStrip({
         {loading ? (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 3 }).map((_, index) => (
-              <div key={index} className="h-28 animate-pulse rounded-[1.25rem] border border-border bg-secondary/30" />
+              <div key={index} className="h-28 animate-pulse rounded-[1.25rem] border border-black/6 bg-[#f3f3f3]" />
             ))}
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="overflow-hidden rounded-[1.35rem] border border-border/70 bg-secondary/20">
+            <div className="overflow-hidden rounded-[1.35rem] border border-black/6 bg-[#f8f8f8]">
               <div className="overflow-x-auto px-4 pb-4 pt-4">
                 <div className="grid auto-cols-[minmax(8.9rem,1fr)] grid-flow-col gap-3">
                   {weekDates.map((date, index) => {
@@ -449,19 +459,19 @@ export function StudentPeriodizationStrip({
 
                     const tileClasses = cn(
                       "flex min-h-[9.5rem] flex-col rounded-[1.3rem] border px-3.5 py-3 transition-all duration-200",
-                      phase ? PHASE_TIMELINE_SURFACE[phase] : "border-border bg-background/70",
+                      phase ? PHASE_TIMELINE_SURFACE[phase] : "border-black/8 bg-white",
                       phase && PHASE_TIMELINE_GLOW[phase],
-                      isCurrentWeek && "ring-1 ring-primary/45 ring-offset-2 ring-offset-background",
+                      isCurrentWeek && "ring-1 ring-black/25 ring-offset-2 ring-offset-white",
                       canEdit && "cursor-pointer active:scale-[0.99]",
-                      isSelected && "border-primary bg-primary/[0.13] ring-1 ring-primary/50",
-                      interactiveStudent && "cursor-pointer hover:border-primary/30",
+                      isSelected && "border-black ring-1 ring-black/40",
+                      interactiveStudent && "cursor-pointer hover:border-black/25",
                     );
 
                     return (
                       <div key={iso} className="min-w-0 space-y-2">
                         <div className="flex h-6 items-center">
                           {startsNewMonth ? (
-                            <span className="rounded-full border border-border bg-background px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                            <span className="rounded-full bg-white px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-black/45 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
                               {format(date, "MMM", { locale: ptBR }).replace(".", "")}
                             </span>
                           ) : null}
@@ -476,13 +486,13 @@ export function StudentPeriodizationStrip({
                           >
                             <div className="flex items-start justify-between gap-3">
                               <div className="space-y-1 text-left">
-                                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-black/45">
                                   {format(date, "EEE", { locale: ptBR }).replace(".", "")}
                                 </p>
-                                <p className="font-display text-[2.05rem] leading-none tracking-[-0.06em] text-foreground">
+                                <p className={cn("font-display text-[2.05rem] leading-none tracking-[-0.06em]", phase === "transmutation" ? "text-white" : "text-black")}>
                                   {format(date, "dd")}
                                 </p>
-                                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                                <p className={cn("font-mono text-[10px] uppercase tracking-[0.18em]", phase === "transmutation" ? "text-white/58" : "text-black/45")}>
                                   sem {format(date, "II")}
                                 </p>
                               </div>
@@ -491,8 +501,8 @@ export function StudentPeriodizationStrip({
                                 className={cn(
                                   "inline-flex h-7 min-w-7 items-center justify-center rounded-full border px-2 font-mono text-[10px] uppercase tracking-[0.16em]",
                                   isSelected
-                                    ? "border-primary bg-primary text-primary-foreground"
-                                    : "border-border bg-background text-muted-foreground",
+                                    ? "border-black bg-black text-white"
+                                    : "border-black/8 bg-white text-black/45",
                                 )}
                               >
                                 {isSelected ? <Check className="h-3.5 w-3.5" /> : "tap"}
@@ -502,20 +512,17 @@ export function StudentPeriodizationStrip({
                             <div className="mt-auto space-y-3 text-left">
                               <div className="flex items-center gap-2">
                                 {phase ? (
-                                  <span
-                                    className={cn("h-2.5 w-2.5 shrink-0 rounded-full", PHASE_LEGEND_SWATCH[phase])}
-                                    aria-hidden
-                                  />
+                                  <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", PHASE_LEGEND_SWATCH_LOCAL[phase])} aria-hidden />
                                 ) : null}
-                                <p className="truncate text-sm text-foreground">{resolvedPhaseLabel}</p>
+                                <p className={cn("truncate text-sm", phase === "transmutation" ? "text-white" : "text-black")}>{resolvedPhaseLabel}</p>
                               </div>
 
                               <div className="flex items-center justify-between gap-2">
-                                <span className="text-xs text-muted-foreground">
+                                <span className={cn("text-xs", phase === "transmutation" ? "text-white/58" : "text-black/45")}>
                                   {isSelected ? "Pronta para editar" : "Adicionar à seleção"}
                                 </span>
                                 {isCurrentWeek ? (
-                                  <span className="rounded-full bg-primary/14 px-2 py-1 text-[10px] uppercase tracking-[0.16em] text-primary">
+                                  <span className={cn("rounded-full px-2 py-1 text-[10px] uppercase tracking-[0.16em]", phase === "transmutation" ? "bg-white text-black" : "bg-black text-white")}>
                                     Agora
                                   </span>
                                 ) : null}
@@ -531,19 +538,19 @@ export function StudentPeriodizationStrip({
                           >
                             <div className="flex items-start justify-between gap-3 text-left">
                               <div className="space-y-1">
-                                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-black/45">
                                   {format(date, "EEE", { locale: ptBR }).replace(".", "")}
                                 </p>
-                                <p className="font-display text-[2rem] leading-none tracking-[-0.06em] text-foreground">
+                                <p className={cn("font-display text-[2rem] leading-none tracking-[-0.06em]", phase === "transmutation" ? "text-white" : "text-black")}>
                                   {format(date, "dd")}
                                 </p>
-                                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                                <p className={cn("font-mono text-[10px] uppercase tracking-[0.18em]", phase === "transmutation" ? "text-white/58" : "text-black/45")}>
                                   sem {format(date, "II")}
                                 </p>
                               </div>
 
                               {isCurrentWeek ? (
-                                <span className="rounded-full bg-primary/14 px-2 py-1 text-[10px] uppercase tracking-[0.16em] text-primary">
+                                <span className={cn("rounded-full px-2 py-1 text-[10px] uppercase tracking-[0.16em]", phase === "transmutation" ? "bg-white text-black" : "bg-black text-white")}>
                                   Agora
                                 </span>
                               ) : null}
@@ -552,14 +559,11 @@ export function StudentPeriodizationStrip({
                             <div className="mt-auto space-y-2 text-left">
                               <div className="flex items-center gap-2">
                                 {phase ? (
-                                  <span
-                                    className={cn("h-2.5 w-2.5 shrink-0 rounded-full", PHASE_LEGEND_SWATCH[phase])}
-                                    aria-hidden
-                                  />
+                                  <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", PHASE_LEGEND_SWATCH_LOCAL[phase])} aria-hidden />
                                 ) : null}
-                                <p className="truncate text-sm text-foreground">{resolvedPhaseLabel}</p>
+                                <p className={cn("truncate text-sm", phase === "transmutation" ? "text-white" : "text-black")}>{resolvedPhaseLabel}</p>
                               </div>
-                              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                              <p className={cn("font-mono text-[10px] uppercase tracking-[0.18em]", phase === "transmutation" ? "text-white/58" : "text-black/45")}>
                                 Toque para abrir a semana
                               </p>
                             </div>
@@ -568,19 +572,19 @@ export function StudentPeriodizationStrip({
                           <div className={tileClasses}>
                             <div className="flex items-start justify-between gap-3 text-left">
                               <div className="space-y-1">
-                                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-black/45">
                                   {format(date, "EEE", { locale: ptBR }).replace(".", "")}
                                 </p>
-                                <p className="font-display text-[2rem] leading-none tracking-[-0.06em] text-foreground">
+                                <p className={cn("font-display text-[2rem] leading-none tracking-[-0.06em]", phase === "transmutation" ? "text-white" : "text-black")}>
                                   {format(date, "dd")}
                                 </p>
-                                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                                <p className={cn("font-mono text-[10px] uppercase tracking-[0.18em]", phase === "transmutation" ? "text-white/58" : "text-black/45")}>
                                   sem {format(date, "II")}
                                 </p>
                               </div>
 
                               {isCurrentWeek ? (
-                                <span className="rounded-full bg-primary/14 px-2 py-1 text-[10px] uppercase tracking-[0.16em] text-primary">
+                                <span className={cn("rounded-full px-2 py-1 text-[10px] uppercase tracking-[0.16em]", phase === "transmutation" ? "bg-white text-black" : "bg-black text-white")}>
                                   Agora
                                 </span>
                               ) : null}
@@ -588,12 +592,9 @@ export function StudentPeriodizationStrip({
 
                             <div className="mt-auto flex items-center gap-2 text-left">
                               {phase ? (
-                                <span
-                                  className={cn("h-2.5 w-2.5 shrink-0 rounded-full", PHASE_LEGEND_SWATCH[phase])}
-                                  aria-hidden
-                                />
+                                <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", PHASE_LEGEND_SWATCH_LOCAL[phase])} aria-hidden />
                               ) : null}
-                              <p className="truncate text-sm text-foreground">{resolvedPhaseLabel}</p>
+                              <p className={cn("truncate text-sm", phase === "transmutation" ? "text-white" : "text-black")}>{resolvedPhaseLabel}</p>
                             </div>
                           </div>
                         )}
@@ -605,9 +606,9 @@ export function StudentPeriodizationStrip({
             </div>
 
             {!canEdit && !hasAnyPhase ? (
-              <div className="rounded-[1.25rem] border border-dashed border-border bg-secondary/20 px-5 py-6 text-center">
-                <p className="text-sm text-foreground">O treinador ainda não definiu fases para esta janela.</p>
-                <p className="mt-1 text-xs text-muted-foreground">
+              <div className="rounded-[1.25rem] border border-dashed border-black/10 bg-[#f8f8f8] px-5 py-6 text-center">
+                <p className="text-sm text-black">O treinador ainda não definiu fases para esta janela.</p>
+                <p className="mt-1 text-xs text-black/45">
                   Assim que o ciclo for configurado, ele vai aparecer aqui na linha do mesociclo.
                 </p>
               </div>

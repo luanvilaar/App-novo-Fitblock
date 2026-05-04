@@ -17,17 +17,17 @@ interface BiSetCardProps {
 
 const BiSetCard: React.FC<BiSetCardProps> = ({ exercises, trackingLogs, onTrackingUpdate }) => {
   return (
-    <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 overflow-hidden">
+    <div className="overflow-hidden rounded-[1.5rem] border border-black/8 bg-[#f8f8f8]">
       {/* Bi-set header */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 border-b border-amber-500/20">
-        <Link2 className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-        <span className="text-[10px] font-bold uppercase tracking-widest text-amber-700 dark:text-amber-400">
+      <div className="flex items-center gap-2 border-b border-black/8 bg-[#efefef] px-4 py-2">
+        <Link2 className="h-3.5 w-3.5 text-black" />
+        <span className="text-[10px] font-bold uppercase tracking-widest text-black/70">
           Bi-Set
         </span>
       </div>
 
       {/* Exercises */}
-      <div className="divide-y divide-amber-500/15">
+      <div className="divide-y divide-black/6">
         {exercises.map((ex, i) => {
           // Limpar a URL do vídeo do texto das notas
           const displayNotes = ex.notes 
@@ -48,14 +48,14 @@ const BiSetCard: React.FC<BiSetCardProps> = ({ exercises, trackingLogs, onTracki
                       href={ex.videoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors text-[10px] font-bold uppercase tracking-wider"
+                      className="flex items-center gap-1 rounded-lg bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black transition-colors hover:bg-[#efefef]"
                     >
                       <PlayCircle className="w-3.5 h-3.5" />
                       Vídeo
                     </a>
                   )}
                   {ex.load && (
-                    <span className="text-[10px] font-bold bg-energy/10 text-energy px-2 py-0.5 rounded-full uppercase tracking-wider">
+                    <span className="rounded-full bg-black px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
                       {ex.load}
                     </span>
                   )}
@@ -84,7 +84,7 @@ const BiSetCard: React.FC<BiSetCardProps> = ({ exercises, trackingLogs, onTracki
                 {ex.distance && (
                   <div className="flex flex-col">
                     <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-semibold">Distância</span>
-                    <span className="text-sm font-medium text-energy">{ex.distance}</span>
+                    <span className="text-sm font-medium text-black">{ex.distance}</span>
                   </div>
                 )}
                 {ex.duration && (
@@ -122,8 +122,8 @@ const BiSetCard: React.FC<BiSetCardProps> = ({ exercises, trackingLogs, onTracki
       </div>
 
       {/* Execution hint */}
-      <div className="px-4 py-2 bg-amber-500/5 border-t border-amber-500/15">
-        <p className="text-[10px] text-amber-700/70 dark:text-amber-400/70 italic">
+      <div className="border-t border-black/8 bg-[#efefef] px-4 py-2">
+        <p className="text-[10px] italic text-black/70">
           Alternado sem descanso entre os exercícios
         </p>
       </div>

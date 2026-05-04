@@ -1,11 +1,21 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { motion } from "framer-motion";
-import { Calendar, ChevronRight, Dumbbell, Clock, Cpu, Activity } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Activity, CalendarClock, ChevronRight, Clock3, History } from "lucide-react";
+
+import {
+  StudentEmptyState,
+  StudentPageSection,
+  StudentPill,
+  StudentSectionHeading,
+  StudentStatCard,
+  StudentSurfaceCard,
+} from "@/components/client/StudentPagePrimitives";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 interface LogEntry {
   id: string;
@@ -27,7 +37,10 @@ const ClientHistory = () => {
         .select("id")
         .eq("user_id", user.id)
         .maybeSingle();
-      if (!student) { setLoading(false); return; }
+      if (!student) {
+        setLoading(false);
+        return;
+      }
 
       const { data } = await supabase
         .from("workout_logs")
@@ -35,10 +48,11 @@ const ClientHistory = () => {
         .eq("student_id", student.id)
         .order("completed_at", { ascending: false })
         .limit(50);
-      if (data) setLogs(data as LogEntry[]);
+
+      setLogs((data as LogEntry[]) ?? []);
       setLoading(false);
     };
-    fetch();
+    void fetch();
   }, [user]);
 
   const formatDuration = (seconds: number | null) => {
@@ -48,72 +62,137 @@ const ClientHistory = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
+  const totalSessions = logs.length;
+  const averageDuration = useMemo(() => {
+    const valid = logs.filter((log) => log.total_time_seconds && log.total_time_seconds > 0);
+    if (valid.length === 0) return null;
+    const avg = Math.round(valid.reduce((sum, log) => sum + (log.total_time_seconds ?? 0), 0) / valid.length);
+    return formatDuration(avg);
+  }, [logs]);
+
   return (
-    <div className="min-h-screen bg-white text-black space-y-8 pb-32">
-      
-      {/* Header */}
-      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="space-y-1">
-        <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">
-          Atividade
-        </p>
-        <h1 className="font-sans text-3xl font-bold tracking-tight text-black">
-          Histórico
-        </h1>
-      </motion.div>
+    <StudentPageSection>
+      <StudentSurfaceCard className="p-6 sm:p-8" tone="strong">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)] lg:items-end">
+          <div className="space-y-4">
+            <StudentPill>Revisão</StudentPill>
+            <div className="space-y-2">
+              <h1 className="font-display text-4xl text-black sm:text-5xl">Histórico de sessões</h1>
+              <p className="max-w-2xl text-sm leading-relaxed text-black/58 sm:text-base">
+                Aqui o atleta revisa treinos concluídos em modo leitura. Não existe mais retorno acidental para o fluxo operacional da sessão.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button asChild variant="secondary-pill" className="h-12 px-6">
+                <Link to="/dashboard/sessao">Abrir sessão atual</Link>
+              </Button>
+              <Button asChild variant="primary-pill" className="h-12 px-6">
+                <Link to="/dashboard/evolucao">Ver evolução</Link>
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            <StudentStatCard eyebrow="Sessões" value={totalSessions} label="treinos registrados" icon={History} />
+            <StudentStatCard eyebrow="Média" value={averageDuration ?? "—"} label="tempo médio de sessão" icon={Clock3} accent />
+            <StudentStatCard
+              eyebrow="Última revisão"
+              value={logs[0] ? format(new Date(logs[0].completed_at), "dd MMM", { locale: ptBR }) : "—"}
+              label="sessão mais recente"
+              icon={CalendarClock}
+            />
+          </div>
+        </div>
+      </StudentSurfaceCard>
 
       {loading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-24 animate-pulse rounded-2xl bg-[#f3f3f3]" />
+            <StudentSurfaceCard key={i} className="h-24 animate-pulse bg-[#f3f3f3]" />
           ))}
         </div>
       ) : logs.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-6 rounded-2xl bg-[#f3f3f3] p-12 text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-black/5">
-            <Activity className="h-8 w-8 text-black/20" />
-          </div>
-          <div className="space-y-1">
-            <p className="font-sans text-sm font-bold">Nenhum treino ainda</p>
-            <p className="font-sans text-xs text-black/40">Complete seu primeiro protocolo para ver o log.</p>
-          </div>
-        </div>
+        <StudentEmptyState
+          icon={Activity}
+          title="Nenhum treino concluído ainda"
+          description="Feche sua primeira sessão para liberar a área de revisão."
+          action={
+            <Button asChild variant="primary-pill" className="h-12 px-6">
+              <Link to="/dashboard/sessao">Abrir sessão</Link>
+            </Button>
+          }
+        />
       ) : (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-4">
-          {logs.map((log, i) => (
-            <Link key={log.id} to={`/dashboard/treino/${log.workouts?.id}`}>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="group relative flex items-center gap-4 rounded-2xl bg-[#f3f3f3] p-5 transition-all active:scale-[0.98]"
-              >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-black text-white">
-                  <Dumbbell className="h-6 w-6" />
-                </div>
-                
-                <div className="min-w-0 flex-1 space-y-1">
-                  <h3 className="truncate font-sans text-base font-bold text-black">
-                    {log.workouts?.title}
-                  </h3>
-                  <div className="flex items-center gap-3 font-mono text-[9px] font-bold uppercase tracking-wider text-black/40">
-                    <span>{format(new Date(log.completed_at), "dd MMM yyyy", { locale: ptBR })}</span>
-                    {log.total_time_seconds && (
-                      <div className="flex items-center gap-1.5">
-                        <div className="h-1 w-1 rounded-full bg-black/10" />
-                        <Clock className="h-3 w-3" />
-                        <span>{formatDuration(log.total_time_seconds)}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
+        <div className="space-y-3">
+          {logs.map((log, index) => {
+            const workoutId = log.workouts?.id;
+            if (!workoutId) return null;
 
-                <ChevronRight className="h-5 w-5 text-black/20 transition-transform group-hover:translate-x-1" />
-              </motion.div>
-            </Link>
-          ))}
-        </motion.div>
+            return (
+              <Link key={log.id} to={`/dashboard/revisao/${workoutId}`}>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.04 }}
+                  className="group"
+                >
+                  <StudentSurfaceCard className="p-5 transition-transform hover:-translate-y-0.5">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1.15rem] border border-black/8 bg-[#efefef] text-black">
+                        <History className="h-5 w-5" />
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-black/40">
+                          <span>{format(new Date(log.completed_at), "dd MMM yyyy", { locale: ptBR })}</span>
+                          {log.workouts?.category ? <span>{log.workouts.category}</span> : null}
+                        </div>
+                        <p className="mt-1 truncate text-base font-semibold text-black">{log.workouts?.title}</p>
+                        <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-black/45">
+                          <span className="inline-flex items-center gap-1.5">
+                            <CalendarClock className="h-3.5 w-3.5" />
+                            {format(new Date(log.workouts.date), "EEEE, dd MMM", { locale: ptBR })}
+                          </span>
+                          {log.total_time_seconds ? (
+                            <span className="inline-flex items-center gap-1.5">
+                              <Clock3 className="h-3.5 w-3.5" />
+                              {formatDuration(log.total_time_seconds)}
+                            </span>
+                          ) : null}
+                        </div>
+                      </div>
+
+                      <div className="flex shrink-0 items-center gap-3">
+                        <StudentPill className="hidden sm:inline-flex">Revisar</StudentPill>
+                        <ChevronRight className="h-5 w-5 text-black/28 transition-transform group-hover:translate-x-1" />
+                      </div>
+                    </div>
+                  </StudentSurfaceCard>
+                </motion.div>
+              </Link>
+            );
+          })}
+        </div>
       )}
-    </div>
+
+      <StudentSurfaceCard className="p-6 sm:p-8">
+        <StudentSectionHeading
+          eyebrow="Fluxo correto"
+          title="Treino e revisão agora têm papéis diferentes."
+          description="Sessão serve para registrar execução. Histórico serve para consultar o que já foi feito. Isso reduz erro de navegação e mantém foco em cada contexto."
+          action={
+            <div className="flex flex-wrap gap-3">
+              <Button asChild variant="secondary-pill" className="h-12 px-6">
+                <Link to="/dashboard/sessao">Treinar agora</Link>
+              </Button>
+              <Button asChild variant="secondary-pill" className="h-12 px-6">
+                <Link to="/dashboard/treinadores">Ver comunidade</Link>
+              </Button>
+            </div>
+          }
+        />
+      </StudentSurfaceCard>
+    </StudentPageSection>
   );
 };
 

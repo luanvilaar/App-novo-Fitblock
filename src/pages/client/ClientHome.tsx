@@ -69,7 +69,7 @@ const getGreeting = () => {
 const SurfaceCard = ({ className, children }: { className?: string; children?: ReactNode }) => (
   <div
     className={cn(
-      "overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl",
+      "overflow-hidden rounded-[2rem] border border-black/6 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.12)]",
       className,
     )}
   >
@@ -95,35 +95,35 @@ const MetricCard = ({
   <SurfaceCard className="p-5">
     <div className="flex items-start justify-between gap-3">
       <div className="space-y-3">
-        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">{eyebrow}</p>
+        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-black/45">{eyebrow}</p>
         <div>
-          <p className={cn("font-display text-3xl text-white", accent && "text-primary")}>{value}</p>
-          <p className="mt-1 text-sm font-medium text-white/72">{label}</p>
+          <p className="font-display text-3xl text-black">{value}</p>
+          <p className="mt-1 text-sm font-medium text-black/72">{label}</p>
         </div>
       </div>
       <div
         className={cn(
-          "flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05]",
-          accent && "border-primary/25 bg-primary/12 text-primary",
+          "flex h-11 w-11 items-center justify-center rounded-2xl border border-black/6 bg-[#f3f3f3] text-black/64",
+          accent && "bg-black text-white",
         )}
       >
         <Icon className="h-5 w-5" />
       </div>
     </div>
-    {detail ? <p className="mt-4 text-xs leading-relaxed text-white/50">{detail}</p> : null}
+    {detail ? <p className="mt-4 text-xs leading-relaxed text-black/50">{detail}</p> : null}
   </SurfaceCard>
 );
 
 const LoadingShell = () => (
   <div className="space-y-5">
-    <SurfaceCard className="min-h-[220px] animate-pulse bg-white/[0.03]" />
+    <SurfaceCard className="min-h-[220px] animate-pulse bg-[#f3f3f3]" />
     <div className="grid gap-4 md:grid-cols-2">
-      <SurfaceCard className="min-h-[220px] animate-pulse bg-white/[0.03]" />
-      <SurfaceCard className="min-h-[220px] animate-pulse bg-white/[0.03]" />
+      <SurfaceCard className="min-h-[220px] animate-pulse bg-[#f3f3f3]" />
+      <SurfaceCard className="min-h-[220px] animate-pulse bg-[#f3f3f3]" />
     </div>
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {Array.from({ length: 4 }).map((_, index) => (
-        <SurfaceCard key={index} className="min-h-[150px] animate-pulse bg-white/[0.03]" />
+        <SurfaceCard key={index} className="min-h-[150px] animate-pulse bg-[#f3f3f3]" />
       ))}
     </div>
   </div>
@@ -143,16 +143,16 @@ const GroupRankingCard = ({
   const { ranking, loading } = useGroupRanking(groupId);
 
   if (loading) {
-    return <SurfaceCard className="min-h-[280px] animate-pulse bg-white/[0.03]" />;
+    return <SurfaceCard className="min-h-[280px] animate-pulse bg-[#f3f3f3]" />;
   }
 
   if (ranking.length === 0) {
     return (
       <SurfaceCard className="p-6">
         <div className="space-y-3">
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-white/45">Comunidade</p>
-          <h3 className="font-display text-2xl text-white">{groupName}</h3>
-          <p className="max-w-md text-sm leading-relaxed text-white/58">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-black/45">Comunidade</p>
+          <h3 className="font-display text-2xl text-black">{groupName}</h3>
+          <p className="max-w-md text-sm leading-relaxed text-black/58">
             Ainda não há sessões suficientes para montar o ranking deste grupo.
           </p>
         </div>
@@ -165,33 +165,33 @@ const GroupRankingCard = ({
   const leaders = ranking.slice(0, featured ? 5 : 3);
 
   return (
-    <SurfaceCard className={cn("p-6", featured && "bg-white/[0.05]")}> 
+    <SurfaceCard className="p-6"> 
       <div className="flex flex-col gap-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-primary/80">Comunidade</p>
-            <h3 className="mt-2 font-display text-2xl text-white sm:text-3xl">{groupName}</h3>
-            <p className="mt-2 max-w-md text-sm leading-relaxed text-white/58">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-black/45">Comunidade</p>
+            <h3 className="mt-2 font-display text-2xl text-black sm:text-3xl">{groupName}</h3>
+            <p className="mt-2 max-w-md text-sm leading-relaxed text-black/58">
               Ranking real dos últimos 30 dias, baseado nas sessões concluídas no app.
             </p>
           </div>
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary/12 text-primary">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-black text-white">
             <Trophy className="h-5 w-5" />
           </div>
         </div>
 
         {myEntry ? (
-          <div className="rounded-[1.75rem] border border-primary/18 bg-primary/10 p-5 shadow-[0_20px_40px_rgba(30,215,96,0.12)]">
+          <div className="rounded-[1.75rem] bg-[#f3f3f3] p-5">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/80">Sua posição</p>
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-black/45">Sua posição</p>
                 <div className="mt-2 flex items-end gap-3">
-                  <span className="font-display text-5xl leading-none text-white">#{myPosition + 1}</span>
-                  <span className="pb-1 text-sm font-medium text-white/64">de {ranking.length} atletas</span>
+                  <span className="font-display text-5xl leading-none text-black">#{myPosition + 1}</span>
+                  <span className="pb-1 text-sm font-medium text-black/64">de {ranking.length} atletas</span>
                 </div>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-right">
-                <p className="font-display text-2xl text-white">{Math.round(myEntry.score)}</p>
+              <div className="rounded-2xl bg-black px-4 py-3 text-right text-white">
+                <p className="font-display text-2xl">{Math.round(myEntry.score)}</p>
                 <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-white/45">pontos</p>
               </div>
             </div>
@@ -200,8 +200,8 @@ const GroupRankingCard = ({
 
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-white/82">Top do grupo</p>
-            <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/35">30 dias</p>
+            <p className="text-sm font-semibold text-black/82">Top do grupo</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/35">30 dias</p>
           </div>
           <div className="space-y-2.5">
             {leaders.map((member, index) => {
@@ -211,24 +211,24 @@ const GroupRankingCard = ({
                   key={member.student_id}
                   className={cn(
                     "flex items-center justify-between gap-3 rounded-[1.35rem] border px-4 py-3",
-                    isMe ? "border-primary/20 bg-primary/10" : "border-white/8 bg-black/15",
+                    isMe ? "border-black bg-black text-white" : "border-black/6 bg-[#f8f8f8]",
                   )}
                 >
                   <div className="flex min-w-0 items-center gap-3">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] text-sm font-semibold text-white">
+                    <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-sm font-semibold", isMe ? "bg-white text-black" : "bg-black text-white")}>
                       {medalLabel(index)}
                     </span>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-white">
+                      <p className={cn("truncate text-sm font-semibold", isMe ? "text-white" : "text-black")}>
                         {member.name}
-                        {isMe ? <span className="ml-1.5 text-primary">• Você</span> : null}
+                        {isMe ? <span className="ml-1.5 text-white/72">• Você</span> : null}
                       </p>
-                      <p className="text-xs text-white/42">{member.workouts_count} sessões válidas</p>
+                      <p className={cn("text-xs", isMe ? "text-white/42" : "text-black/42")}>{member.workouts_count} sessões válidas</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-display text-xl text-white">{Math.round(member.score)}</p>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/35">pts</p>
+                    <p className={cn("font-display text-xl", isMe ? "text-white" : "text-black")}>{Math.round(member.score)}</p>
+                    <p className={cn("font-mono text-[10px] uppercase tracking-[0.24em]", isMe ? "text-white/35" : "text-black/35")}>pts</p>
                   </div>
                 </div>
               );
@@ -425,7 +425,7 @@ const ClientHome = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen px-safe pb-28 pt-2 text-white">
+      <div className="min-h-screen px-safe pb-28 pt-2 text-black">
         <div className="mx-auto max-w-6xl">
           <LoadingShell />
         </div>
@@ -434,53 +434,44 @@ const ClientHome = () => {
   }
 
   return (
-    <div className="min-h-screen px-safe pb-28 pt-2 text-white">
+    <div className="min-h-screen px-safe pb-28 pt-2 text-black">
       <div className="mx-auto max-w-6xl space-y-6">
-        <SurfaceCard className="relative overflow-hidden border-white/12 bg-[#0f1111]">
-          <img
-            src={heroBg}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover opacity-20"
-          />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(30,215,96,0.22),transparent_34%),linear-gradient(135deg,rgba(8,10,10,0.92),rgba(8,10,10,0.98))]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_45%)]" />
-
-          <div className="relative grid gap-6 p-6 sm:p-8 xl:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)] xl:items-end">
+        <SurfaceCard className="p-6 sm:p-8">
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)] xl:items-center">
             <div className="space-y-6">
-              <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium text-white/64">
-                <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 font-mono uppercase tracking-[0.24em]">
+              <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium text-black/64">
+                <span className="rounded-full bg-[#efefef] px-3 py-1 font-mono uppercase tracking-[0.24em]">
                   Dashboard do atleta
                 </span>
-                <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 font-mono uppercase tracking-[0.24em] text-primary">
+                <span className="rounded-full bg-black px-3 py-1 font-mono uppercase tracking-[0.24em] text-white">
                   {format(new Date(), "dd 'de' MMMM", { locale: ptBR })}
                 </span>
               </div>
 
               <div className="space-y-3">
-                <p className="text-lg font-medium text-white/72">{getGreeting()},</p>
-                <h1 className="max-w-3xl font-display text-4xl leading-none text-white sm:text-5xl xl:text-6xl">
+                <p className="text-lg font-medium text-black/72">{getGreeting()},</p>
+                <h1 className="max-w-3xl font-display text-4xl leading-none text-black sm:text-5xl xl:text-6xl">
                   {profileName || "Atleta"}
                 </h1>
-                <p className="max-w-2xl text-sm leading-relaxed text-white/58 sm:text-base">
+                <p className="max-w-2xl text-sm leading-relaxed text-black/58 sm:text-base">
                   Sua home agora prioriza comunidade, sequência de treino e sinais reais de evolução dentro do app.
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-3">
                 {spotlightWorkout ? (
-                  <Button asChild variant="primary-pill" className="h-12 bg-primary px-6 text-black hover:bg-primary/90">
+                  <Button asChild variant="primary-pill" className="h-12 px-6">
                     <Link to={`/dashboard/treino/${spotlightWorkout.id}`}>Abrir treino em destaque</Link>
                   </Button>
                 ) : (
-                  <Button asChild variant="secondary-pill" className="h-12 border border-white/12 bg-white/[0.06] px-6 text-white hover:bg-white/[0.1]">
+                  <Button asChild variant="secondary-pill" className="h-12 px-6">
                     <Link to="/dashboard/treinadores">Explorar grupos e coaches</Link>
                   </Button>
                 )}
                 <Button
                   type="button"
                   variant="secondary-pill"
-                  className="h-12 border border-white/12 bg-white/[0.06] px-6 text-white hover:bg-white/[0.1]"
+                  className="h-12 px-6"
                   onClick={() => setMaxLoadsOpen(true)}
                 >
                   <TrendingUp className="h-4 w-4" />
@@ -489,25 +480,30 @@ const ClientHome = () => {
               </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
-              <div className="rounded-[1.75rem] border border-white/10 bg-black/30 p-5 backdrop-blur-sm">
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">Grupo principal</p>
-                <p className="mt-3 font-display text-2xl text-white">{primaryGroup?.name ?? "Sem grupo"}</p>
-                <p className="mt-2 text-sm text-white/54">
+            <div className="grid gap-4">
+              <div className="overflow-hidden rounded-[1.75rem] bg-[#f3f3f3]">
+                <img src={heroBg} alt="" aria-hidden="true" className="h-48 w-full object-cover grayscale" />
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+                <div className="rounded-[1.75rem] bg-[#f3f3f3] p-5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Grupo principal</p>
+                  <p className="mt-3 font-display text-2xl text-black">{primaryGroup?.name ?? "Sem grupo"}</p>
+                  <p className="mt-2 text-sm text-black/54">
                   {groups.length > 0 ? `${groups.length} grupo${groups.length > 1 ? "s" : ""} ativo${groups.length > 1 ? "s" : ""}` : "Sem comunidade conectada"}
-                </p>
-              </div>
+                  </p>
+                </div>
 
-              <div className="rounded-[1.75rem] border border-white/10 bg-black/30 p-5 backdrop-blur-sm">
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">Aderência</p>
-                <p className="mt-3 font-display text-4xl text-primary">{completionRate}%</p>
-                <p className="mt-2 text-sm text-white/54">dos próximos protocolos já concluídos</p>
-              </div>
+                <div className="rounded-[1.75rem] bg-[#f3f3f3] p-5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Aderência</p>
+                  <p className="mt-3 font-display text-4xl text-black">{completionRate}%</p>
+                  <p className="mt-2 text-sm text-black/54">dos próximos protocolos já concluídos</p>
+                </div>
 
-              <div className="rounded-[1.75rem] border border-white/10 bg-black/30 p-5 backdrop-blur-sm">
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">Sequência</p>
-                <p className="mt-3 font-display text-4xl text-white">{consistencySnapshot?.sessionsLast30 ?? 0}</p>
-                <p className="mt-2 text-sm text-white/54">sessões válidas nos últimos 30 dias</p>
+                <div className="rounded-[1.75rem] bg-[#f3f3f3] p-5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Sequência</p>
+                  <p className="mt-3 font-display text-4xl text-black">{consistencySnapshot?.sessionsLast30 ?? 0}</p>
+                  <p className="mt-2 text-sm text-black/54">sessões válidas nos últimos 30 dias</p>
+                </div>
               </div>
             </div>
           </div>
@@ -519,13 +515,13 @@ const ClientHome = () => {
           <SurfaceCard className="p-6 sm:p-8">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl">
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">Comunidade</p>
-                <h2 className="mt-3 font-display text-3xl text-white">Entre em um grupo para liberar o ranking</h2>
-                <p className="mt-3 text-sm leading-relaxed text-white/58">
+                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Comunidade</p>
+                <h2 className="mt-3 font-display text-3xl text-black">Entre em um grupo para liberar o ranking</h2>
+                <p className="mt-3 text-sm leading-relaxed text-black/58">
                   O dashboard social aparece quando você entra em um grupo com sessões registradas. Até lá, a home continua focada na sua rotina de treino.
                 </p>
               </div>
-              <Button asChild variant="primary-pill" className="h-12 bg-primary px-6 text-black hover:bg-primary/90">
+              <Button asChild variant="primary-pill" className="h-12 px-6">
                 <Link to="/dashboard/treinadores">Encontrar treinadores</Link>
               </Button>
             </div>
@@ -545,10 +541,10 @@ const ClientHome = () => {
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">Semana em curso</p>
-                  <h2 className="mt-2 font-display text-3xl text-white">Agenda de treino</h2>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Semana em curso</p>
+                  <h2 className="mt-2 font-display text-3xl text-black">Agenda de treino</h2>
                 </div>
-                <div className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/62">
+                <div className="rounded-full border border-black/8 bg-[#efefef] px-4 py-2 text-sm text-black/62">
                   {completedThisWeek}/{thisWeekWorkouts.length} concluídos
                 </div>
               </div>
@@ -556,38 +552,38 @@ const ClientHome = () => {
               {spotlightWorkout ? (
                 <Link
                   to={`/dashboard/treino/${spotlightWorkout.id}`}
-                  className="group rounded-[1.9rem] border border-white/10 bg-[linear-gradient(135deg,rgba(30,215,96,0.18),rgba(8,10,10,0.94)_45%)] p-5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f1111]"
+                  className="group rounded-[1.9rem] border border-black/8 bg-[#f3f3f3] p-5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 >
                   <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                     <div className="space-y-3">
-                      <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">
-                        <span className="rounded-full border border-white/10 bg-white/[0.06] px-3 py-1">
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-black/55">
+                        <span className="rounded-full border border-black/8 bg-white px-3 py-1">
                           {spotlightWorkout.date === todayIso ? "Treino de hoje" : "Próximo treino"}
                         </span>
                         <span>{format(new Date(`${spotlightWorkout.date}T12:00:00`), "EEEE, dd MMM", { locale: ptBR })}</span>
                       </div>
                       <div>
-                        <h3 className="text-2xl font-semibold tracking-tight text-white">{spotlightWorkout.title}</h3>
-                        <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/58">
+                        <h3 className="text-2xl font-semibold tracking-tight text-black">{spotlightWorkout.title}</h3>
+                        <p className="mt-2 max-w-xl text-sm leading-relaxed text-black/58">
                           {spotlightWorkout.description || "Abra o treino para executar séries, registrar cargas e validar a sessão no ranking."}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-right">
-                        <p className="font-display text-2xl text-white">{spotlightWorkout.workout_exercises.length}</p>
-                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-white/40">exercícios</p>
+                      <div className="rounded-2xl bg-white px-4 py-3 text-right">
+                        <p className="font-display text-2xl text-black">{spotlightWorkout.workout_exercises.length}</p>
+                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-black/40">exercícios</p>
                       </div>
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white text-black transition-transform group-hover:translate-x-1">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-black text-white transition-transform group-hover:translate-x-1">
                         <ChevronRight className="h-5 w-5" />
                       </div>
                     </div>
                   </div>
                 </Link>
               ) : (
-                <div className="rounded-[1.9rem] border border-dashed border-white/12 bg-white/[0.03] p-6 text-center">
-                  <p className="font-display text-2xl text-white">Sem treino programado nesta semana</p>
-                  <p className="mt-2 text-sm leading-relaxed text-white/54">
+                <div className="rounded-[1.9rem] border border-dashed border-black/10 bg-[#f8f8f8] p-6 text-center">
+                  <p className="font-display text-2xl text-black">Sem treino programado nesta semana</p>
+                  <p className="mt-2 text-sm leading-relaxed text-black/54">
                     Quando seu coach publicar um protocolo, ele aparece aqui com acesso direto para execução.
                   </p>
                 </div>
@@ -609,26 +605,26 @@ const ClientHome = () => {
                         <Link
                           to={`/dashboard/treino/${workout.id}`}
                           className={cn(
-                            "flex items-center justify-between gap-4 rounded-[1.45rem] border px-4 py-4 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f1111]",
-                            isDone ? "border-white/8 bg-white/[0.03] text-white/55" : "border-white/10 bg-black/15 text-white hover:bg-white/[0.05]",
+                            "flex items-center justify-between gap-4 rounded-[1.45rem] border px-4 py-4 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+                            isDone ? "border-black/8 bg-[#f3f3f3] text-black/55" : "border-black/8 bg-white text-black hover:bg-[#f8f8f8]",
                           )}
                         >
                           <div className="min-w-0">
-                            <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-white/40">
+                            <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-black/40">
                               <span>{format(new Date(`${workout.date}T12:00:00`), "EEE", { locale: ptBR })}</span>
-                              {isToday ? <span className="text-primary">Hoje</span> : null}
-                              {isDone ? <span className="text-white/50">Concluído</span> : null}
+                              {isToday ? <span className="text-black/58">Hoje</span> : null}
+                              {isDone ? <span className="text-black/50">Concluído</span> : null}
                             </div>
                             <p className={cn("mt-1 truncate text-base font-semibold", isDone && "line-through")}>{workout.title}</p>
                           </div>
                           <div className="flex shrink-0 items-center gap-3">
-                            <span className="text-xs text-white/40">{workout.workout_exercises.length} ex.</span>
+                            <span className="text-xs text-black/40">{workout.workout_exercises.length} ex.</span>
                             {isDone ? (
-                              <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/20 bg-primary/12 text-primary">
+                              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-black text-white">
                                 <Check className="h-4 w-4" />
                               </span>
                             ) : (
-                              <ChevronRight className="h-5 w-5 text-white/40" />
+                              <ChevronRight className="h-5 w-5 text-black/40" />
                             )}
                           </div>
                         </Link>
@@ -681,10 +677,10 @@ const ClientHome = () => {
           <SurfaceCard className="p-6 sm:p-8">
             <div className="mb-5 flex items-center justify-between gap-4">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">Ciclo</p>
-                <h2 className="mt-2 font-display text-3xl text-white">Linha do mesociclo</h2>
+                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Ciclo</p>
+                <h2 className="mt-2 font-display text-3xl text-black">Linha do mesociclo</h2>
               </div>
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white/64">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-black/6 bg-[#efefef] text-black/64">
                 <CalendarRange className="h-5 w-5" />
               </div>
             </div>
@@ -694,9 +690,9 @@ const ClientHome = () => {
           <SurfaceCard className="p-6 sm:p-8">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">Volume</p>
-                <h2 className="mt-2 font-display text-3xl text-white">Condicionamento da semana</h2>
-                <p className="mt-2 text-sm text-white/54">
+                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Volume</p>
+                <h2 className="mt-2 font-display text-3xl text-black">Condicionamento da semana</h2>
+                <p className="mt-2 text-sm text-black/54">
                   {format(currentWeekStart, "dd MMM", { locale: ptBR })} - {format(currentWeekEnd, "dd MMM", { locale: ptBR })}
                 </p>
               </div>
@@ -705,20 +701,20 @@ const ClientHome = () => {
                   type="button"
                   variant="secondary-pill"
                   size="icon"
-                  className="h-11 w-11 border border-white/10 bg-white/[0.05] text-white hover:bg-white/[0.1]"
+                  className="h-11 w-11"
                   onClick={() => setWeekOffset((previous) => previous - 1)}
                   aria-label="Semana anterior"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <div className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">
+                <div className="rounded-full border border-black/8 bg-[#efefef] px-4 py-2 font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">
                   {weekVolumeLabel}
                 </div>
                 <Button
                   type="button"
                   variant="secondary-pill"
                   size="icon"
-                  className="h-11 w-11 border border-white/10 bg-white/[0.05] text-white hover:bg-white/[0.1]"
+                  className="h-11 w-11"
                   onClick={() => setWeekOffset((previous) => previous + 1)}
                   aria-label="Próxima semana"
                 >
@@ -734,39 +730,39 @@ const ClientHome = () => {
           <SurfaceCard className="p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">Grupos</p>
-                <p className="mt-3 font-display text-3xl text-white">{groups.length}</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Grupos</p>
+                <p className="mt-3 font-display text-3xl text-black">{groups.length}</p>
               </div>
-              <Users className="h-5 w-5 text-white/40" />
+              <Users className="h-5 w-5 text-black/40" />
             </div>
           </SurfaceCard>
           <SurfaceCard className="p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">Próximos protocolos</p>
-                <p className="mt-3 font-display text-3xl text-white">{upcomingTotal}</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Próximos protocolos</p>
+                <p className="mt-3 font-display text-3xl text-black">{upcomingTotal}</p>
               </div>
-              <Activity className="h-5 w-5 text-white/40" />
+              <Activity className="h-5 w-5 text-black/40" />
             </div>
           </SurfaceCard>
           <SurfaceCard className="p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">Pontos atuais</p>
-                <p className="mt-3 font-display text-3xl text-white">
+                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Pontos atuais</p>
+                <p className="mt-3 font-display text-3xl text-black">
                   {consistencySnapshot?.groupPoints != null ? Math.round(consistencySnapshot.groupPoints) : "—"}
                 </p>
               </div>
-              <Trophy className="h-5 w-5 text-white/40" />
+              <Trophy className="h-5 w-5 text-black/40" />
             </div>
           </SurfaceCard>
           <SurfaceCard className="p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/42">Resumo</p>
-                <p className="mt-3 font-display text-3xl text-primary">{completionRate}%</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-black/42">Resumo</p>
+                <p className="mt-3 font-display text-3xl text-black">{completionRate}%</p>
               </div>
-              <Sparkles className="h-5 w-5 text-primary" />
+              <Sparkles className="h-5 w-5 text-black/40" />
             </div>
           </SurfaceCard>
         </div>

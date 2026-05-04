@@ -23,13 +23,13 @@ interface WorkoutBlockCardProps {
 }
 
 const BLOCK_ICONS: Record<string, React.ReactNode> = {
-  AQUECIMENTO: <Heart className="w-4 h-4 text-energy" />,
-  WARMUP: <Heart className="w-4 h-4 text-energy" />,
-  FORÇA: <Dumbbell className="w-4 h-4 text-energy" />,
-  STRENGTH: <Dumbbell className="w-4 h-4 text-energy" />,
-  METCON: <Zap className="w-4 h-4 text-energy" />,
-  CONDICIONAMENTO: <Zap className="w-4 h-4 text-energy" />,
-  WOD: <Zap className="w-4 h-4 text-energy" />,
+  AQUECIMENTO: <Heart className="h-4 w-4 text-black" />,
+  WARMUP: <Heart className="h-4 w-4 text-black" />,
+  FORÇA: <Dumbbell className="h-4 w-4 text-black" />,
+  STRENGTH: <Dumbbell className="h-4 w-4 text-black" />,
+  METCON: <Zap className="h-4 w-4 text-black" />,
+  CONDICIONAMENTO: <Zap className="h-4 w-4 text-black" />,
+  WOD: <Zap className="h-4 w-4 text-black" />,
 };
 
 function isConditioningBlock(block: ParsedBlock): boolean {
@@ -65,7 +65,7 @@ function groupBiSets(exercises: ParsedExercise[]): Array<{ type: 'single' | 'bis
 
 const WorkoutBlockCard: React.FC<WorkoutBlockCardProps> = (props) => {
   const { block, mode = 'full', trackingLogs, onTrackingUpdate, onExerciseClick: _onExerciseClick } = props;
-  const icon = BLOCK_ICONS[block.title.toUpperCase()] || <Activity className="w-4 h-4 text-energy" />;
+  const icon = BLOCK_ICONS[block.title.toUpperCase()] || <Activity className="h-4 w-4 text-black" />;
 
   // Conditioning blocks get a dedicated card
   if (isConditioningBlock(block)) {
@@ -76,7 +76,7 @@ const WorkoutBlockCard: React.FC<WorkoutBlockCardProps> = (props) => {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
-        <div className="text-sm text-muted-foreground mb-2 font-light">
+      <div className="mb-2 text-sm font-light text-black/45">
           {blockLabel}. Conditioning
         </div>
         <ConditioningCard block={block} />
@@ -93,14 +93,14 @@ const WorkoutBlockCard: React.FC<WorkoutBlockCardProps> = (props) => {
       animate={{ opacity: 1, y: 0 }}
       className="mb-8"
     >
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-8 h-8 rounded-xl bg-energy/15 flex items-center justify-center">
+      <div className="mb-4 flex items-center gap-2">
+        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#efefef]">
           {icon}
         </div>
         <div>
           <h3 className="text-lg font-light tracking-tight uppercase">{block.title}</h3>
           {block.formatType && (
-            <span className="text-[10px] font-bold text-energy tracking-[0.2em]">
+            <span className="text-[10px] font-bold tracking-[0.2em] text-black/58">
               {block.formatType} {block.rounds ? `| ${block.rounds} ROUNDS` : ''}
               {block.timeCap ? ` | TC: ${block.timeCap}'` : ''}
             </span>

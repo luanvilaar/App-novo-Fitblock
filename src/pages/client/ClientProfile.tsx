@@ -1,13 +1,31 @@
-import { useState, useEffect } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  Camera,
+  Eye,
+  EyeOff,
+  Loader2,
+  Lock,
+  LogOut,
+  Shield,
+  Target,
+  User,
+} from "lucide-react";
+import { toast } from "sonner";
+
+import {
+  StudentPageSection,
+  StudentPill,
+  StudentSectionHeading,
+  StudentStatCard,
+  StudentSurfaceCard,
+} from "@/components/client/StudentPagePrimitives";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { LogOut, User, Camera, Loader2, Lock, Eye, EyeOff, Shield, Trophy, Activity } from "lucide-react";
-import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 const ClientProfile = () => {
   const { user, signOut, roles } = useAuth();
@@ -21,6 +39,8 @@ const ClientProfile = () => {
   const [gender, setGender] = useState<"" | "male" | "female">("");
   const [birthDate, setBirthDate] = useState("");
   const [savingDemo, setSavingDemo] = useState(false);
+  const [trainerName, setTrainerName] = useState<string | null>(null);
+  const [groupCount, setGroupCount] = useState(0);
 
   useEffect(() => {
     if (!user) return;
@@ -36,8 +56,38 @@ const ClientProfile = () => {
         if (data.gender === "male" || data.gender === "female") setGender(data.gender);
         if (data.birth_date) setBirthDate(data.birth_date);
       }
+
+      const { data: student } = await supabase
+        .from("students")
+        .select("id, trainer_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (student?.id) {
+        const { count } = await supabase
+          .from("group_members")
+          .select("group_id", { count: "exact", head: true })
+          .eq("student_id", student.id);
+        setGroupCount(count ?? 0);
+
+        if (student.trainer_id) {
+          const { data: trainer } = await supabase
+            .from("trainers")
+            .select("user_id")
+            .eq("id", student.trainer_id)
+            .maybeSingle();
+          if (trainer?.user_id) {
+            const { data: trainerProfile } = await supabase
+              .from("profiles")
+              .select("name, email")
+              .eq("user_id", trainer.user_id)
+              .maybeSingle();
+            setTrainerName(trainerProfile?.name ?? trainerProfile?.email ?? null);
+          }
+        }
+      }
     };
-    fetchProfile();
+    void fetchProfile();
   }, [user]);
 
   const handleSaveDemographics = async () => {
@@ -55,8 +105,8 @@ const ClientProfile = () => {
     setSavingDemo(false);
   };
 
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleAvatarUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (!file || !user) return;
     setUploading(true);
     try {
@@ -68,7 +118,7 @@ const ClientProfile = () => {
       await supabase.from("profiles").update({ avatar_url: publicUrl }).eq("user_id", user.id);
       setAvatarUrl(publicUrl);
       toast.success("Foto atualizada!");
-    } catch (err) {
+    } catch {
       toast.error("Erro no upload.");
     }
     setUploading(false);
@@ -92,165 +142,173 @@ const ClientProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black space-y-8 pb-32">
-      
-      {/* Header */}
-      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="space-y-1">
-        <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">
-          Conta
-        </p>
-        <h1 className="font-sans text-3xl font-bold tracking-tight text-black">
-          Perfil
-        </h1>
-      </motion.div>
+    <StudentPageSection>
+      <StudentSurfaceCard className="p-6 sm:p-8" tone="strong">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)] lg:items-end">
+          <div className="space-y-4">
+            <StudentPill>Athlete identity</StudentPill>
+            <div className="space-y-2">
+              <h1 className="font-display text-4xl text-black sm:text-5xl">Perfil do atleta</h1>
+              <p className="max-w-2xl text-sm leading-relaxed text-black/58 sm:text-base">
+                O perfil agora funciona como central de identidade esportiva e conta. Dados da conta continuam aqui, mas o contexto atlético ganhou prioridade visual.
+              </p>
+            </div>
+          </div>
 
-      {/* Profile Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="rounded-3xl bg-[#f3f3f3] p-8 text-center"
-      >
-        <div className="relative w-28 h-28 mx-auto mb-6">
+          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            <StudentStatCard eyebrow="Coach" value={trainerName ?? "Sem vínculo"} label="treinador atual" icon={Target} />
+            <StudentStatCard eyebrow="Grupos" value={groupCount} label="comunidades ativas" icon={Shield} accent />
+            <StudentStatCard eyebrow="Acesso" value={roles.join(", ")} label="permissões desta conta" icon={User} />
+          </div>
+        </div>
+      </StudentSurfaceCard>
+
+      <StudentSurfaceCard className="p-8 text-center">
+        <div className="relative mx-auto mb-6 h-28 w-28">
           {avatarUrl ? (
             <img
               src={avatarUrl}
               alt="Avatar"
-              className="h-28 w-28 rounded-full border-4 border-white object-cover shadow-xl"
+              className="h-28 w-28 rounded-full object-cover shadow-[0_20px_50px_rgba(0,0,0,0.28)]"
             />
           ) : (
-            <div className="flex h-28 w-28 items-center justify-center rounded-full bg-black text-white">
-              <User className="w-10 h-10" />
+            <div className="flex h-28 w-28 items-center justify-center rounded-full border border-black/8 bg-[#efefef] text-black">
+              <User className="h-10 w-10" />
             </div>
           )}
-          <label className="absolute bottom-0 right-0 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-black text-white shadow-lg transition-transform hover:scale-110">
-            {uploading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Camera className="w-4 h-4" />
-            )}
+          <label className="absolute bottom-0 right-0 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-black text-white shadow-[0_4px_16px_rgba(0,0,0,0.16)] transition-transform hover:scale-105">
+            {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
             <input type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} disabled={uploading} />
           </label>
         </div>
         <div className="space-y-1">
-          <h2 className="font-sans text-xl font-bold">{profileName || user?.email}</h2>
-          <p className="font-mono text-[10px] uppercase font-bold opacity-30">{user?.email}</p>
-          <div className="inline-flex mt-4 items-center gap-2 rounded-full bg-black/5 px-4 py-1.5 font-mono text-[9px] font-bold uppercase tracking-wider text-black/60">
-            <Shield className="w-3 h-3" />
-            {roles.join(", ")}
+          <h2 className="text-xl font-semibold text-black">{profileName || user?.email}</h2>
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35">{user?.email}</p>
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-black/8 bg-[#efefef] px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-black/45">
+            <Shield className="h-3.5 w-3.5" />
+            Athlete workspace
           </div>
         </div>
-      </motion.div>
-
-      {/* Ranking Form */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="space-y-6 rounded-3xl bg-white p-8 ring-1 ring-black/5 shadow-sm"
-      >
-        <div className="flex items-center gap-3">
-          <Trophy className="w-5 h-5 opacity-40" />
-          <h2 className="font-sans text-lg font-bold">Informações</h2>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Button asChild variant="secondary-pill" className="h-12 px-6">
+            <Link to="/dashboard/treinadores">Gerir vínculo com coach</Link>
+          </Button>
+          <Button asChild variant="secondary-pill" className="h-12 px-6">
+            <Link to="/dashboard/evolucao">Abrir evolução</Link>
+          </Button>
         </div>
+      </StudentSurfaceCard>
 
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label className="font-mono text-[9px] font-bold uppercase tracking-wider opacity-40">Gênero</Label>
-            <Select value={gender} onValueChange={(v) => setGender(v as "" | "male" | "female")}>
-              <SelectTrigger className="h-12 rounded-full border-black/5 bg-[#f3f3f3] font-sans text-sm font-bold focus:ring-0">
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent className="border-black/5 bg-white font-sans">
-                <SelectItem value="male">Masculino</SelectItem>
-                <SelectItem value="female">Feminino</SelectItem>
-              </SelectContent>
-            </Select>
+      <div className="grid gap-6 xl:grid-cols-2">
+        <StudentSurfaceCard className="p-8">
+          <div className="mb-6 flex items-center gap-3">
+            <Target className="h-5 w-5 text-black" />
+            <h2 className="font-display text-2xl text-black">Informações atléticas</h2>
           </div>
 
-          <div className="space-y-2">
-            <Label className="font-mono text-[9px] font-bold uppercase tracking-wider opacity-40">Nascimento</Label>
-            <Input
-              type="date"
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
-              className="h-12 rounded-full border-black/5 bg-[#f3f3f3] font-sans text-sm font-bold"
-            />
-          </div>
-        </div>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/40">Gênero</Label>
+              <Select value={gender} onValueChange={(value) => setGender(value as "" | "male" | "female")}>
+                <SelectTrigger className="h-12 rounded-full border-black/8 bg-[#f3f3f3] text-black focus:ring-0">
+                  <SelectValue placeholder="Selecione" />
+                </SelectTrigger>
+                <SelectContent className="border-black/8 bg-white text-black">
+                  <SelectItem value="male">Masculino</SelectItem>
+                  <SelectItem value="female">Feminino</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-        <button
-          onClick={handleSaveDemographics}
-          disabled={savingDemo}
-          className="h-14 w-full rounded-full bg-black font-sans text-sm font-bold text-white transition-all active:scale-[0.98]"
-        >
-          {savingDemo ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar alterações"}
-        </button>
-      </motion.div>
-
-      {/* Security Form */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="space-y-6 rounded-3xl bg-white p-8 ring-1 ring-black/5 shadow-sm"
-      >
-        <div className="flex items-center gap-3">
-          <Lock className="w-5 h-5 opacity-40" />
-          <h2 className="font-sans text-lg font-bold">Segurança</h2>
-        </div>
-
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label className="font-mono text-[9px] font-bold uppercase tracking-wider opacity-40">Nova Senha</Label>
-            <div className="relative">
+            <div className="space-y-2">
+              <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/40">Nascimento</Label>
               <Input
-                type={showPassword ? "text" : "password"}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="h-12 rounded-full border-black/5 bg-[#f3f3f3] pr-12 font-sans text-sm font-bold"
+                type="date"
+                value={birthDate}
+                onChange={(event) => setBirthDate(event.target.value)}
+                className="h-12 border-black/8 bg-[#f3f3f3] text-black"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword((p) => !p)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100"
-              >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label className="font-mono text-[9px] font-bold uppercase tracking-wider opacity-40">Confirmar Senha</Label>
-            <Input
-              type={showPassword ? "text" : "password"}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="h-12 rounded-full border-black/5 bg-[#f3f3f3] font-sans text-sm font-bold"
-            />
+          <button
+            onClick={handleSaveDemographics}
+            disabled={savingDemo}
+            className="mt-6 flex h-14 w-full items-center justify-center rounded-full bg-black text-sm font-semibold text-white transition-all active:scale-[0.98]"
+          >
+            {savingDemo ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvar informações"}
+          </button>
+        </StudentSurfaceCard>
+
+        <StudentSurfaceCard className="p-8">
+          <div className="mb-6 flex items-center gap-3">
+            <Lock className="h-5 w-5 text-black" />
+            <h2 className="font-display text-2xl text-black">Segurança da conta</h2>
           </div>
-        </div>
 
-        <button
-          onClick={handleChangePassword}
-          disabled={changingPassword || !newPassword || !confirmPassword}
-          className="h-14 w-full rounded-full bg-black font-sans text-sm font-bold text-white transition-all active:scale-[0.98] disabled:opacity-20"
-        >
-          {changingPassword ? <Loader2 className="w-4 h-4 animate-spin" /> : "Atualizar senha"}
-        </button>
-      </motion.div>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/40">Nova senha</Label>
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={newPassword}
+                  onChange={(event) => setNewPassword(event.target.value)}
+                  className="h-12 border-black/8 bg-[#f3f3f3] pr-12 text-black"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((current) => !current)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-black/36 hover:text-black"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
 
-      {/* Logout */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        <button onClick={signOut} className="flex h-16 w-full items-center justify-center gap-3 rounded-full bg-[#f3f3f3] font-sans text-sm font-bold text-red-500 transition-all active:scale-[0.98]">
-          <LogOut className="w-4 h-4" />
-          Sair da conta
-        </button>
-      </motion.div>
-    </div>
+            <div className="space-y-2">
+              <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/40">Confirmar senha</Label>
+              <Input
+                type={showPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                className="h-12 border-black/8 bg-[#f3f3f3] text-black"
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={handleChangePassword}
+            disabled={changingPassword || !newPassword || !confirmPassword}
+            className="mt-6 flex h-14 w-full items-center justify-center rounded-full border border-black/8 bg-[#efefef] text-sm font-semibold text-black transition-all hover:bg-[#e2e2e2] active:scale-[0.98] disabled:opacity-20"
+          >
+            {changingPassword ? <Loader2 className="h-4 w-4 animate-spin" /> : "Atualizar senha"}
+          </button>
+        </StudentSurfaceCard>
+      </div>
+
+      <StudentSurfaceCard className="p-6 sm:p-8">
+        <StudentSectionHeading
+          eyebrow="Conta"
+          title="Ações rápidas"
+          description="Gerencie sua conta sem sair do contexto de atleta."
+          action={
+            <div className="flex flex-wrap gap-3">
+              <Button asChild variant="secondary-pill" className="h-12 px-6">
+                <Link to="/dashboard/historico">Rever treinos</Link>
+              </Button>
+              <button
+                onClick={signOut}
+                className="flex h-12 items-center justify-center gap-2 rounded-full border border-black/8 bg-[#efefef] px-6 text-sm font-semibold text-black transition-all hover:bg-[#e2e2e2]"
+              >
+                <LogOut className="h-4 w-4" />
+                Sair da conta
+              </button>
+            </div>
+          }
+        />
+      </StudentSurfaceCard>
+    </StudentPageSection>
   );
 };
 

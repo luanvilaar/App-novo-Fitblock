@@ -40,16 +40,16 @@ const ConditioningCard: React.FC<ConditioningCardProps> = ({
   };
 
   return (
-    <div className="bg-[#0E0E0C] rounded-xl overflow-hidden border border-white/10">
+    <div className="overflow-hidden rounded-[1.75rem] border border-black/8 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
       {/* Header */}
-      <div className="p-4 flex items-center justify-between">
+      <div className="flex items-center justify-between p-4">
         <div>
-          <h3 className="font-display text-xl font-bold uppercase tracking-tight text-white">
+          <h3 className="font-display text-xl font-bold uppercase tracking-tight text-black">
             {block.title}
           </h3>
         </div>
-        <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors">
-          <MoreHorizontal className="w-5 h-5 text-white/60" />
+        <button className="flex h-10 w-10 items-center justify-center rounded-full bg-[#efefef] transition-colors hover:bg-[#e2e2e2]">
+          <MoreHorizontal className="h-5 w-5 text-black/60" />
         </button>
       </div>
 
@@ -58,7 +58,7 @@ const ConditioningCard: React.FC<ConditioningCardProps> = ({
         {hasRawContent ? (
           <div className="space-y-1">
             {contentLines.map((line, i) => (
-              <p key={i} className="text-white/90 text-base leading-relaxed font-light">
+              <p key={i} className="text-base font-light leading-relaxed text-black/90">
                 {line}
               </p>
             ))}
@@ -66,23 +66,23 @@ const ConditioningCard: React.FC<ConditioningCardProps> = ({
         ) : (
           <div className="space-y-1">
             {block.exercises.map((ex, i) => (
-              <div key={i} className="text-white/90 text-base leading-relaxed font-light">
+              <div key={i} className="text-base font-light leading-relaxed text-black/90">
                 <span className="flex flex-wrap items-baseline gap-x-1.5">
                   {ex.rounds && <span className="font-bold">{ex.rounds}x</span>}
                   {ex.reps && <span className="font-bold">{ex.reps}</span>}
                   <span className="font-medium">{ex.name}</span>
                   {ex.load && (
-                    <span className="text-energy font-semibold">#{ex.load}</span>
+                    <span className="font-semibold text-black">#{ex.load}</span>
                   )}
                   {ex.distance && (
-                    <span className="text-white/70">{ex.distance}</span>
+                    <span className="text-black/70">{ex.distance}</span>
                   )}
                   {ex.duration && (
-                    <span className="text-white/70">{ex.duration}</span>
+                    <span className="text-black/70">{ex.duration}</span>
                   )}
                 </span>
                 {ex.notes && (
-                  <p className="text-white/50 text-sm mt-0.5">{ex.notes.trim()}</p>
+                  <p className="mt-0.5 text-sm text-black/50">{ex.notes.trim()}</p>
                 )}
               </div>
             ))}
@@ -91,15 +91,15 @@ const ConditioningCard: React.FC<ConditioningCardProps> = ({
 
         {/* Time Cap */}
         {block.timeCap && (
-          <div className="mt-3 text-white/70 text-sm">
+          <div className="mt-3 text-sm text-black/70">
             Time cap: {block.timeCap}min
           </div>
         )}
 
         {/* Additional Notes */}
         {block.notes && !hasRawContent && (
-          <div className="mt-4 pt-3 border-t border-white/10">
-            <p className="text-white/70 text-sm whitespace-pre-wrap">{block.notes}</p>
+          <div className="mt-4 border-t border-black/8 pt-3">
+            <p className="whitespace-pre-wrap text-sm text-black/70">{block.notes}</p>
           </div>
         )}
 
@@ -109,12 +109,12 @@ const ConditioningCard: React.FC<ConditioningCardProps> = ({
             placeholder="Add circuit note"
             value={circuitNote}
             onChange={(e) => handleNoteChange(e.target.value)}
-            className="h-12 bg-white/5 border-white/10 text-white placeholder:text-white/40 rounded-lg focus:border-energy"
+            className="h-12 rounded-lg border-black/8 bg-[#f3f3f3] text-black placeholder:text-black/40"
           />
         </div>
 
         {/* Score Type Button */}
-        <button className="mt-4 w-full h-14 bg-[#6366F1] hover:bg-[#5558E8] text-white font-semibold rounded-xl flex items-center justify-center gap-3 transition-colors">
+        <button className="mt-4 flex h-14 w-full items-center justify-center gap-3 rounded-xl bg-black font-semibold text-white transition-colors hover:bg-black/90">
           <Trophy className="w-5 h-5" />
           <span className="text-lg">{scoreLabel}</span>
         </button>

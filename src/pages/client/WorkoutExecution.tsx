@@ -1,12 +1,10 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, ArrowRight, Check, Loader2, Layers, Radar, Target } from "lucide-react";
-import VideoPreview from "@/components/VideoPreview";
-import ExerciseAccordionCard from "@/components/ExerciseAccordionCard";
+import { ArrowLeft, Check, Loader2, Layers, Radar } from "lucide-react";
 import { parseLpoExercises, hasLpoStructuredMarker } from "@/components/trainer/LpoBlockForm";
 import LpoAthleteCard from "@/components/LpoAthleteCard";
 import MetconMiniRanking from "@/components/MetconMiniRanking";
@@ -138,6 +136,8 @@ const WorkoutExecution = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isReviewMode = location.pathname.startsWith("/dashboard/revisao/");
   const [workout, setWorkout] = useState<any>(null);
   const [exercises, setExercises] = useState<WorkoutExercise[]>([]);
   const [metcons, setMetcons] = useState<MetconBlock[]>([]);
@@ -455,7 +455,7 @@ const WorkoutExecution = () => {
 
   const autoSave = useCallback(
     async (updatedLogs: Record<string, SetLog[]>, updatedSmartLogs?: Record<string, SmartSetLog[]>, totalTime?: number, force = false) => {
-      if (!user || !id) return;
+      if (!user || !id || isReviewMode) return;
       
       const performSave = async () => {
         setSaving(true);
@@ -601,10 +601,11 @@ const WorkoutExecution = () => {
         saveTimeout.current = setTimeout(performSave, 800);
       }
     },
-    [user, id, workoutLogId, smartLogs, exercises]
+    [user, id, isReviewMode, workoutLogId, smartLogs, exercises]
   );
 
   const updateSet = (exerciseId: string, setIdx: number, field: keyof PremiumSetLog, value: any) => {
+    if (isReviewMode) return;
     setLogs((prev) => {
       const updated = { ...prev };
       updated[exerciseId] = [...(prev[exerciseId] || [])];
@@ -615,6 +616,7 @@ const WorkoutExecution = () => {
   };
 
    const updateSmartSet = async (exerciseName: string, setIdx: number, field: keyof PremiumSetLog, value: any) => {
+    if (isReviewMode) return;
     setSmartLogs(prev => {
       const updated = { ...prev };
       const exLogs = [...(prev[exerciseName] || [])];
@@ -628,6 +630,7 @@ const WorkoutExecution = () => {
   };
 
   const toggleSetComplete = (exerciseId: string, setIdx: number) => {
+    if (isReviewMode) return;
     setLogs((prev) => {
       const updated = { ...prev };
       if (!updated[exerciseId]) return prev;
@@ -643,6 +646,7 @@ const WorkoutExecution = () => {
   };
 
   const toggleSmartSetComplete = (exerciseName: string, setIdx: number) => {
+    if (isReviewMode) return;
     setSmartLogs((prev) => {
       const exLogs = [...(prev[exerciseName] || [])];
       if (!exLogs[setIdx]) return prev;
@@ -657,6 +661,7 @@ const WorkoutExecution = () => {
   };
 
   const patchLineAdaptation = (lineId: string, patch: Partial<LineAdaptation>) => {
+    if (isReviewMode) return;
     setLineAdaptations((prev) => {
       const base = { ...emptyLineAdaptation(), ...prev[lineId] };
       const next = { ...prev, [lineId]: { ...base, ...patch } };
@@ -667,7 +672,7 @@ const WorkoutExecution = () => {
   };
 
   const saveMetconScore = async (metconId: string, scoreValue: string) => {
-    if (!currentStudentId || !scoreValue?.trim()) return;
+    if (isReviewMode || !currentStudentId || !scoreValue?.trim()) return;
     
     setSavingScore(true);
     try {
@@ -691,6 +696,7 @@ const WorkoutExecution = () => {
   };
 
   const completeWorkout = async () => {
+    if (isReviewMode) return;
     setCompleting(true);
     // Forçar salvamento final síncrono antes de sair
     await autoSave(logs, smartLogs, undefined, true);
@@ -700,6 +706,7 @@ const WorkoutExecution = () => {
   };
 
   const saveReferenceMaxForExercise = async (exerciseId: string, maxKg: number) => {
+    if (isReviewMode) return;
     if (!currentStudentId) {
       toast.error("Sessão de atleta não encontrada.");
       return;
@@ -749,7 +756,7 @@ const WorkoutExecution = () => {
 
   if (!workout) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
+      <div className="app-shell flex min-h-screen items-center justify-center bg-[#f8f8f8] text-black">
         <Loader2 className="h-9 w-9 animate-spin text-black" />
       </div>
     );
@@ -763,21 +770,23 @@ const WorkoutExecution = () => {
   const showSmartWorkoutFallback = descriptionLooksSmart && exercises.length === 0;
 
   return (
-    <div className="min-h-screen bg-white text-black pb-32">
+    <div className="app-shell min-h-screen bg-[#f8f8f8] pb-10 text-black">
       
       {/* Cabeçalho App Style */}
-      <div className="fixed left-0 top-0 z-50 flex h-20 w-full items-center border-b border-black/5 bg-white/90 px-6 backdrop-blur-xl">
+      <div className="fixed left-0 top-0 z-50 flex h-20 w-full items-center border-b border-black/5 bg-white px-6">
         <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-4">
             <button
               type="button"
-              onClick={() => navigate(-1)}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#efefef] text-black transition-transform active:scale-95"
+              onClick={() => (isReviewMode ? navigate("/dashboard/historico") : navigate(-1))}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#efefef] text-black transition-transform active:scale-95"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
             <div className="min-w-0">
-              <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/40">Sessão</p>
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[1.4px] text-black/38">
+                {isReviewMode ? "Revisão" : "Sessão"}
+              </p>
               <h1 className="truncate font-sans text-lg font-bold text-black">
                 {workout.title || "Treino"}
               </h1>
@@ -785,15 +794,15 @@ const WorkoutExecution = () => {
           </div>
           <div className="flex shrink-0 items-center gap-3">
             <AnimatePresence>
-              {saving && (
+              {saving && !isReviewMode && (
                 <motion.div
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 10 }}
-                  className="flex items-center gap-2 rounded-full bg-black/5 px-4 py-1.5"
+                  className="flex items-center gap-2 rounded-full border border-black/8 bg-[#efefef] px-4 py-1.5"
                 >
                   <Loader2 className="h-3.5 w-3.5 animate-spin text-black" />
-                  <span className="font-mono text-[9px] font-bold uppercase tracking-[1.4px]">Saving</span>
+                  <span className="font-mono text-[9px] font-bold uppercase tracking-[1.4px] text-black/58">Saving</span>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -801,10 +810,10 @@ const WorkoutExecution = () => {
         </div>
       </div>
 
-      <div className="pt-24 space-y-4">
+      <div className="mx-auto max-w-4xl space-y-4 px-4 pb-24 pt-24 sm:px-6">
         {showSmartWorkoutFallback ? (
-          <div className="rounded-2xl border border-white/[0.08] bg-[#121212] p-6 md:p-8">
-             <div className="mb-6 flex items-center gap-2 font-mono text-[9px] font-bold uppercase tracking-[0.24em] text-primary">
+          <div className="rounded-[1.75rem] border border-black/8 bg-white p-6 shadow-[0_4px_16px_rgba(0,0,0,0.12)] md:p-8">
+             <div className="mb-6 flex items-center gap-2 font-mono text-[9px] font-bold uppercase tracking-[0.24em] text-black/45">
                 <Radar className="h-3.5 w-3.5" /> Treino por texto
              </div>
             <SmartWorkoutView 
@@ -827,18 +836,18 @@ const WorkoutExecution = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: gIdx * 0.05 }}
-                    className="rounded-2xl border border-white/[0.08] bg-[#121212] p-6 shadow-2xl"
+                    className="rounded-[1.75rem] border border-black/8 bg-white p-6 shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
                 >
                     <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15">
-                        <Layers className="h-4 w-4 text-primary" />
+                    <div className="flex h-9 w-9 items-center justify-center rounded-2xl border border-black/8 bg-[#efefef]">
+                        <Layers className="h-4 w-4 text-black" />
                     </div>
                     <div className="space-y-0.5">
-                        <span className="font-display text-xs font-bold uppercase tracking-tight text-primary">Bloco metcon</span>
-                        <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">{m.metcon_type}</p>
+                        <span className="font-display text-xs font-bold uppercase tracking-tight text-black">Bloco metcon</span>
+                        <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-black/45">{m.metcon_type}</p>
                     </div>
                     </div>
-                    {m.title && <h3 className="font-display text-base uppercase tracking-tight mb-3">{m.title}</h3>}
+                    {m.title && <h3 className="mb-3 font-display text-base uppercase tracking-tight text-black">{m.title}</h3>}
                     {(() => {
                       const lpoParsed = parseLpoExercises(m.description);
                       if (lpoParsed && lpoParsed.length > 0) {
@@ -852,19 +861,19 @@ const WorkoutExecution = () => {
                       }
                       if (hasLpoStructuredMarker(m.description)) {
                         return (
-                          <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-4">
-                            <p className="mb-2 font-body text-sm text-amber-100/90">
+                          <div className="rounded-[1.35rem] border border-black/8 bg-[#f8f8f8] p-4">
+                            <p className="mb-2 font-body text-sm text-black">
                               Não foi possível ler este bloco LPO automaticamente. Atualiza a app ou contacta o
                               treinador se o problema continuar.
                             </p>
-                            <p className="whitespace-pre-wrap font-body text-xs leading-relaxed text-muted-foreground">
+                            <p className="whitespace-pre-wrap font-body text-xs leading-relaxed text-black/55">
                               {m.description.replace(/^\[LPO_STRUCTURED\]\s*/i, "").slice(0, 2000)}
                             </p>
                           </div>
                         );
                       }
                       return (
-                        <div className="whitespace-pre-wrap rounded-xl border border-white/[0.06] bg-white/[0.03] p-4 font-body text-sm leading-relaxed text-muted-foreground">
+                        <div className="whitespace-pre-wrap rounded-[1.35rem] border border-black/8 bg-[#f8f8f8] p-4 font-body text-sm leading-relaxed text-black/55">
                           {m.description}
                         </div>
                       );
@@ -873,10 +882,10 @@ const WorkoutExecution = () => {
                     {/* Score Input — partilhado no grupo (RLS + ranking abaixo) */}
                     <div className="mt-4 space-y-3">
                       <div>
-                        <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
+                        <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-black/45">
                           Registrar resultado
                         </div>
-                        <p className="mt-1 font-body text-[11px] leading-snug text-muted-foreground">
+                        <p className="mt-1 font-body text-[11px] leading-snug text-black/55">
                           Visível para todos os atletas do mesmo grupo. O ranking atualiza quando alguém guarda o resultado.
                         </p>
                       </div>
@@ -885,14 +894,15 @@ const WorkoutExecution = () => {
                           placeholder={SCORE_PLACEHOLDERS[m.metcon_type] || "Score"}
                           value={metconScores[m.id] || ""}
                           onChange={(e) => setMetconScores(prev => ({ ...prev, [m.id]: e.target.value }))}
-                          className="h-11 flex-1 font-mono text-center border-border bg-background focus:border-primary"
+                          className="h-11 flex-1 border-black/8 bg-[#f3f3f3] font-mono text-center text-black"
+                          disabled={isReviewMode}
                         />
                         <button
                           onClick={() => saveMetconScore(m.id, metconScores[m.id])}
-                          disabled={!metconScores[m.id]?.trim() || savingScore}
-                          className="h-11 rounded-xl bg-primary px-4 font-mono text-xs font-bold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                          disabled={isReviewMode || !metconScores[m.id]?.trim() || savingScore}
+                          className="h-11 rounded-full bg-black px-4 font-mono text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-black/90 disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                          Salvar
+                          {isReviewMode ? "Registrado" : "Salvar"}
                         </button>
                       </div>
                     </div>
@@ -958,9 +968,9 @@ const WorkoutExecution = () => {
               <ExerciseExecutionDetail
                 key="detail-overlay"
                 mode="smart"
-                exercise={{
-                  id: smartName,
-                  name: smartName,
+              exercise={{
+                id: smartName,
+                name: smartName,
                   letter: "S",
                   category: "Smart",
                   prescription: `${sets.length} séries`,
@@ -970,11 +980,12 @@ const WorkoutExecution = () => {
                   suggestedRepsBySet: undefined,
                   suggestedLoad: undefined,
                   suggestedLoadBySet: undefined
-                }}
-                sets={sets}
-                onClose={() => setActiveOverlay(null)}
-                onUpdateSet={(field, setIdx, value) => {
-                  updateSmartSet(smartName, setIdx, field as keyof PremiumSetLog, value);
+              }}
+              sets={sets}
+              readOnly={isReviewMode}
+              onClose={() => setActiveOverlay(null)}
+              onUpdateSet={(field, setIdx, value) => {
+                updateSmartSet(smartName, setIdx, field as keyof PremiumSetLog, value);
                 }}
                 onToggleComplete={(idx) => toggleSmartSetComplete(smartName, idx)}
               />
@@ -1073,6 +1084,7 @@ const WorkoutExecution = () => {
               onSaveReferenceMax={
                 ex.load_type === "percent" ? (kg) => saveReferenceMaxForExercise(eff, kg) : undefined
               }
+              readOnly={isReviewMode}
               onClose={() => setActiveOverlay(null)}
               onUpdateSet={(field, setIdx, value) => {
                 updateSet(lineId, setIdx, field, value);
@@ -1084,29 +1096,31 @@ const WorkoutExecution = () => {
       </AnimatePresence>
 
       {/* CTA — Solid Black Pill */}
-      <div className="pointer-events-none fixed bottom-24 left-0 right-0 z-[80] mx-auto max-w-lg px-6 pb-safe">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="pointer-events-auto"
-        >
-          <button
-            type="button"
-            onClick={completeWorkout}
-            disabled={completing}
-            className="flex h-16 w-full items-center justify-center gap-3 rounded-full bg-black font-sans text-sm font-bold uppercase tracking-wider text-white shadow-xl transition-all active:scale-[0.98] disabled:opacity-20"
+      {!isReviewMode ? (
+        <div className="pointer-events-none fixed bottom-6 left-0 right-0 z-[80] mx-auto max-w-lg px-6 pb-safe">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="pointer-events-auto"
           >
-            {completing ? (
-              <Loader2 className="h-6 w-6 animate-spin text-white" />
-            ) : (
-              <>
-                <span>Concluir treino</span>
-                <Check className="h-5 w-5 text-white" strokeWidth={3} />
-              </>
-            )}
-          </button>
-        </motion.div>
-      </div>
+            <button
+              type="button"
+              onClick={completeWorkout}
+              disabled={completing}
+              className="flex h-16 w-full items-center justify-center gap-3 rounded-full bg-black font-sans text-sm font-bold uppercase tracking-wider text-white shadow-[0_4px_16px_rgba(0,0,0,0.16)] transition-all active:scale-[0.98] disabled:opacity-20"
+            >
+              {completing ? (
+                <Loader2 className="h-6 w-6 animate-spin text-white" />
+              ) : (
+                <>
+                  <span>Concluir treino</span>
+                  <Check className="h-5 w-5 text-white" strokeWidth={3} />
+                </>
+              )}
+            </button>
+          </motion.div>
+        </div>
+      ) : null}
     </div>
   );
 };

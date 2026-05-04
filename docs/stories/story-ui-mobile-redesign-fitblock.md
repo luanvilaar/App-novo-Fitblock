@@ -6,7 +6,7 @@
 **Points:** 21  
 **Priority:** High  
 **Created:** 2026-05-03  
-**Status:** 👀 In Review
+**Status:** ✅ Ready for Review
 
 ---
 
@@ -56,7 +56,7 @@ Fica fora do escopo:
 ## Key Implementation Notes
 
 - Referência visual principal: `design_system_fitblock.md`
-- Base visual: dark app-first, com verde funcional apenas em CTAs/ativos/progresso
+- A área do aluno foi rebaseada para o sistema preto/branco/cinza do documento, sem gradientes, glassmorphism ou verde residual
 - Substituição prática da tipografia proprietária: fonte grotesk arredondada disponível via web font
 - Rotas-alvo principais:
   - `/`
@@ -117,13 +117,15 @@ Fica fora do escopo:
 
 ## Validation Results
 
+- `npm run lint`: ✅ passou sem erros; restaram `20` warnings não bloqueantes já existentes de `react-refresh` e `react-hooks/exhaustive-deps`
+- `npm run typecheck`: ✅ passou
+- `npm test`: ✅ passou (`11` arquivos, `125` testes)
+- `npm run build`: ✅ passou; restou apenas o warning não bloqueante de chunks acima de `500 kB`
+- `npx eslint src/components/ClientLayout.tsx src/components/BottomNav.tsx src/components/PremiumPerformanceChart.tsx src/components/client/ExecutionGridPremium.tsx src/components/client/ExerciseExecutionDetail.tsx src/components/client/StudentPagePrimitives.tsx src/pages/client/ClientSessionHub.tsx src/pages/client/ClientHistory.tsx src/pages/client/ClientProgress.tsx src/pages/client/ClientProfile.tsx src/pages/client/FindTrainers.tsx src/pages/client/WorkoutExecution.tsx`: ✅ passou sem warnings
+- `npx eslint src/App.tsx src/components/ClientLayout.tsx src/components/BottomNav.tsx src/components/PremiumPerformanceChart.tsx src/components/client/ExerciseExecutionDetail.tsx src/components/client/ExecutionGridPremium.tsx src/pages/client/ClientSessionHub.tsx src/pages/client/WorkoutExecution.tsx src/pages/client/ClientHistory.tsx src/pages/client/ClientProgress.tsx src/pages/client/FindTrainers.tsx src/pages/client/ClientProfile.tsx`: ✅ passou sem warnings
 - `npx eslint src/pages/client/ClientHome.tsx src/components/ClientLayout.tsx src/components/BottomNav.tsx`: ✅ passou sem warnings
 - `npx eslint src/pages/trainer/TrainerDashboard.tsx src/components/PremiumActivityChart.tsx`: ✅ passou com 1 warning antigo de `useEffect` em `TrainerDashboard`
-- `npm test`: ✅ passou (`11` arquivos, `125` testes)
-- `npm run build`: ✅ passou
 - `npx eslint src/components/client/StudentPeriodizationStrip.tsx src/hooks/useTrainingPeriodWeeks.ts src/lib/training-periodization.ts`: ✅ passou sem warnings
-- `npm run lint`: ✅ passou sem erros; restaram `20` warnings não bloqueantes de `react-refresh` e `react-hooks/exhaustive-deps`
-- `npm run typecheck`: ✅ passou
 
 Também foram corrigidas as falhas globais de tipagem/lint que bloqueavam o push antes deste fechamento.
 
@@ -136,18 +138,35 @@ Também foram corrigidas as falhas globais de tipagem/lint que bloqueavam o push
 - [x] `src/components/BottomNav.tsx`
 - [x] `src/components/ClientLayout.tsx`
 - [x] `src/components/PremiumActivityChart.tsx`
+- [x] `src/components/PremiumPerformanceChart.tsx`
 - [x] `src/components/client/BiSetCard.tsx`
+- [x] `src/components/client/ConditioningCard.tsx`
+- [x] `src/components/client/ExecutionGridPremium.tsx`
 - [x] `src/components/client/ExerciseCardSmart.tsx`
+- [x] `src/components/client/ExerciseExecutionDetail.tsx`
+- [x] `src/components/client/MaxLoadsModal.tsx`
+- [x] `src/components/client/MinimalExerciseListItem.tsx`
+- [x] `src/components/client/StudentPagePrimitives.tsx`
+- [x] `src/components/client/StudentPeriodizationStrip.tsx`
 - [x] `src/components/client/SmartExerciseTracker.tsx`
+- [x] `src/components/client/WeeklyVolumePanel.tsx`
 - [x] `src/components/client/WorkoutBlockCard.tsx`
 - [x] `src/components/trainer/TrainerWorkoutBuilderDialog.tsx`
 - [x] `src/components/trainer/TrainerWorkoutExerciseRow.tsx`
 - [x] `src/components/ui/command.tsx`
+- [x] `src/components/ui/button.tsx`
 - [x] `src/components/ui/textarea.tsx`
+- [x] `src/components/ui/input.tsx`
 - [x] `src/lib/ranking-session-validation.ts`
 - [x] `src/lib/trainer-workout-actions.ts`
 - [x] `src/lib/workout-parser/__tests__/backward-compat.test.ts`
+- [x] `src/App.tsx`
 - [x] `src/pages/client/ClientHome.tsx`
+- [x] `src/pages/client/ClientHistory.tsx`
+- [x] `src/pages/client/ClientProfile.tsx`
+- [x] `src/pages/client/ClientProgress.tsx`
+- [x] `src/pages/client/ClientSessionHub.tsx`
+- [x] `src/pages/client/FindTrainers.tsx`
 - [x] `src/pages/client/WorkoutExecution.tsx`
 - [x] `src/pages/trainer/TrainerDashboard.tsx`
 - [x] `src/pages/trainer/TrainerGroups.tsx`
