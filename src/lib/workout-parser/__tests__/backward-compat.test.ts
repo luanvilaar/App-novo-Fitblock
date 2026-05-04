@@ -24,7 +24,7 @@ describe('backward-compatible adapter', () => {
     expect(ex.isCombined).toBe(false);
 
     // Should NOT have a 'prescription' field
-    expect((ex as Record<string, unknown>).prescription).toBeUndefined();
+    expect((ex as unknown as Record<string, unknown>).prescription).toBeUndefined();
   });
 
   it('maps bi-set correctly', () => {

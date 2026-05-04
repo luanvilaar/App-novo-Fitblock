@@ -8,7 +8,11 @@ interface ExerciseCardSmartProps {
   exercise: ParsedExercise;
   // Tracking props (optional — only passed in execution mode)
   trackingLogs?: SmartSetLog[];
-  onTrackingUpdate?: (setIdx: number, field: keyof SmartSetLog, value: any) => void;
+  onTrackingUpdate?: (
+    setIdx: number,
+    field: "load_used" | "reps_done" | "notes",
+    value: string | number | null,
+  ) => void;
 }
 
 const ExerciseCardSmart: React.FC<ExerciseCardSmartProps> = ({ exercise, trackingLogs, onTrackingUpdate }) => {

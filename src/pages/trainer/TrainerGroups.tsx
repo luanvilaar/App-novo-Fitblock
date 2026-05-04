@@ -11,6 +11,7 @@ import { Plus, Users, Trash2, Edit2, Trophy, ChevronDown, ChevronUp, Dumbbell, L
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { useGroupRanking } from "@/hooks/useGroupRanking";
+import { cn } from "@/lib/utils";
 
 interface StudentInfo {
   id: string;

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState, type Dispatch, type SetStateAction, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { ArrowDown, ArrowLeft, ArrowUp, Layers, Link2, Plus, Sparkles, Trash2, Users } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUp, Layers, Link2, Loader2, Plus, Sparkles, Trash2, Users } from "lucide-react";
 import NewExerciseDialog from "@/components/trainer/NewExerciseDialog";
 import StudentCombobox from "@/components/StudentCombobox";
 import { toast } from "sonner";
@@ -62,6 +63,10 @@ interface WorkoutItem {
   block_category?: string;
   lpo_exercises?: LpoExercise[];
 }
+
+type ExerciseInsert = Database["public"]["Tables"]["exercises"]["Insert"];
+type WorkoutExerciseInsert = Database["public"]["Tables"]["workout_exercises"]["Insert"];
+type WorkoutMetconInsert = Database["public"]["Tables"]["workout_metcons"]["Insert"];
 
 export function TrainerWorkoutBuilderDialog({
   draftScope,
@@ -273,7 +278,7 @@ export function TrainerWorkoutBuilderDialog({
       if (field === "video_url" && value && updated[idx].exercise_id) {
         supabase
           .from("exercises")
-          .update({ video_url: value } as Record<string, unknown>)
+          .update({ video_url: String(value) })
           .eq("id", updated[idx].exercise_id!)
           .then(() => {
             setExercises((pex) => pex.map((e) => (e.id === updated[idx].exercise_id ? { ...e, video_url: String(value) } : e)));
@@ -455,11 +460,11 @@ export function TrainerWorkoutBuilderDialog({
         .single();
       if (error) throw error;
 
-      const exerciseRows: Record<string, unknown>[] = [];
+      const exerciseRows: WorkoutExerciseInsert[] = [];
       let sortOrder = 0;
       for (const item of itemsToSave) {
         if (item.type === "exercise") {
-          const row: Record<string, unknown> = {
+          const row: WorkoutExerciseInsert = {
             workout_id: workout.id,
             exercise_id: String(item.exercise_id).trim(),
             sets: item.sets,
@@ -479,9 +484,9 @@ export function TrainerWorkoutBuilderDialog({
       }
       if (exerciseRows.length > 0) {
         const { error: exError } = await supabase.from("workout_exercises").insert(exerciseRows);
-        if (exError) {
-          if (isWorkoutExerciseSchemaError(exError.message)) {
-            const fallbackRows = exerciseRows.map((r) => stripWorkoutExerciseExtendedFields(r));
+          if (exError) {
+            if (isWorkoutExerciseSchemaError(exError.message)) {
+            const fallbackRows = exerciseRows.map((r) => stripWorkoutExerciseExtendedFields(r)) as WorkoutExerciseInsert[];
             const { error: fallbackError } = await supabase.from("workout_exercises").insert(fallbackRows);
             if (fallbackError) throw fallbackError;
           } else {
@@ -494,14 +499,15 @@ export function TrainerWorkoutBuilderDialog({
       for (const item of itemsToSave) {
         if (item.type === "metcon" && item.block_category) {
           const composedTitle = `${item.block_category}${item.metcon_title ? ` - ${item.metcon_title}` : ""}`;
-          const { error: metconError } = await supabase.from("workout_metcons").insert({
+          const metconRow: WorkoutMetconInsert = {
             workout_id: workout.id,
             title: composedTitle,
             description: item.metcon_description || "",
             metcon_type: item.metcon_type || "NOT FOR TIME",
             is_ranking_reference: (item.metcon_type || "NOT FOR TIME") !== "NOT FOR TIME",
             sort_order: metconSortOrder++,
-          });
+          };
+          const { error: metconError } = await supabase.from("workout_metcons").insert(metconRow);
           if (metconError) throw metconError;
         }
       }
@@ -559,7 +565,7 @@ export function TrainerWorkoutBuilderDialog({
       return;
     }
     setSavingExercise(true);
-    const insertPayload: Record<string, unknown> = {
+    const insertPayload: ExerciseInsert = {
       name: trimmed,
       category: data.category,
       video_url: data.video_url || null,

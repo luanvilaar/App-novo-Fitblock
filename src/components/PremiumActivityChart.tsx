@@ -73,7 +73,7 @@ const PremiumActivityChart: React.FC<PremiumActivityChartProps> = ({ data, title
   const engagementRate = totalCheckins > 0 ? ((totalResults / totalCheckins) * 100).toFixed(0) : "0";
 
   return (
-    <div className="relative flex h-full min-w-0 max-w-full flex-col justify-between overflow-hidden bg-transparent mb-2">
+    <div className="relative mb-1 flex h-full min-w-0 max-w-full flex-col justify-between overflow-hidden rounded-[1.4rem] bg-[#0d0f10] px-3 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:mb-2 sm:rounded-[1.8rem] sm:px-4 sm:py-5 lg:px-5 lg:py-6">
       <style>{`
         @keyframes tooltipFadeInFloat {
           0% { opacity: 0; transform: translate(-50%, 8px); }
@@ -94,33 +94,33 @@ const PremiumActivityChart: React.FC<PremiumActivityChartProps> = ({ data, title
       `}</style>
 
       {/* Metrics Legend */}
-      <div className="z-10 mb-6 flex min-w-0 max-w-full flex-wrap items-center gap-x-4 gap-y-2 md:mb-8 md:gap-8">
+      <div className="z-10 mb-4 flex min-w-0 max-w-full flex-wrap items-center gap-x-3 gap-y-2 sm:mb-6 sm:gap-x-4 md:mb-8 md:gap-8">
         <div className="flex min-w-0 max-w-full items-center gap-2 sm:gap-3">
           <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary shadow-[0_0_10px_rgba(65,31,128,0.6)]" />
-          <span className="min-w-0 break-words font-mono text-[8px] font-bold uppercase tracking-[0.12em] text-muted-foreground sm:text-[9px] sm:tracking-[0.2em]">
+          <span className="min-w-0 break-words font-mono text-[7px] font-bold uppercase tracking-[0.08em] text-white/55 sm:text-[8px] sm:tracking-[0.12em] md:text-[9px] md:tracking-[0.2em]">
             Atletas Treinaram <span className="ml-1 text-white tabular-nums sm:ml-2">{totalCheckins}</span>
           </span>
         </div>
         <div className="flex min-w-0 max-w-full items-center gap-2 sm:gap-3">
           <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-white opacity-40" />
-          <span className="min-w-0 break-words font-mono text-[8px] font-bold uppercase tracking-[0.12em] text-muted-foreground sm:text-[9px] sm:tracking-[0.2em]">
+          <span className="min-w-0 break-words font-mono text-[7px] font-bold uppercase tracking-[0.08em] text-white/55 sm:text-[8px] sm:tracking-[0.12em] md:text-[9px] md:tracking-[0.2em]">
             Resultados Postados <span className="ml-1 text-white tabular-nums sm:ml-2">{totalResults}</span>
           </span>
         </div>
       </div>
  
       {/* Metric & Chart Layout */}
-      <div className="z-10 grid min-w-0 max-w-full grid-cols-1 items-end gap-6 lg:grid-cols-5 lg:gap-8">
+      <div className="z-10 grid min-w-0 max-w-full grid-cols-1 items-end gap-4 sm:gap-5 lg:grid-cols-5 lg:gap-8">
         {/* Left: Main Performance Indicator */}
-        <div className="flex min-w-0 flex-col pb-2 lg:col-span-1 lg:pb-4">
-          <span className="mb-2 font-body text-xs font-normal tracking-wide text-primary">Eficiência</span>
-          <span className="font-body text-4xl font-semibold tabular-nums leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
+        <div className="flex min-w-0 flex-col pb-1 lg:col-span-1 lg:pb-4">
+          <span className="mb-1.5 font-body text-[11px] font-normal tracking-wide text-primary sm:mb-2 sm:text-xs">Eficiência</span>
+          <span className="font-body text-[2.2rem] font-semibold tabular-nums leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
             {engagementRate}%
           </span>
         </div>
  
         {/* Right: activity chart */}
-        <div className="relative mt-2 h-32 w-full min-w-0 max-w-full lg:col-span-4 lg:mt-0 lg:h-48">
+        <div className="relative mt-1 h-28 w-full min-w-0 max-w-full sm:mt-2 sm:h-32 lg:col-span-4 lg:mt-0 lg:h-48">
           
           {/* Peak Indicator Tooltip */}
           {peakPoint && (
@@ -128,7 +128,7 @@ const PremiumActivityChart: React.FC<PremiumActivityChartProps> = ({ data, title
               className="anim-tooltip pointer-events-none absolute z-20 flex max-w-[min(200px,90%)] flex-col items-center"
               style={{ left: `${(peakPoint.x / 600) * 100}%`, top: `${(peakPoint.y / 140) * 100}%`, transform: 'translate(-50%, -110%)' }}
             >
-              <div className="max-w-full truncate border border-primary/20 bg-primary px-2 py-1.5 text-center font-mono text-[7px] font-bold uppercase leading-tight tracking-[0.08em] text-white backdrop-blur-md sm:px-3 sm:text-[8px] sm:tracking-[0.1em]">
+              <div className="max-w-full truncate rounded-full border border-primary/20 bg-primary px-2 py-1.5 text-center font-mono text-[7px] font-bold uppercase leading-tight tracking-[0.08em] text-white backdrop-blur-md sm:px-3 sm:text-[8px] sm:tracking-[0.1em]">
                 PICO: {peakPoint.val} RES ({peakPoint.date})
               </div>
               <div className="w-0 h-0 border-l-[5px] border-r-[5px] border-t-[5px] border-l-transparent border-r-transparent -mt-px border-t-primary"></div>

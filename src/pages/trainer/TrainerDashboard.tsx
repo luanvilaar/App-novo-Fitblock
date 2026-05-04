@@ -91,30 +91,39 @@ const StatCard = ({
   >
     <div
       className={cn(
-        "group relative flex h-full flex-col justify-between overflow-hidden rounded-[2.25rem] border p-7 transition-all duration-300",
+        "group relative flex h-full flex-col justify-between overflow-hidden rounded-[1.9rem] border p-5 transition-all duration-300 sm:rounded-[2.1rem] sm:p-6 lg:rounded-[2.25rem] lg:p-7",
         tone === "dark"
           ? "border-black bg-black text-white shadow-[0_18px_42px_rgba(0,0,0,0.18)]"
           : "border-black/10 bg-[#f2f2f0] text-black shadow-[0_10px_24px_rgba(0,0,0,0.08)] hover:border-black/20 hover:shadow-[0_14px_30px_rgba(0,0,0,0.12)]",
       )}
     >
+      <div
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-x-0 top-0 h-24 opacity-80",
+          tone === "dark"
+            ? "bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.14),transparent_48%)]"
+            : "bg-[radial-gradient(circle_at_top_left,rgba(0,0,0,0.08),transparent_48%)]",
+        )}
+      />
       <div className="flex items-start justify-between">
         <div
           className={cn(
-            "flex h-14 w-14 items-center justify-center rounded-full transition-all",
+            "flex h-12 w-12 items-center justify-center rounded-[1.15rem] transition-all sm:h-14 sm:w-14 sm:rounded-full",
             tone === "dark"
               ? "bg-white/10 text-white"
               : "bg-white text-black/65 ring-1 ring-black/8 group-hover:bg-black group-hover:text-white",
           )}
         >
-          <Icon className="h-6 w-6" strokeWidth={2.2} />
+          <Icon className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.2} />
         </div>
         <div className={cn("h-2.5 w-2.5 rounded-full", tone === "dark" ? "bg-white/35" : "bg-black/20")} />
       </div>
       
-      <div className="space-y-2 pt-10">
+      <div className="space-y-2 pt-7 sm:pt-9">
         <p
           className={cn(
-            "font-sans text-5xl font-black tracking-tighter tabular-nums leading-none lg:text-6xl",
+            "font-sans text-[2.6rem] font-black tracking-tighter tabular-nums leading-none sm:text-5xl lg:text-6xl",
             tone === "dark" ? "text-white" : "text-black",
           )}
         >
@@ -122,13 +131,13 @@ const StatCard = ({
         </p>
         <p
           className={cn(
-            "font-mono text-[9px] font-black uppercase tracking-[0.24em]",
+            "font-mono text-[8px] font-black uppercase tracking-[0.22em] sm:text-[9px] sm:tracking-[0.24em]",
             tone === "dark" ? "text-white/55" : "text-black/45",
           )}
         >
           {label}
         </p>
-        <p className={cn("max-w-[18ch] text-sm leading-snug", tone === "dark" ? "text-white/72" : "text-black/55")}>
+        <p className={cn("max-w-[22ch] text-[13px] leading-snug sm:text-sm", tone === "dark" ? "text-white/72" : "text-black/55")}>
           {helper}
         </p>
       </div>
@@ -226,7 +235,7 @@ const TrainerDashboard = () => {
           const meta = logMeta.get(a.workout_log_id);
           const sid = meta?.student_id;
           const uid = sid ? sMap.get(sid) : undefined;
-          const wex = a.workout_exercises as
+          const wex = a.workout_exercises as unknown as
             | { exercises: { name: string } | null }
             | null;
           const orig =
@@ -458,27 +467,27 @@ const TrainerDashboard = () => {
   };
 
   return (
-    <div className="space-y-24">
-      <header className="flex flex-col gap-8 rounded-[2.5rem] border border-black/6 bg-[#f6f5f2] px-8 py-8 shadow-[0_14px_36px_rgba(0,0,0,0.06)] lg:flex-row lg:items-end lg:justify-between lg:px-10">
+    <div className="space-y-12 sm:space-y-16 lg:space-y-24">
+      <header className="flex flex-col gap-6 rounded-[2rem] border border-black/6 bg-[#f6f5f2] px-5 py-6 shadow-[0_14px_36px_rgba(0,0,0,0.06)] sm:rounded-[2.25rem] sm:px-7 sm:py-7 lg:flex-row lg:items-end lg:justify-between lg:gap-8 lg:rounded-[2.5rem] lg:px-10 lg:py-8">
         <div className="max-w-3xl space-y-3">
           <p className="font-mono text-[10px] font-black uppercase tracking-[0.26em] text-black/28">Coach Workspace</p>
-          <h1 className="font-sans text-4xl font-black tracking-tighter text-black sm:text-5xl lg:text-6xl">
+          <h1 className="font-sans text-[2.6rem] font-black tracking-tighter text-black sm:text-5xl lg:text-6xl">
             Performance.
           </h1>
-          <p className="max-w-2xl text-sm leading-relaxed text-black/55 sm:text-base">
+          <p className="max-w-2xl text-[15px] leading-relaxed text-black/55 sm:text-base">
             Visão rápida do que precisa de atenção agora: atletas ativos, comunidades em andamento e protocolos publicados.
           </p>
         </div>
-        <div className="flex shrink-0 flex-wrap items-center gap-3">
+        <div className="grid shrink-0 grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center">
           <button
             type="button"
             onClick={() => navigate("/trainer/treinos")}
-            className="h-14 rounded-full bg-black px-7 text-sm font-black uppercase tracking-[0.18em] text-white transition-all active:scale-95 shadow-[0_14px_32px_rgba(0,0,0,0.18)]"
+            className="h-12 rounded-full bg-black px-5 text-[10px] font-black uppercase tracking-[0.18em] text-white transition-all active:scale-95 shadow-[0_14px_32px_rgba(0,0,0,0.18)] sm:h-14 sm:px-7 sm:text-sm"
           >
             Novo protocolo
           </button>
           <NavLink to="/trainer/atletas">
-            <button className="h-14 rounded-full border border-black/10 bg-white px-7 text-sm font-black uppercase tracking-[0.18em] text-black/55 transition-all hover:border-black/25 hover:bg-black hover:text-white">
+            <button className="h-12 w-full rounded-full border border-black/10 bg-white px-5 text-[10px] font-black uppercase tracking-[0.18em] text-black/55 transition-all hover:border-black/25 hover:bg-black hover:text-white sm:h-14 sm:px-7 sm:text-sm">
               Atletas
             </button>
           </NavLink>
@@ -486,14 +495,16 @@ const TrainerDashboard = () => {
       </header>
 
       {/* ── STATS GRID ── */}
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
-        <StatCard
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3 xl:gap-5">
+        <div className="col-span-2 xl:col-span-1">
+          <StatCard
           label="Atletas Ativos"
           value={stats.students}
           icon={Users}
           tone="dark"
           helper="Atletas em acompanhamento com acesso e vínculo ativos."
         />
+        </div>
         <StatCard
           label="Comunidades"
           value={stats.groups}
@@ -512,33 +523,33 @@ const TrainerDashboard = () => {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <NavLink
             to="/trainer/atletas"
-            className="flex items-center justify-between rounded-[3rem] bg-black p-10 text-white shadow-2xl transition-all active:scale-[0.98]"
+            className="flex items-center justify-between gap-4 rounded-[2rem] bg-black p-5 text-white shadow-2xl transition-all active:scale-[0.98] sm:rounded-[2.5rem] sm:p-7 lg:rounded-[3rem] lg:p-10"
           >
-            <div className="flex items-center gap-10">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-black">
-                <Inbox className="h-7 w-7" />
+            <div className="flex min-w-0 items-center gap-4 sm:gap-6 lg:gap-10">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1.2rem] bg-white text-black sm:h-14 sm:w-14 sm:rounded-[1.4rem] lg:h-16 lg:w-16 lg:rounded-full">
+                <Inbox className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
               </div>
-              <div className="space-y-2">
+              <div className="min-w-0 space-y-1.5 sm:space-y-2">
                 <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Ação requerida</p>
-                <h3 className="font-sans text-3xl font-black tracking-tight">
+                <h3 className="truncate font-sans text-xl font-black tracking-tight sm:text-2xl lg:text-3xl">
                   {pendingLinkCount === 1 ? "Nova solicitação" : `${pendingLinkCount} solicitações de vínculo`}
                 </h3>
               </div>
             </div>
-            <ChevronRight className="h-10 w-10 text-white/40" strokeWidth={3} />
+            <ChevronRight className="h-7 w-7 shrink-0 text-white/40 sm:h-8 sm:w-8 lg:h-10 lg:w-10" strokeWidth={3} />
           </NavLink>
         </motion.div>
       )}
 
-      <div className="grid grid-cols-1 gap-24 lg:grid-cols-12">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-24">
         {/* ACTIVITY CHART */}
-        <div className="lg:col-span-8 space-y-12">
-          <div className="flex items-center gap-6">
-            <h2 className="font-sans text-3xl font-black tracking-tight text-black">Fluxo de rendimento.</h2>
+        <div className="space-y-6 sm:space-y-8 lg:col-span-8 lg:space-y-12">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <h2 className="font-sans text-2xl font-black tracking-tight text-black sm:text-3xl">Fluxo de rendimento.</h2>
             <div className="h-px flex-1 bg-black/5" />
           </div>
-          <div className="rounded-[3rem] bg-white p-10 ring-1 ring-black/5 shadow-sm">
-            <div className="h-[400px] w-full">
+          <div className="rounded-[2rem] bg-white p-5 ring-1 ring-black/5 shadow-sm sm:rounded-[2.5rem] sm:p-7 lg:rounded-[3rem] lg:p-10">
+            <div className="h-[290px] w-full sm:h-[340px] lg:h-[400px]">
               {!loading && activityData.length > 0 && (
                 <PremiumActivityChart data={activityData} title="" />
               )}
@@ -547,29 +558,29 @@ const TrainerDashboard = () => {
         </div>
 
         {/* DAILY PROGRESS */}
-        <div className="lg:col-span-4 space-y-12">
-          <div className="flex items-center gap-6">
-            <h2 className="font-sans text-3xl font-black tracking-tight text-black">Check-ins.</h2>
+        <div className="space-y-6 sm:space-y-8 lg:col-span-4 lg:space-y-12">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <h2 className="font-sans text-2xl font-black tracking-tight text-black sm:text-3xl">Check-ins.</h2>
             <div className="h-px flex-1 bg-black/5" />
           </div>
-          <div className="rounded-[3rem] bg-white p-10 ring-1 ring-black/5 shadow-sm">
-            <div className="space-y-10">
+          <div className="rounded-[2rem] bg-white p-5 ring-1 ring-black/5 shadow-sm sm:rounded-[2.5rem] sm:p-7 lg:rounded-[3rem] lg:p-10">
+            <div className="space-y-6 sm:space-y-8 lg:space-y-10">
               {dailyProgress.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-20 text-center text-black/10">
-                  <BarChart3 className="mb-6 h-12 w-12" />
+                <div className="flex flex-col items-center justify-center py-14 text-center text-black/10 sm:py-16 lg:py-20">
+                  <BarChart3 className="mb-5 h-10 w-10 sm:mb-6 sm:h-12 sm:w-12" />
                   <p className="font-mono text-[10px] font-black uppercase tracking-widest">Sem atividade hoje</p>
                 </div>
               ) : (
                 dailyProgress.slice(0, 5).map((p) => (
-                  <div key={p.workout_id} className="space-y-4">
+                  <div key={p.workout_id} className="space-y-3.5 rounded-[1.4rem] bg-[#f7f7f5] p-4 sm:rounded-[1.6rem] sm:p-5">
                     <div className="flex items-center justify-between">
                       <div className="min-w-0">
-                        <p className="truncate font-sans text-lg font-black text-black">{p.title.toLowerCase()}</p>
+                        <p className="truncate font-sans text-base font-black text-black sm:text-lg">{p.title.toLowerCase()}</p>
                         <p className="font-mono text-[9px] font-black uppercase tracking-widest text-black/30">{p.group_name || "Individual"}</p>
                       </div>
                       <span className="font-sans text-sm font-black text-black">{p.completed_students}/{p.total_students}</span>
                     </div>
-                    <div className="h-2 w-full overflow-hidden rounded-full bg-[#f3f3f3]">
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-black/6">
                       <div
                         className="h-full bg-black transition-all duration-1000"
                         style={{ width: `${p.total_students > 0 ? (p.completed_students / p.total_students) * 100 : 0}%` }}
@@ -578,8 +589,8 @@ const TrainerDashboard = () => {
                   </div>
                 ))
               )}
-              <NavLink to="/trainer/treinos" className="block pt-6">
-                <button className="w-full h-14 rounded-full border border-black/5 bg-[#f3f3f3] text-[10px] font-black uppercase tracking-widest text-black/40 transition-all hover:bg-black hover:text-white">
+              <NavLink to="/trainer/treinos" className="block pt-2 sm:pt-4 lg:pt-6">
+                <button className="h-12 w-full rounded-full border border-black/5 bg-[#f3f3f3] text-[10px] font-black uppercase tracking-widest text-black/40 transition-all hover:bg-black hover:text-white sm:h-14">
                   Ver programação completa
                 </button>
               </NavLink>
@@ -589,28 +600,28 @@ const TrainerDashboard = () => {
       </div>
 
       {/* PROTOCOL STATUS */}
-      <div className="space-y-16">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="font-sans text-4xl font-black tracking-tighter text-black">Status dos protocolos.</h2>
-          <div className="flex items-center gap-3 rounded-full bg-[#f3f3f3] px-6 py-3 text-[10px] font-black uppercase tracking-widest text-black ring-1 ring-black/5">
+      <div className="space-y-8 sm:space-y-12 lg:space-y-16">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <h2 className="font-sans text-[2rem] font-black tracking-tighter text-black sm:text-4xl">Status dos protocolos.</h2>
+          <div className="flex w-fit items-center gap-3 rounded-full bg-[#f3f3f3] px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-black ring-1 ring-black/5 sm:px-6 sm:py-3">
             <span className="h-2 w-2 rounded-full bg-black animate-pulse shadow-[0_0_10px_rgba(0,0,0,0.4)]" />
             Live Update
           </div>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-10">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-96 animate-pulse rounded-[3rem] bg-[#f3f3f3]" />
+              <div key={i} className="h-72 animate-pulse rounded-[2rem] bg-[#f3f3f3] sm:h-80 sm:rounded-[2.4rem] lg:h-96 lg:rounded-[3rem]" />
             ))}
           </div>
         ) : dailyProgress.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-40 text-center rounded-[3rem] bg-[#f3f3f3] ring-1 ring-black/5">
-            <Activity className="mb-8 h-20 w-20 text-black/10" />
-            <p className="text-xl font-black text-black/20 uppercase tracking-tighter">Nenhum protocolo ativo</p>
+          <div className="flex flex-col items-center justify-center rounded-[2rem] bg-[#f3f3f3] py-24 text-center ring-1 ring-black/5 sm:rounded-[2.5rem] sm:py-28 lg:rounded-[3rem] lg:py-40">
+            <Activity className="mb-6 h-16 w-16 text-black/10 sm:mb-8 sm:h-20 sm:w-20" />
+            <p className="text-lg font-black uppercase tracking-tighter text-black/20 sm:text-xl">Nenhum protocolo ativo</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-10">
             {dailyProgress.map((dp, i) => {
               const perc = dp.total_students === 0 ? 0 : Math.round((dp.completed_students / dp.total_students) * 100);
               return (
@@ -619,33 +630,33 @@ const TrainerDashboard = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="flex flex-col rounded-[3rem] bg-white p-10 ring-1 ring-black/5 transition-all hover:ring-black/10 shadow-sm"
+                  className="flex flex-col rounded-[2rem] bg-white p-5 ring-1 ring-black/5 shadow-sm transition-all hover:ring-black/10 sm:rounded-[2.4rem] sm:p-7 lg:rounded-[3rem] lg:p-10"
                 >
-                  <div className="mb-12 flex items-start justify-between">
+                  <div className="mb-6 flex items-start justify-between gap-4 sm:mb-8 lg:mb-12">
                     <div className="min-w-0 space-y-2">
                       <p className="font-mono text-[9px] font-black uppercase tracking-widest text-black/30">
                         {dp.group_name || "Individual"}
                       </p>
-                      <h4 className="truncate font-sans text-3xl font-black tracking-tighter text-black">{dp.title.toLowerCase()}</h4>
+                      <h4 className="truncate font-sans text-2xl font-black tracking-tighter text-black sm:text-[2rem]">{dp.title.toLowerCase()}</h4>
                     </div>
                     <div className="text-right">
-                      <p className="font-sans text-5xl font-black text-black">{perc}%</p>
+                      <p className="font-sans text-4xl font-black text-black sm:text-5xl">{perc}%</p>
                     </div>
                   </div>
 
-                  <div className="mb-12 h-3 w-full overflow-hidden rounded-full bg-[#f3f3f3]">
+                  <div className="mb-6 h-3 w-full overflow-hidden rounded-full bg-[#f3f3f3] sm:mb-8 lg:mb-12">
                     <div
                       className="h-full bg-black transition-all duration-1000"
                       style={{ width: `${perc}%` }}
                     />
                   </div>
 
-                  <div className="max-h-64 flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar">
+                  <div className="max-h-56 flex-1 space-y-3 overflow-y-auto pr-1.5 sm:max-h-64 sm:space-y-4 sm:pr-2 custom-scrollbar">
                     {dp.students.map((st) => (
                       <div
                         key={st.id}
                         className={cn(
-                          "flex items-center justify-between rounded-2xl p-5 text-[10px] font-black uppercase tracking-widest transition-all",
+                          "flex items-center justify-between rounded-[1.1rem] p-4 text-[10px] font-black uppercase tracking-[0.18em] transition-all sm:rounded-2xl sm:p-5 sm:tracking-widest",
                           st.completed 
                             ? "bg-black text-white shadow-lg" 
                             : "bg-[#f3f3f3] text-black/20"
@@ -657,7 +668,7 @@ const TrainerDashboard = () => {
                     ))}
                   </div>
 
-                  <div className="mt-12 border-t border-black/5 pt-10">
+                  <div className="mt-6 border-t border-black/5 pt-5 sm:mt-8 sm:pt-7 lg:mt-12 lg:pt-10">
                     <NavLink
                       to="/trainer/treinos"
                       className="flex items-center justify-center text-[10px] font-black uppercase tracking-[0.2em] text-black hover:opacity-60 transition-opacity"

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -63,6 +64,10 @@ interface WorkoutItem {
   block_category?: string;
 }
 
+type WorkoutExerciseRow = Database["public"]["Tables"]["workout_exercises"]["Row"];
+type WorkoutExerciseInsert = Database["public"]["Tables"]["workout_exercises"]["Insert"];
+type WorkoutMetconInsert = Database["public"]["Tables"]["workout_metcons"]["Insert"];
+
 const METCON_TYPES = ["FOR TIME", "AMRAP", "EMOM", "CARGA"];
 
 const WorkoutDetail = () => {
@@ -115,19 +120,19 @@ const WorkoutDetail = () => {
       }
 
       // Build items: exercises sorted by sort_order
-      const weList = (workout.workout_exercises || []).sort(
-        (a: any, b: any) => a.sort_order - b.sort_order
+      const weList = ((workout.workout_exercises || []) as WorkoutExerciseRow[]).sort(
+        (a, b) => a.sort_order - b.sort_order
       );
 
-      const items: WorkoutItem[] = weList.map((we: any) => ({
+      const items: WorkoutItem[] = weList.map((we) => ({
         type: "exercise" as const,
         exercise_id: we.exercise_id,
-        parsed_name: we.exercises?.name || "",
+        parsed_name: "",
         sets: we.sets,
         reps: we.reps,
         reps_scheme: we.reps_scheme || undefined,
         suggested_load: we.suggested_load || "",
-        load_scheme: (we as any).load_scheme || undefined,
+        load_scheme: we.load_scheme || undefined,
         notes: we.notes || "",
         superset_group_id: we.superset_group_id || "",
         video_url: we.video_url || "",
@@ -204,7 +209,7 @@ const WorkoutDetail = () => {
     });
   };
 
-  const updateItemField = (idx: number, field: string, value: any) => {
+  const updateItemField = (idx: number, field: string, value: unknown) => {
     setWorkoutItems((prev) => {
       const updated = [...prev];
       updated[idx] = { ...updated[idx], [field]: value };
@@ -220,8 +225,8 @@ const WorkoutDetail = () => {
       }
       // Save video_url globally to exercises table
       if (field === "video_url" && value && updated[idx].exercise_id) {
-        supabase.from("exercises").update({ video_url: value } as any).eq("id", updated[idx].exercise_id!).then(() => {
-          setAllExercises((prev) => prev.map((e) => e.id === updated[idx].exercise_id ? { ...e, video_url: value } : e));
+        supabase.from("exercises").update({ video_url: String(value) }).eq("id", updated[idx].exercise_id!).then(() => {
+          setAllExercises((prev) => prev.map((e) => e.id === updated[idx].exercise_id ? { ...e, video_url: String(value) } : e));
         });
       }
       if (field === "sets" && updated[idx].type === "exercise") {
@@ -328,8 +333,8 @@ const WorkoutDetail = () => {
             if (exs) setAllExercises(exs);
           }
         }
-      } catch (resolveErr: any) {
-        toast.error(resolveErr.message || "Erro ao associar exercícios ao catálogo.");
+      } catch (resolveErr: unknown) {
+        toast.error(resolveErr instanceof Error ? resolveErr.message : "Erro ao associar exercícios ao catálogo.");
         setSaving(false);
         return;
       }
@@ -345,11 +350,11 @@ const WorkoutDetail = () => {
 
       // Delete old exercises and reinsert
       await supabase.from("workout_exercises").delete().eq("workout_id", id);
-      const exerciseRows: any[] = [];
+      const exerciseRows: WorkoutExerciseInsert[] = [];
       let sortOrder = 0;
       for (const item of itemsToSave) {
         if (item.type === "exercise") {
-          const row: any = {
+          const row: WorkoutExerciseInsert = {
             workout_id: id,
             exercise_id: String(item.exercise_id).trim(),
             sets: item.sets,
@@ -370,7 +375,7 @@ const WorkoutDetail = () => {
         const { error: exError } = await supabase.from("workout_exercises").insert(exerciseRows);
         if (exError) {
           if (isWorkoutExerciseSchemaError(exError.message)) {
-            const fallbackRows = exerciseRows.map((r) => stripWorkoutExerciseExtendedFields(r));
+            const fallbackRows = exerciseRows.map((r) => stripWorkoutExerciseExtendedFields(r)) as WorkoutExerciseInsert[];
             const { error: fallbackError } = await supabase.from("workout_exercises").insert(fallbackRows);
             if (fallbackError) throw fallbackError;
           } else {
@@ -384,20 +389,21 @@ const WorkoutDetail = () => {
       let metconSort = 0;
       for (const item of itemsToSave) {
         if (item.type === "metcon") {
-          await supabase.from("workout_metcons").insert({
+          const metconRow: WorkoutMetconInsert = {
             workout_id: id,
             title: item.metcon_title || null,
             description: item.metcon_description || "",
             metcon_type: item.metcon_type || "FOR TIME",
             sort_order: metconSort++,
             is_ranking_reference: item.is_ranking_reference || false,
-          });
+          };
+          await supabase.from("workout_metcons").insert(metconRow);
         }
       }
 
       toast.success("Treino salvo!");
-    } catch (e: any) {
-      toast.error(e.message);
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erro ao salvar treino");
     }
     setSaving(false);
   };

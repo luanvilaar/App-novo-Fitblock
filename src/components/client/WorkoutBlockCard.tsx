@@ -13,7 +13,12 @@ interface WorkoutBlockCardProps {
   mode?: 'full' | 'minimal';
   // Tracking props (optional)
   trackingLogs?: Record<string, SmartSetLog[]>;
-  onTrackingUpdate?: (exerciseName: string, setIdx: number, field: keyof SmartSetLog, value: any) => void;
+  onTrackingUpdate?: (
+    exerciseName: string,
+    setIdx: number,
+    field: "load_used" | "reps_done" | "notes",
+    value: string | number | null,
+  ) => void;
   onExerciseClick?: (exerciseName: string) => void;
 }
 
@@ -74,7 +79,7 @@ const WorkoutBlockCard: React.FC<WorkoutBlockCardProps> = (props) => {
         <div className="text-sm text-muted-foreground mb-2 font-light">
           {blockLabel}. Conditioning
         </div>
-        <ConditioningCard block={block} defaultExpanded={true} />
+        <ConditioningCard block={block} />
       </motion.div>
     );
   }

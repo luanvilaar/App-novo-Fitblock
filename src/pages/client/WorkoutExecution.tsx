@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, ArrowRight, Loader2, Layers, Radar, Target } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Loader2, Layers, Radar, Target } from "lucide-react";
 import VideoPreview from "@/components/VideoPreview";
 import ExerciseAccordionCard from "@/components/ExerciseAccordionCard";
 import { parseLpoExercises, hasLpoStructuredMarker } from "@/components/trainer/LpoBlockForm";
@@ -63,13 +63,23 @@ interface SetLog {
   notes?: string;
 }
 
-interface PremiumSetLog extends SetLog {}
+type PremiumSetLog = SetLog;
 
 /** Por linha de workout_exercises: substituição e nota (feedback ao treinador) */
 interface LineAdaptation {
   substituteExerciseId: string | null;
   studentNote: string;
 }
+
+type ExerciseLogWithOptionalLine = {
+  set_number: number;
+  exercise_id: string;
+  reps_done: number | null;
+  load_used: number | null;
+  is_completed: boolean | null;
+  notes?: string | null;
+  workout_exercise_id?: string | null;
+};
 
 type ActiveOverlay =
   | null
@@ -271,7 +281,7 @@ const WorkoutExecution = () => {
               linesByEx[e.exercise_id].push(e.id);
             });
             const loaded = emptyByLine(exList);
-            const applyToLine = (lineId: string, log: Record<string, unknown> & { set_number: number; exercise_id: string; workout_exercise_id?: string | null }) => {
+            const applyToLine = (lineId: string, log: ExerciseLogWithOptionalLine) => {
               if (!loaded[lineId]) return;
               const setIdx = log.set_number - 1;
               const row: SetLog = {
@@ -415,8 +425,9 @@ const WorkoutExecution = () => {
               .eq("workout_log_id", existingLog.id);
             
             if (smartELogs) {
-              smartELogs.forEach(log => {
-                const exName = (log.exercises as any)?.name;
+              smartELogs.forEach((log) => {
+                const exerciseRef = log.exercises as { name?: string } | { name?: string }[] | null;
+                const exName = Array.isArray(exerciseRef) ? exerciseRef[0]?.name : exerciseRef?.name;
                 if (exName && initialSmartLogs[exName]) {
                   const setIdx = log.set_number - 1;
                   if (initialSmartLogs[exName][setIdx]) {
@@ -478,7 +489,7 @@ const WorkoutExecution = () => {
           if (totalTime !== undefined) {
             await supabase
               .from("workout_logs")
-              .update({ total_time_seconds: totalTime } as any)
+              .update({ total_time_seconds: totalTime })
               .eq("id", logId);
           }
 
@@ -526,7 +537,7 @@ const WorkoutExecution = () => {
                   substitute_exercise_id: hasSub ? a.substituteExerciseId : null,
                   student_note: hasNote ? a.studentNote.trim() : null,
                   updated_at: new Date().toISOString(),
-                } as any,
+                },
                 { onConflict: "workout_log_id,workout_exercise_id" }
               );
             } else {
@@ -542,7 +553,15 @@ const WorkoutExecution = () => {
           if (Object.keys(currentSmart).length > 0) {
             const { data: catalog } = await supabase.from("exercises").select("id, name");
             if (catalog) {
-              const smartRows: any[] = [];
+              const smartRows: Array<{
+                workout_log_id: string;
+                exercise_id: string;
+                set_number: number;
+                load_used: number | null;
+                is_completed: boolean | undefined;
+                notes: string | null;
+                reps_done: number | null;
+              }> = [];
               Object.entries(currentSmart).forEach(([exName, sLogs]) => {
                 const catalogEx = catalog.find(c => c.name.toLowerCase() === exName.toLowerCase());
                 if (catalogEx) {
@@ -664,8 +683,8 @@ const WorkoutExecution = () => {
       
       toast.success("Score registrado!");
       setRankingRefreshKey(k => k + 1);
-    } catch (err: any) {
-      toast.error(err.message || "Erro ao salvar score");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erro ao salvar score");
     } finally {
       setSavingScore(false);
     }

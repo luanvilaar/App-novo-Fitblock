@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
 export type WLog = { id: string; student_id: string; workout_id: string; completed_at: string };
 
@@ -98,7 +99,7 @@ export function sessionCountsForRanking(
 }
 
 export async function fetchInChunks<T>(
-  table: string,
+  table: keyof Database["public"]["Tables"],
   column: string,
   ids: string[],
   select: string,
@@ -108,7 +109,8 @@ export async function fetchInChunks<T>(
   for (let i = 0; i < ids.length; i += chunk) {
     const slice = ids.slice(i, i + chunk);
     if (slice.length === 0) continue;
-    const { data, error } = await supabase.from(table).select(select).in(column, slice);
+    const fromTable = (supabase as unknown as { from: (relation: string) => any }).from(table);
+    const { data, error } = await fromTable.select(select).in(column, slice);
     if (error) throw error;
     if (data) out.push(...(data as T[]));
   }

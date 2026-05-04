@@ -1,12 +1,15 @@
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import { isWorkoutExerciseSchemaError, stripWorkoutExerciseExtendedFields } from "@/lib/utils";
 
-type WorkoutExerciseRow = Record<string, unknown>;
+type WorkoutExerciseRow = Database["public"]["Tables"]["workout_exercises"]["Row"];
+type WorkoutExerciseInsert = Database["public"]["Tables"]["workout_exercises"]["Insert"];
+type WorkoutMetconInsert = Database["public"]["Tables"]["workout_metcons"]["Insert"];
 
-function buildExerciseCloneRows(newWorkoutId: string, workoutExercises: WorkoutExerciseRow[]): WorkoutExerciseRow[] {
+function buildExerciseCloneRows(newWorkoutId: string, workoutExercises: WorkoutExerciseRow[]): WorkoutExerciseInsert[] {
   return workoutExercises.map((we) => {
-    const row: WorkoutExerciseRow = {
+    const row: WorkoutExerciseInsert = {
       workout_id: newWorkoutId,
       exercise_id: we.exercise_id,
       sets: we.sets,
@@ -30,7 +33,7 @@ async function insertClonedWorkoutExercises(newWorkoutId: string, workoutExercis
   const rows = buildExerciseCloneRows(newWorkoutId, workoutExercises);
   const { error: dupExError } = await supabase.from("workout_exercises").insert(rows);
   if (dupExError && isWorkoutExerciseSchemaError(dupExError.message)) {
-    const fallbackRows = rows.map((r) => stripWorkoutExerciseExtendedFields(r));
+    const fallbackRows = rows.map((r) => stripWorkoutExerciseExtendedFields(r)) as WorkoutExerciseInsert[];
     const { error: fb } = await supabase.from("workout_exercises").insert(fallbackRows);
     if (fb) throw fb;
   } else if (dupExError) {
@@ -41,7 +44,7 @@ async function insertClonedWorkoutExercises(newWorkoutId: string, workoutExercis
 async function insertClonedMetcons(sourceWorkoutId: string, newWorkoutId: string) {
   const { data: metcons } = await supabase.from("workout_metcons").select("*").eq("workout_id", sourceWorkoutId);
   if (!metcons?.length) return;
-  const metconRows = metcons.map((m: Record<string, unknown>) => ({
+  const metconRows: WorkoutMetconInsert[] = metcons.map((m) => ({
     workout_id: newWorkoutId,
     title: m.title,
     description: m.description,

@@ -7,7 +7,12 @@ interface BiSetCardProps {
   exercises: ParsedExercise[];
   // Tracking props (optional — only passed in execution mode)
   trackingLogs?: Record<string, SmartSetLog[]>;
-  onTrackingUpdate?: (exerciseName: string, setIdx: number, field: 'load_used' | 'reps_done' | 'notes', value: any) => void;
+  onTrackingUpdate?: (
+    exerciseName: string,
+    setIdx: number,
+    field: "load_used" | "reps_done" | "notes",
+    value: string | number | null,
+  ) => void;
 }
 
 const BiSetCard: React.FC<BiSetCardProps> = ({ exercises, trackingLogs, onTrackingUpdate }) => {

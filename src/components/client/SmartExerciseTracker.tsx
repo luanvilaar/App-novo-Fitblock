@@ -12,11 +12,13 @@ export interface SmartSetLog {
   is_completed?: boolean;
 }
 
+type SmartEditableField = "load_used" | "reps_done" | "notes";
+
 interface SmartExerciseTrackerProps {
   exerciseName: string;
   sets: number;
   logs: SmartSetLog[];
-  onUpdate: (setIdx: number, field: keyof SmartSetLog, value: any) => void;
+  onUpdate: (setIdx: number, field: SmartEditableField, value: string | number | null) => void;
 }
 
 const SmartExerciseTracker: React.FC<SmartExerciseTrackerProps> = ({

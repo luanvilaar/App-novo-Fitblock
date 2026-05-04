@@ -117,49 +117,39 @@ Fica fora do escopo:
 
 ## Validation Results
 
+- `npx eslint src/pages/client/ClientHome.tsx src/components/ClientLayout.tsx src/components/BottomNav.tsx`: ✅ passou sem warnings
+- `npx eslint src/pages/trainer/TrainerDashboard.tsx src/components/PremiumActivityChart.tsx`: ✅ passou com 1 warning antigo de `useEffect` em `TrainerDashboard`
 - `npm test`: ✅ passou (`11` arquivos, `125` testes)
 - `npm run build`: ✅ passou
-- `npx eslint src/pages/trainer/TrainerDashboard.tsx`: ⚠️ 1 warning preexistente de dependência em `useEffect` (`fetchData`)
-- `npx eslint src/pages/trainer/TrainerAthletes.tsx`: ⚠️ falhou por `no-explicit-any` preexistente no próprio arquivo (`catch`), sem relação com o ajuste visual
 - `npx eslint src/components/client/StudentPeriodizationStrip.tsx src/hooks/useTrainingPeriodWeeks.ts src/lib/training-periodization.ts`: ✅ passou sem warnings
-- `npm run lint`: ⚠️ falhou por problemas preexistentes no workspace, incluindo `.aiox-core`, regras `no-explicit-any`, parsing errors em templates e issues antigas fora do redesign
-- `npm run typecheck`: ⚠️ falhou por problemas preexistentes de tipagem em fluxos Supabase, trainer builders e utilitários já existentes no repo
+- `npm run lint`: ✅ passou sem erros; restaram `20` warnings não bloqueantes de `react-refresh` e `react-hooks/exhaustive-deps`
+- `npm run typecheck`: ✅ passou
 
-O redesign não introduziu uma nova classe dominante de falhas nos gates; os bloqueios restantes já estavam presentes no workspace.
+Também foram corrigidas as falhas globais de tipagem/lint que bloqueavam o push antes deste fechamento.
 
 ---
 
 ## File List
 
 - [x] `docs/stories/story-ui-mobile-redesign-fitblock.md`
-- [x] `package.json`
-- [x] `src/App.css`
-- [x] `src/index.css`
+- [x] `eslint.config.js`
 - [x] `src/components/BottomNav.tsx`
 - [x] `src/components/ClientLayout.tsx`
-- [x] `src/components/NotificationBell.tsx`
-- [x] `src/components/TrainerLayout.tsx`
-- [x] `src/components/client/StudentPeriodizationStrip.tsx`
-- [x] `src/hooks/useTrainingPeriodWeeks.ts`
-- [x] `src/lib/training-periodization.ts`
-- [x] `src/components/trainer/TrainerPanelCard.tsx`
-- [x] `src/components/ui/button.tsx`
-- [x] `src/components/ui/card.tsx`
-- [x] `src/components/ui/dialog.tsx`
-- [x] `src/components/ui/input.tsx`
-- [x] `src/components/ui/popover.tsx`
-- [x] `src/components/ui/select.tsx`
-- [x] `src/components/ui/tabs.tsx`
-- [x] `src/pages/AguardandoAprovacao.tsx`
-- [x] `src/pages/Auth.tsx`
-- [x] `src/pages/Index.tsx`
-- [x] `src/pages/Login.tsx`
-- [x] `src/pages/NotFound.tsx`
-- [x] `src/pages/PublicRanking.tsx`
-- [x] `src/pages/ResetPassword.tsx`
-- [x] `src/pages/TrainerRegister.tsx`
+- [x] `src/components/PremiumActivityChart.tsx`
+- [x] `src/components/client/BiSetCard.tsx`
+- [x] `src/components/client/ExerciseCardSmart.tsx`
+- [x] `src/components/client/SmartExerciseTracker.tsx`
+- [x] `src/components/client/WorkoutBlockCard.tsx`
+- [x] `src/components/trainer/TrainerWorkoutBuilderDialog.tsx`
+- [x] `src/components/trainer/TrainerWorkoutExerciseRow.tsx`
+- [x] `src/components/ui/command.tsx`
+- [x] `src/components/ui/textarea.tsx`
+- [x] `src/lib/ranking-session-validation.ts`
+- [x] `src/lib/trainer-workout-actions.ts`
+- [x] `src/lib/workout-parser/__tests__/backward-compat.test.ts`
 - [x] `src/pages/client/ClientHome.tsx`
-- [x] `src/pages/client/ClientProgress.tsx`
-- [x] `src/pages/trainer/TrainerAthletes.tsx`
+- [x] `src/pages/client/WorkoutExecution.tsx`
 - [x] `src/pages/trainer/TrainerDashboard.tsx`
-- [x] `src/pages/trainer/TrainerWorkouts.tsx`
+- [x] `src/pages/trainer/TrainerGroups.tsx`
+- [x] `src/pages/trainer/WorkoutDetail.tsx`
+- [x] `tela-a.png`
