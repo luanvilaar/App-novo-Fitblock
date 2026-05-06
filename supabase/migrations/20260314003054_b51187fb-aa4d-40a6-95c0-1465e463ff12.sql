@@ -1,0 +1,2 @@
+UPDATE boxes SET logo_url = 'https://kqyzjywdtdfvftvderny.supabase.co/storage/v1/object/public/avatars/box-logos/fitblock-training.png' WHERE slug = 'fitblock-training';
+UPDATE boxes SET logo_url = 'https://kqyzjywdtdfvftvderny.supabase.co/storage/v1/object/public/avatars/box-logos/pulsefit.png' WHERE slug = 'pulsefit';

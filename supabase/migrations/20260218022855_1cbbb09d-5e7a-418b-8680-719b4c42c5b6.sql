@@ -1,0 +1,1 @@
+ALTER TABLE public.workout_metcons ADD COLUMN is_ranking_reference boolean NOT NULL DEFAULT false;

@@ -1,0 +1,1 @@
+ALTER TABLE public.groups ADD COLUMN box_id uuid REFERENCES public.boxes(id);

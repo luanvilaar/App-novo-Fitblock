@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Confirme a inscrição — FitBlock</title>
+</head>
+<body style="margin:0;padding:0;background-color:#ede8e0;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+  <!-- Pré-visualização (inbox) -->
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#ede8e0;opacity:0;">
+    Bem-vindo à equipe FitBlock. Um passo rápido: confirme a inscrição para ativar sua conta.
+  </div>
+
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#ede8e0;padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;background-color:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 4px 24px rgba(26,26,26,0.08);border:1px solid #e0d8ce;">
+          <!-- Faixa superior -->
+          <tr>
+            <td style="height:4px;background:linear-gradient(90deg,#6b4f9c,#1a1a1a);background-color:#6b4f9c;line-height:4px;font-size:0;">&nbsp;</td>
+          </tr>
+          <!-- Logo -->
+          <tr>
+            <td style="padding:32px 32px 16px 32px;text-align:center;background-color:#faf9f7;">
+              <img src="{{ .SiteURL }}/email/fit_logo.png" width="220" alt="FitBlock Training" style="display:block;margin:0 auto;max-width:85%;height:auto;border:0;" />
+            </td>
+          </tr>
+          <!-- Hero -->
+          <tr>
+            <td style="padding:0;line-height:0;font-size:0;">
+              <img src="{{ .SiteURL }}/email/hero-bg.jpg" width="600" alt="Comunidade FitBlock" style="display:block;width:100%;max-width:600px;height:auto;border:0;" />
+            </td>
+          </tr>
+          <!-- Conteúdo -->
+          <tr>
+            <td style="padding:36px 32px 28px 32px;background-color:#ffffff;">
+              <p style="margin:0 0 10px 0;font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#6b4f9c;">
+                Boas-vindas
+              </p>
+              <h1 style="margin:0 0 12px 0;font-size:28px;line-height:1.15;font-weight:800;color:#1a1a1a;letter-spacing:-0.03em;">
+                Estamos felizes em ter você com a gente
+              </h1>
+              <p style="margin:0 0 20px 0;font-size:17px;line-height:1.55;color:#3d3d3d;">
+                Sua inscrição na <strong style="color:#1a1a1a;">FitBlock</strong> quase está pronta. Falta só <strong style="color:#1a1a1a;">confirmar o e-mail</strong>
+                <span style="white-space:nowrap;">(<span style="color:#6b4f9c;font-weight:600;">{{ .Email }}</span>)</span> para ativar a conta e começar a treinar com seu coach.
+              </p>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 24px 0;background-color:#f7f5f2;border:1px solid #ebe6df;border-radius:4px;">
+                <tr>
+                  <td style="padding:20px 22px;">
+                    <p style="margin:0 0 14px 0;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1a1a1a;">
+                      Depois de confirmar, você poderá
+                    </p>
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td style="padding:6px 0;font-size:15px;line-height:1.5;color:#4a4a4a;vertical-align:top;width:28px;">&#10003;</td>
+                        <td style="padding:6px 0;font-size:15px;line-height:1.5;color:#4a4a4a;">Acessar treinos prescritos e seu histórico de sessões</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:15px;line-height:1.5;color:#4a4a4a;vertical-align:top;">&#10003;</td>
+                        <td style="padding:6px 0;font-size:15px;line-height:1.5;color:#4a4a4a;">Registrar cargas, resultados e evolução com sua equipe</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:15px;line-height:1.5;color:#4a4a4a;vertical-align:top;">&#10003;</td>
+                        <td style="padding:6px 0;font-size:15px;line-height:1.5;color:#4a4a4a;">Usar uma experiência feita para quem leva o treino a sério</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:8px auto 28px auto;">
+                <tr>
+                  <td style="border-radius:4px;background-color:#1a1a1a;">
+                    <a href="{{ .ConfirmationURL }}" target="_blank" rel="noopener" style="display:inline-block;padding:18px 36px;font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#ffffff;text-decoration:none;">
+                      Confirme a inscrição
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0;font-size:13px;line-height:1.6;color:#6b6560;">
+                Se o botão não abrir, copie e cole este link no navegador:<br />
+                <a href="{{ .ConfirmationURL }}" style="color:#6b4f9c;font-weight:600;word-break:break-all;">{{ .ConfirmationURL }}</a>
+              </p>
+            </td>
+          </tr>
+          <!-- Rodapé -->
+          <tr>
+            <td style="padding:24px 32px 32px 32px;background-color:#faf9f7;border-top:1px solid #ece8e0;">
+              <p style="margin:0 0 8px 0;font-size:12px;line-height:1.55;color:#8a8278;text-align:center;">
+                Você recebeu este e-mail porque criou uma conta na FitBlock. Se não foi você, pode ignorar com segurança.
+              </p>
+              <p style="margin:0;font-size:11px;line-height:1.5;color:#b0a99f;text-align:center;">
+                &copy; FitBlock Training &middot; Comunidade &middot; Performance
+              </p>
+            </td>
+          </tr>
+        </table>
+        <p style="margin:20px 0 0 0;font-size:11px;color:#9a9288;text-align:center;max-width:560px;">
+          Dica: adicione o remetente aos contatos para não perder atualizações da sua box.
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
